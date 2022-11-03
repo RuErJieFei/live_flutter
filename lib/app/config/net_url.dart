@@ -1,0 +1,13 @@
+class NetUrl {
+  ///本地地址
+  // static const String kHttp_HostName = 'http://192.168.50.241:8080/niit-api';
+
+  ///测试
+  static const String kHttp_HostName = "http://httpbin.org";
+
+  ///正式
+  // static const String kHttp_HostName = "https://";
+
+  ///账户登录
+  static const String kUrl_user_login = '/user/login';
+}
