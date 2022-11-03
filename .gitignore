@@ -9,6 +9,8 @@
 .history
 .svn/
 migrate_working_dir/
+#版本控制
+pubspec.lock
 
 # IntelliJ related
 *.iml
