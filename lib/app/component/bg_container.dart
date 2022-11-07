@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wit_niit/app/data/base_data.dart';
 
 /// 有状态背景
 class BGContainer extends StatefulWidget {
@@ -22,7 +21,7 @@ class BGContainer extends StatefulWidget {
   final int defaultType;
 
   BGContainer({
-    this.bgColor = BaseData.kBackColor,
+    this.bgColor = Colors.transparent,
     this.child,
     this.cWidth = 0,
     this.cHeight = 0,

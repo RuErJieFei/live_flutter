@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wit_niit/app/data/theme_data.dart';
 
 /// 背景渐变
 class BGGradient extends StatelessWidget {
@@ -39,10 +40,7 @@ class BGGradient extends StatelessWidget {
         borderRadius: borderRadius,
         border: border,
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFFBA0B1A),
-            Color(0xFFEF0F23),
-          ],
+          colors: [Config.viceColor, Config.mainColor],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

@@ -20,7 +20,6 @@ class MyButton extends StatelessWidget {
       child: BGGradient(
         alignment: Alignment.center,
         height: 48.h,
-        margin: EdgeInsets.symmetric(horizontal: 35.w),
         borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),

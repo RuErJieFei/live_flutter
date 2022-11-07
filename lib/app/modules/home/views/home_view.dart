@@ -8,7 +8,6 @@ import 'package:wit_niit/app/component/my_text_field.dart';
 import 'package:wit_niit/app/data/base_style.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/home/controllers/home_controller.dart';
-import 'package:wit_niit/app/routes/app_pages.dart';
 import 'package:wit_niit/main.dart';
 
 class HomeView extends StatelessWidget {
@@ -86,7 +85,6 @@ class HomeView extends StatelessWidget {
                       backgroundColor: Colors.white);
                 },
                 title: 'bottomSheet'),
-            ElevatedButton(onPressed: () => Get.toNamed(Routes.LOGIN), child: Text('去登录'))
           ],
         ),
       ),

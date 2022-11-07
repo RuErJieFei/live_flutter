@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:wit_niit/app/routes/route_auth_middleware.dart';
 
 import '../modules/bench/bindings/bench_binding.dart';
 import '../modules/bench/views/bench_view.dart';
@@ -42,10 +43,10 @@ class AppPages {
       binding: BenchBinding(),
     ),
     GetPage(
-      name: _Paths.INDEX,
-      page: () => const IndexView(),
-      binding: IndexBinding(),
-    ),
+        name: _Paths.INDEX,
+        page: () => const IndexView(),
+        binding: IndexBinding(),
+        middlewares: [RouteAuthMiddleware()]),
     GetPage(
       name: _Paths.CONTACTS,
       page: () => const ContactsView(),

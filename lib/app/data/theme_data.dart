@@ -5,6 +5,12 @@ import 'package:flutter/material.dart';
 final ThemeData defaultTheme = buildDefaultTheme();
 
 class Config {
+  ///主色
+  static const mainColor = Color(0xFF7693d5);
+
+  /// 副色
+  static const viceColor = Color(0xFFa9a2cd);
+
   /// 主题颜色
   static const int _primaryColorValue = 0xFF8AA58D;
   static const Color primaryColor = Color(_primaryColorValue);

@@ -16,7 +16,7 @@ class IndexView extends GetView<IndexController> {
     return Obx(() => BottomNavigationBar(
           items: controller.bottomTabs,
           currentIndex: controller.currentPage,
-          type: BottomNavigationBarType.shifting, // fixed 默认白色，shifting 切换背景色
+          type: BottomNavigationBarType.fixed, // fixed 默认白色，shifting 切换背景色
           // fixedColor: Colors.red,
           selectedFontSize: 16,
           unselectedFontSize: 13,

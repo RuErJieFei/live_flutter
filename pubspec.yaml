@@ -42,6 +42,8 @@ dependencies:
 
 dev_dependencies: 
   flutter_lints: ^2.0.0
+  # 启动画面
+  flutter_native_splash: ^2.2.10
   flutter_test: 
     sdk: flutter
 
@@ -50,4 +52,10 @@ flutter:
 
   assets:
     - images/public/
+    - images/login/
 
+#flutter_native_splash:
+#  background_image: images/login/wit_niit.png
+#  android_12:
+#    image: images/login/wit_niit.png
+#  fullscreen: true

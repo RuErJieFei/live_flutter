@@ -9,5 +9,8 @@ class NetUrl {
   // static const String kHttp_HostName = "https://";
 
   ///账户登录
-  static const String kUrl_user_login = '/user/login';
+  static const String user_login = '/user/login';
+
+  /// 获取验证码
+  static const String user_vCode = '/user/vCode';
 }
