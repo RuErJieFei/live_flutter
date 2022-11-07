@@ -53,6 +53,13 @@ flutter:
   assets:
     - images/public/
     - images/login/
+    - images/school/
+
+  fonts:
+    - family: iconfont
+      fonts:
+        - asset: fonts/iconfont.ttf
+
 
 #flutter_native_splash:
 #  background_image: images/login/wit_niit.png
