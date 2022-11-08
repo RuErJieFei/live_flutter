@@ -36,7 +36,7 @@ void main() async {
   await SpUtil.getInstance(); // 等待sp初始化完成后再运行app
   LogUtil.v('App启动～～'); // debug 模式输出
   /// Authing 身份云初始化
-  Authing.init('627351d938cd3d7ded36d7d1', '6368b2bfeeb7c9d7d5222c8a');
+  Authing.init('6368b106c55c8b3934a8e0fe', '6369fe8ffcc7a6cc9f2027ac');
   runApp(MyApp());
   configLoading();
 }

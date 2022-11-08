@@ -12,7 +12,7 @@ class Config {
   static const viceColor = Color(0xFFa9a2cd);
 
   /// 主题颜色
-  static const int _primaryColorValue = 0xFF8AA58D;
+  static const int _primaryColorValue = 0xFF7693d5;
   static const Color primaryColor = Color(_primaryColorValue);
   static const MaterialColor primarySwatchColor = MaterialColor(
     _primaryColorValue,
@@ -25,8 +25,6 @@ class Config {
       500: Color(0xFF1A4B57),
       600: Color(0xFF0B3946),
       700: Color(0xFF022D3B),
-      800: Color(0xFF092C50),
-      900: Color(0xFF2C2647),
     },
   );
 }
