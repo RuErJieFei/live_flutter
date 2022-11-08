@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/component/my_Botton.dart';
+import 'package:wit_niit/app/modules/bench/bindings/enter_school_binding.dart';
 
 import '../controllers/bench_controller.dart';
 import 'enter_school_view.dart';
@@ -20,7 +21,7 @@ class BenchView extends GetView<BenchController> {
           children: [
             MyButton(
               onTap: () {
-                Get.to(EnterSchoolView());
+                Get.to(EnterSchoolView(), binding: EnterSchoolBinding());
               },
               title: '去智慧入校',
             ),

@@ -5,7 +5,9 @@ import 'package:wit_niit/app/data/iconfont.dart';
 
 import '../../../data/base_style.dart';
 import '../../../data/school_theme_data.dart';
+import '../bindings/enter_school_from_binding.dart';
 import '../controllers/enter_school_index_controller.dart';
+import 'enter_school_from_view.dart';
 
 class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
   const EnterSchoolIndexView({Key? key}) : super(key: key);
@@ -34,7 +36,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 150.sp,
+              height: 150.h,
               padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
@@ -52,7 +54,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
               ),
             ),
             SizedBox(
-              height: 15.sp,
+              height: 15.h,
             ),
             Container(
               child: Column(
@@ -76,7 +78,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
                         ),
                       ),
                       SizedBox(
-                        width: 10.sp,
+                        width: 10.w,
                       ),
                       Text(
                         '教职工入校申请',
@@ -85,7 +87,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
                     ],
                   ),
                   SizedBox(
-                    height: 10.sp,
+                    height: 10.h,
                   ),
                   Text(
                     '起止时间：2022-10-09～2022-12-09',
@@ -95,7 +97,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
               ),
             ),
             SizedBox(
-              height: 35.sp,
+              height: 35.h,
             ),
             Container(
               child: Column(
@@ -114,7 +116,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
                     ],
                   ),
                   SizedBox(
-                    height: 10.sp,
+                    height: 10.h,
                   ),
                   RichText(
                     text: TextSpan(text: '', children: [
@@ -136,7 +138,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
               ),
             ),
             SizedBox(
-              height: 15.sp,
+              height: 15.h,
             ),
             Row(
               children: <Widget>[
@@ -148,13 +150,27 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
               ],
             ),
             SizedBox(
-              height: 35.sp,
+              height: 35.h,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                rowList(IconFont.icon_wendang, '入校申请', '提前申请入校'),
-                rowList(IconFont.icon_wendang1, '历史记录', '查看历史记录'),
+                InkWell(
+                  onTap: () {
+                    Get.to(EnterSchoolFromView(),
+                        binding: EnterSchoolFromBinding());
+                  },
+                  child: rowList(
+                    IconFont.icon_wendang,
+                    '入校申请',
+                    '提交申请入校',
+                  ),
+                ),
+                rowList(
+                  IconFont.icon_wendang1,
+                  '历史记录',
+                  '查看历史记录',
+                ),
               ],
             ),
           ],
@@ -171,7 +187,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
           color: SchoolConfig.primaryColor,
         ),
         SizedBox(
-          width: 20.0,
+          width: 20.w,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +197,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
               style: BaseStyle.fs14bold,
             ),
             SizedBox(
-              height: 5.sp,
+              height: 5.h,
             ),
             Text(
               subTitle,

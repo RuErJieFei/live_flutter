@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:wit_niit/app/modules/bench/bindings/enter_school_index_binding.dart';
 
 import '../../../data/base_style.dart';
 import '../../../data/iconfont.dart';
@@ -35,7 +36,7 @@ class EnterSchoolView extends GetView<EnterSchoolController> {
           children: [
             Container(
               padding: EdgeInsets.all(10.0),
-              height: 60.sp,
+              height: 60.h,
               decoration: new BoxDecoration(
                 color: Colors.white,
               ),
@@ -73,7 +74,7 @@ class EnterSchoolView extends GetView<EnterSchoolController> {
               ),
             ),
             SizedBox(
-              height: 5.sp,
+              height: 5.h,
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -83,27 +84,28 @@ class EnterSchoolView extends GetView<EnterSchoolController> {
               ),
             ),
             SizedBox(
-              height: 5.sp,
+              height: 5.h,
             ),
             Container(
               padding: EdgeInsets.all(10.0),
-              height: 70.sp,
+              height: 75.h,
               decoration: new BoxDecoration(
                 color: Colors.white,
               ),
               child: Row(
                 children: <Widget>[
                   SizedBox(
-                    width: 10.sp,
+                    width: 10.w,
                   ),
                   InkWell(
                     child: columnApp(IconFont.icon_fangzi, '入校申请'),
                     onTap: () {
-                      Get.to(EnterSchoolIndexView());
+                      Get.to(EnterSchoolIndexView(),
+                          binding: EnterSchoolIndexBinding());
                     },
                   ),
                   SizedBox(
-                    width: 30.sp,
+                    width: 30.w,
                   ),
                   columnApp(IconFont.icon_gengduo, '更多功能'),
                 ],
@@ -119,15 +121,15 @@ class EnterSchoolView extends GetView<EnterSchoolController> {
     return Column(
       children: [
         Container(
-          height: 30.sp,
-          width: 30.sp,
+          height: 30.h,
+          width: 30.w,
           child: Icon(
             iconData,
             color: SchoolConfig.primaryColor,
           ),
         ),
         SizedBox(
-          height: 3.sp,
+          height: 3.h,
         ),
         Text(
           name,
