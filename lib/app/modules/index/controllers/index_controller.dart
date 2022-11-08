@@ -29,6 +29,12 @@ class IndexController extends GetxController {
     currentPage = index;
   }
 
+  /// 打开抽屉
+  final GlobalKey<ScaffoldState> indexScaffoldKey = new GlobalKey<ScaffoldState>();
+  open() {
+    indexScaffoldKey.currentState?.openDrawer();
+  }
+
   /// 在Widget内存中分配后立即调用，可以用它来初始化initialize一些东西
   @override
   void onInit() {

@@ -4,7 +4,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/routes/app_pages.dart';
 
 /// 创建时间：2022/11/8
@@ -16,20 +16,46 @@ class LeftDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? user = SpUtil.getObj("user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
     return Drawer(
       elevation: 0,
       child: Column(
         children: [
           UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              image: NetworkImage('http://img.w2gd.top/up/texture9.png'),
+              fit: BoxFit.cover,
+            )),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage('${SpUtil.getString('avatar')}'),
+              backgroundImage: NetworkImage('${user?.photo}'),
             ),
-            accountName: Text('${SpUtil.getString('username')}'),
-            accountEmail: Text('${SpUtil.getString('email')}'),
+            otherAccountsPictures: <Widget>[
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                backgroundImage: NetworkImage('http://img.w2gd.top/up/logo.png'),
+              ),
+            ],
+            accountName: Text(
+              // '${SpUtil.getString('username')}',
+              '${user?.name}',
+              style: TextStyle(fontSize: 20.sp),
+            ),
+            accountEmail: Text('${user?.email}'),
+            onDetailsPressed: () {
+              LogUtil.v('----');
+            },
           ),
-          SizedBox(height: 70.h),
-          ListTile(leading: Text('手机号'), title: Text('${SpUtil.getString('phone')}')),
-          ListTile(leading: Text('邮箱'), title: Text('${SpUtil.getString('email')}')),
+          ListTile(leading: Text('手机号'), title: Text('${user?.phone}')),
+          ListTile(leading: new Icon(Icons.help), title: new Text("帮助")),
+          ListTile(
+            leading: new Icon(Icons.settings),
+            title: new Text("设置"),
+            onTap: () {
+              // Get.to(()=> )
+            },
+          ),
+          Expanded(child: SizedBox()),
           ElevatedButton(
             onPressed: () {
               SpUtil.clear();
@@ -38,6 +64,7 @@ class LeftDrawer extends StatelessWidget {
             },
             child: Text('退出登录'),
           ),
+          Expanded(child: SizedBox()),
         ],
       ),
     );

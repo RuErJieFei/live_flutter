@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/index/controllers/index_controller.dart';
+import 'package:wit_niit/app/modules/message/widget/left_drawer.dart';
 
 class IndexView extends GetView<IndexController> {
   const IndexView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.indexScaffoldKey,
       bottomNavigationBar: _buildBottomNavigationBar(),
       body: _buildPageView(),
+      drawer: LeftDrawer(),
     );
   }
 

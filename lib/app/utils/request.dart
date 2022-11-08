@@ -86,6 +86,7 @@ class Request {
 
       ///忽略证书
       client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      return null;
     };
   }
 
@@ -143,7 +144,6 @@ class Request {
         return Future.error('HTTP错误');
       }
     } on DioError catch (e) {
-      // Toast.e(_dioError(e), '');
       EasyLoading.showToast(_dioError(e));
       return Future.error(_dioError(e));
     } catch (e) {
