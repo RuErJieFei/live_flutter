@@ -1,3 +1,4 @@
+import 'package:authing_sdk/authing.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,8 @@ void main() async {
   LogUtil.init(isDebug: kDebugMode, maxLen: 800, tag: packageInfo.appName);
   await SpUtil.getInstance(); // 等待sp初始化完成后再运行app
   LogUtil.v('App启动～～'); // debug 模式输出
+  /// Authing 身份云初始化
+  Authing.init('627351d938cd3d7ded36d7d1', '6368b2bfeeb7c9d7d5222c8a');
   runApp(MyApp());
   configLoading();
 }

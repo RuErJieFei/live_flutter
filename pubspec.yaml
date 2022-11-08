@@ -37,6 +37,8 @@ dependencies:
   cached_network_image: any
   #通知权限
   notification_permissions: ^0.6.1
+  # Authing 身份云
+  authing_sdk: ^1.0.0
 
 
 

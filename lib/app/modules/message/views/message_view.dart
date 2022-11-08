@@ -1,3 +1,4 @@
+import 'package:authing_sdk/client.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,11 +22,13 @@ class MessageView extends GetView<MessageController> {
             ElevatedButton(
                 onPressed: () {
                   SpUtil.clear();
+                  AuthClient.logout();
                   Get.offAllNamed(Routes.LOGIN);
                 },
                 child: Text('退出登录')),
             Text('用户名： ${SpUtil.getString('username')}'),
-            Text('token： ${SpUtil.getString('token')}'),
+            Text('邮箱： ${SpUtil.getString('email')}'),
+            Text('手机号： ${SpUtil.getString('phone')}'),
           ],
         ),
       ),
