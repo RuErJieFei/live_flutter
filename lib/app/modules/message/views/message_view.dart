@@ -26,7 +26,7 @@ class MessageView extends GetView<MessageController> {
             onPressed: () => Get.toNamed('/message/search'),
           ),
           SizedBox(width: 10),
-          _popupMenu(),
+          _popupMenu(context),
           SizedBox(width: 15),
         ],
       ),
@@ -35,7 +35,7 @@ class MessageView extends GetView<MessageController> {
   }
 
   /// + 号 菜单
-  Widget _popupMenu() {
+  Widget _popupMenu(BuildContext context) {
     return PopupMenuButton(
       offset: Offset(0, 50),
       elevation: 4,
@@ -54,8 +54,10 @@ class MessageView extends GetView<MessageController> {
           EasyLoading.showToast('加微信');
         } else if (v == '扫一扫') {
           EasyLoading.showToast('扫一扫');
+          // Get.to(() => ScanView());
+          // Get.to(() => CustomizedView());
         } else if (v == '休息一下') {
-          EasyLoading.showToast('休息一下');
+          showDialog(context: context, builder: (_) => _haveARest());
         }
       },
       itemBuilder: (context) {
@@ -105,4 +107,36 @@ class MessageView extends GetView<MessageController> {
       child: Icon(Icons.add_circle_outline, size: 28),
     );
   }
+
+  /// 休息一下
+  _haveARest() => UnconstrainedBox(
+        child: SizedBox(
+          width: 370.w,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Wrap(
+                children: [
+                  ListTile(
+                    onTap: () {},
+                    leading: Icon(Icons.coffee, color: Config.mainColor, size: 45.w),
+                    title: Text('小休'),
+                    subtitle: Text('1小时内不接收消息通知'),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    leading: Icon(Icons.work_off, color: Config.mainColor, size: 45.w),
+                    title: Text('下班了'),
+                    subtitle: Text('明天09：00前不接受消息通知'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
 }
