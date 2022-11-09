@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:wit_niit/app/modules/message/controllers/search_mess_controller.dart';
+import 'package:wit_niit/app/modules/message/views/search_mess_view.dart';
 import 'package:wit_niit/app/routes/route_auth_middleware.dart';
 
 import '../modules/bench/bindings/bench_binding.dart';
@@ -28,10 +30,17 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: _Paths.MESSAGE,
-      page: () => const MessageView(),
-      binding: MessageBinding(),
-    ),
+        name: _Paths.MESSAGE,
+        page: () => const MessageView(),
+        binding: MessageBinding(),
+        children: [
+          GetPage(
+              name: '/search',
+              page: () => SearchMessView(),
+              binding: BindingsBuilder(() {
+                Get.lazyPut(() => SearchMessController());
+              })),
+        ]),
     GetPage(
       name: _Paths.LOGIN,
       page: () => const LoginView(),

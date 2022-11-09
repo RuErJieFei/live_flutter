@@ -39,6 +39,10 @@ dependencies:
   notification_permissions: ^0.6.1
   # Authing 身份云
   authing_sdk: ^1.0.0
+  # fake  https://pub.dev/packages/faker/install
+  faker: ^2.0.0
+  # 日期时间包
+  jiffy: ^5.0.0
 
 
 
