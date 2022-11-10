@@ -4,6 +4,7 @@ import 'package:wit_niit/app/data/school_theme_data.dart';
 
 class BaseStyle {
   /// 字号
+  static TextStyle fs14 = TextStyle(fontSize: 14.sp);
   static TextStyle fs14bold =
       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold);
   static TextStyle fs16 = TextStyle(fontSize: 16.sp);
@@ -31,11 +32,39 @@ class BaseStyle {
       TextStyle(color: Colors.black, fontSize: 16.sp);
 
   /// 黑色小号字体
-  static TextStyle smallStyle = TextStyle(color: Colors.black, fontSize: 12.sp);
+  static TextStyle smallStyle = TextStyle(color: Colors.black, fontSize: 14.sp);
+
+  /// 黑色小号加粗字体
+  static TextStyle smallBBoldStyle = TextStyle(
+    color: Colors.black,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.bold,
+  );
+
+  /// 深灰小号字体加粗
+  static TextStyle smallBoldStyle = TextStyle(
+    color: Colors.grey.shade700,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.bold,
+  );
 
   /// 智慧入校主题色中号字体
   static TextStyle schoolContentStyle =
       TextStyle(color: SchoolConfig.primaryColor, fontSize: 16.sp);
+
+  /// 智慧入校主题色中号加粗字体
+  static TextStyle schoolBoldContentStyle = TextStyle(
+    color: SchoolConfig.primaryColor,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.bold,
+  );
+
+  /// 智慧入校主题色小号加粗字体
+  static TextStyle schoolBoldSmallStyle = TextStyle(
+    color: SchoolConfig.primaryColor,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.bold,
+  );
 
   /// 智慧入校主题色小号字体
   static TextStyle schoolSmallStyle =

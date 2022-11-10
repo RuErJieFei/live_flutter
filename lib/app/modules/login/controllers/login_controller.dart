@@ -9,7 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/config/base_extend.dart';
+import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/routes/app_pages.dart';
+import 'package:wit_niit/main.dart';
 
 class LoginController extends GetxController {
   //TODO: 文本输入框控制器
@@ -87,8 +89,9 @@ class LoginController extends GetxController {
       LogUtil.v('获取验证码~~');
       startTimer();
       AuthResult result = await AuthClient.sendSms(phoneTf.text, "+86");
-
-      // request.post(NetUrl.user_vCode);
+      // hlh 的烂接口，暂不可用
+      // request.post('/users/sendSms',
+      //     data: {"phone": phoneTf.text}, headers: {"contentType": "multipart/form-data"});
     }
   }
 
@@ -107,7 +110,20 @@ class LoginController extends GetxController {
       }
 
       /// Authing 账户登录，可以是手机号 / 邮箱 / 用户名
-      result = await AuthClient.loginByAccount(accountTf.text, passwordTf.text);
+      // result = await AuthClient.loginByAccount(accountTf.text, passwordTf.text);
+      /// 手机号&密码 登录
+      var dataForm = {"phone": accountTf.text, "password": passwordTf.text};
+      request.post('/users/phone', data: dataForm).then((data) {
+        // 存储用户信息和token
+        UserModel user = UserModel.fromJson(data);
+        SpUtil.putObject("user", user);
+        SpUtil.putString('userId', user.id as String);
+        SpUtil.putString('token', user.token);
+        //  跳转到首页，取消之前所有路由
+        Get.offAllNamed(Routes.INDEX);
+      }).catchError((_) {
+        EasyLoading.showError('用户名或密码错误');
+      });
     } else {
       if (!BaseExtend.isValue(phoneTf.text)) {
         EasyLoading.showToast('请输入手机号');
@@ -125,25 +141,38 @@ class LoginController extends GetxController {
 
       /// Authing 手机验证码登录/注册
       result = await AuthClient.loginByPhoneCode(phoneTf.text, vCodeTf.text);
+      if (result.code != 200) {
+        EasyLoading.showError(result.message);
+        return;
+      }
+      User? user = result.user;
+      //
+      UserModel theUser = UserModel(
+          token: user!.token,
+          phone: user.phone,
+          email: user.email,
+          photo: user.photo,
+          name: user.name,
+          registerSource: ["basic:phone-code"]);
+      SpUtil.putObject("user", theUser);
+      SpUtil.putString('userId', user.id);
+      SpUtil.putString('token', user.token);
+      //  跳转到首页，取消之前所有路由
+      Get.offAllNamed(Routes.INDEX);
     }
-    if (result.code != 200) {
-      EasyLoading.showError(result.message);
-      return;
-    }
-    User? user = result.user;
-    LogUtil.v('登录成功！！！${user?.token}');
-    SpUtil.putString('token', user!.token);
-    SpUtil.putString('username', user.name);
-    SpUtil.putString('email', user.email);
-    SpUtil.putString('avatar', user.photo);
-    SpUtil.putString('phone', user.phone);
-
-    Get.offAllNamed(Routes.INDEX);
-    // request.post(NetUrl.user_login).then((value) {
-    //   ///  存储用户信息和token
-    //   ///  跳转到首页，取消之前所有路由
-    //   Get.offAllNamed(Routes.INDEX);
-    // }).catchError((_) {});
+    // if (result.code != 200) {
+    //   EasyLoading.showError(result.message);
+    //   return;
+    // }
+    // User? user = result.user;
+    // LogUtil.v('登录成功！！！${user?.token}');
+    // SpUtil.putString('token', user!.token);
+    // SpUtil.putString('username', user.name);
+    // SpUtil.putString('email', user.email);
+    // SpUtil.putString('avatar', user.photo);
+    // SpUtil.putString('phone', user.phone);
+    //
+    // Get.offAllNamed(Routes.INDEX);
   }
 
   /// Authing 邮箱注册

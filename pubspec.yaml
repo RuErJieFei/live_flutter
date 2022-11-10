@@ -15,8 +15,6 @@ dependencies:
   pull_to_refresh: ^2.0.0
   #网络请求
   dio: ^4.0.6
-  #存储
-#  shared_preferences: any
   #获取版本信息
   package_info: any
   #屏幕适配
@@ -30,7 +28,9 @@ dependencies:
   #跳转网页
   url_launcher: any
   #拍照、图片选择
-  image_picker: any
+  images_picker: ^1.2.11
+  # https://pub.flutter-io.cn/packages/images_picker
+  # https://juejin.cn/post/6886643071069634567
   #图片预览
   photo_view: ^0.14.0
   #网络加载图
@@ -41,6 +41,11 @@ dependencies:
   authing_sdk: ^1.0.0
   # 日历组件
   table_calendar: ^3.0.8
+  # fake  https://pub.dev/packages/faker/install
+  faker: ^2.0.0
+  # 日期时间包
+  jiffy: ^5.0.0
+
 
 
 
@@ -65,8 +70,8 @@ flutter:
         - asset: fonts/iconfont.ttf
 
 
-#flutter_native_splash:
-#  background_image: images/login/wit_niit.png
-#  android_12:
-#    image: images/login/wit_niit.png
-#  fullscreen: true
+flutter_native_splash:
+  background_image: images/login/wit_niit.png
+  android_12:
+    image: images/login/wit_niit.png
+  fullscreen: true
