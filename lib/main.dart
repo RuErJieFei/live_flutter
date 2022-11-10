@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 import 'package:package_info/package_info.dart';
 import 'package:wit_niit/app/config/net_url.dart';
 
@@ -37,6 +39,7 @@ void main() async {
   LogUtil.v('App启动～～'); // debug 模式输出
   /// Authing 身份云初始化
   Authing.init('627351d938cd3d7ded36d7d1', '6368b2bfeeb7c9d7d5222c8a');
+  // initializeDateFormatting().then((_) => runApp(MyApp()));
   runApp(MyApp());
   configLoading();
 }
@@ -61,7 +64,6 @@ void configLoading() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(

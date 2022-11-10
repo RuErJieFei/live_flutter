@@ -39,6 +39,8 @@ dependencies:
   notification_permissions: ^0.6.1
   # Authing 身份云
   authing_sdk: ^1.0.0
+  # 日历组件
+  table_calendar: ^3.0.8
 
 
 
