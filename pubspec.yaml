@@ -28,7 +28,6 @@ dependencies:
   #跳转网页
   url_launcher: any
   #拍照、图片选择
-#  image_picker: any
   images_picker: ^1.2.11
   # https://pub.flutter-io.cn/packages/images_picker
   # https://juejin.cn/post/6886643071069634567
@@ -68,8 +67,8 @@ flutter:
         - asset: fonts/iconfont.ttf
 
 
-#flutter_native_splash:
-#  background_image: images/login/wit_niit.png
-#  android_12:
-#    image: images/login/wit_niit.png
-#  fullscreen: true
+flutter_native_splash:
+  background_image: images/login/wit_niit.png
+  android_12:
+    image: images/login/wit_niit.png
+  fullscreen: true
