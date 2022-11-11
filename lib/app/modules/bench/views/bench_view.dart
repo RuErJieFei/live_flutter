@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/component/my_Botton.dart';
-import 'package:wit_niit/app/modules/bench/views/schedule/schedule_page_view.dart';
+import 'package:wit_niit/app/modules/bench/views/schedule/schedule_view.dart';
 import 'package:wit_niit/app/modules/bench/bindings/enter_school_binding.dart';
 import '../controllers/bench_controller.dart';
 import 'enter_school_view.dart';
@@ -28,7 +28,7 @@ class BenchView extends GetView<BenchController> {
             SizedBox(height: 10,),
             MyButton(
               onTap: () {
-                Get.to(SchedulePageView());
+                Get.to(()=>SchedulePageView());
               },
               title: '日程',
             ),

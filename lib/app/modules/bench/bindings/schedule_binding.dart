@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:wit_niit/app/modules/bench/controllers/schedule_page_controller.dart';
+import 'package:wit_niit/app/modules/bench/controllers/schedule_controller.dart';
 
-class SchedulePageBingding extends Bindings {
+class SchedulePageBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
