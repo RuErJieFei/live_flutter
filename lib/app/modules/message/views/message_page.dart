@@ -2,9 +2,6 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:wit_niit/app/data/helpers.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/message_model.dart';
@@ -159,13 +156,13 @@ class _Stories extends GetView<MessageController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 16.0, top: 8, bottom: 16),
+            Padding(
+              padding: EdgeInsets.only(left: 16.w, top: 4.h, bottom: 7.h),
               child: Text(
                 '最近聊天',
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
-                  fontSize: 15,
+                  fontSize: 15.sp,
                   // color: AppColors.textFaded,
                 ),
               ),
@@ -181,7 +178,7 @@ class _Stories extends GetView<MessageController> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
-                      width: 60,
+                      width: 60.w,
                       child: InkWell(
                         /// 点击与他发起聊天
                         onTap: () {
@@ -231,12 +228,12 @@ class _StoryCard extends StatelessWidget {
         Avatar.medium(url: storyData.url),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: EdgeInsets.only(top: 10.h),
             child: Text(
               storyData.name,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 11,
+              style: TextStyle(
+                fontSize: 12.sp,
                 letterSpacing: 0.3,
                 fontWeight: FontWeight.bold,
               ),

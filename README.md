@@ -10,9 +10,9 @@
 - 多人协作，都在命名路由里加路由，合并代码时候比较麻烦，优先使用正常路由跳转
 
   ```dart
-  Get.to(LoginView());
+  Get.to(()=>LoginView());
   
-  Get.to(Home(), binding: HomeBinding());
+  Get.to(()=>Home(), binding: HomeBinding());
   
   ```
 

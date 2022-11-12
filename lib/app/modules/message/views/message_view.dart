@@ -6,6 +6,7 @@ import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/index/controllers/index_controller.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/views/message_page.dart';
+import 'package:wit_niit/app/modules/message/views/scan_view.dart';
 
 class MessageView extends GetView<MessageController> {
   const MessageView({Key? key}) : super(key: key);
@@ -53,9 +54,8 @@ class MessageView extends GetView<MessageController> {
         } else if (v == '加微信') {
           EasyLoading.showToast('加微信');
         } else if (v == '扫一扫') {
-          EasyLoading.showToast('扫一扫');
-          // Get.to(() => ScanView());
-          // Get.to(() => CustomizedView());
+          // EasyLoading.showToast('扫一扫');
+          Get.to(() => ScanView());
         } else if (v == '休息一下') {
           showDialog(context: context, builder: (_) => _haveARest());
         }
