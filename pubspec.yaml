@@ -45,6 +45,8 @@ dependencies:
   faker: ^2.0.0
   # 日期时间包
   jiffy: ^5.0.0
+  # StreamChannel 通信
+  web_socket_channel: ^2.2.0
   # 二维码扫描
   qr_code_scanner: ^1.0.1 # 不支持识别相册图，无动画
   #  flutter_scankit: ^1.2.4 # 安装后 ios 模拟器无法运行和打包
@@ -57,6 +59,13 @@ dev_dependencies:
   flutter_native_splash: ^2.2.10
   flutter_test: 
     sdk: flutter
+  flutter_ume: ^1.0.1
+  flutter_ume_kit_ui: ^1.0.0
+  flutter_ume_kit_device: ^1.0.0
+  flutter_ume_kit_perf: ^1.0.0
+  flutter_ume_kit_show_code: ^1.0.0
+  flutter_ume_kit_console: ^1.0.0
+  flutter_ume_kit_dio: ^1.0.0
 
 flutter: 
   uses-material-design: true

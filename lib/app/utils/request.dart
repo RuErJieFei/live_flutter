@@ -30,7 +30,7 @@ class Request {
   static late BaseOptions _options;
 
   /// 创建Dio实例
-  static late Dio _dio;
+  static late Dio dio;
 
   /// 公共参数
   static late Map _commonParam;
@@ -74,9 +74,9 @@ class Request {
     });
 
     /// 初始化dio
-    _dio = Dio(_options);
+    dio = Dio(_options);
 
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
       client.findProxy = (url) {
         /// 设置代理 电脑ip地址
         // return "PROXY 10.20.81.75:8888";
@@ -99,11 +99,11 @@ class Request {
     bool? isHasToken,
     Map<String, dynamic>? headers,
   }) async {
-    _dio.options.headers['timeStamp'] = DateTime.now().millisecondsSinceEpoch;
+    dio.options.headers['timeStamp'] = DateTime.now().millisecondsSinceEpoch;
     try {
       LogUtil.v('请求地址：${NetUrl.kHttp_HostName}$path}');
       // LogUtil.v('请求头：${headers??myHeaders}');
-      Response response = await _dio.request(
+      Response response = await dio.request(
         path,
         queryParameters: params,
         data: data,
@@ -126,8 +126,8 @@ class Request {
           } else {
             if (isHasToken!) {
               var data = json.decode(response.data[_responseFormat.dataKey]);
-              _dio.options.headers[_responseFormat.tokenKey!] = data[_responseFormat.tokenKey];
-              _dio.options.headers['userId'] = data['userId'];
+              dio.options.headers[_responseFormat.tokenKey!] = data[_responseFormat.tokenKey];
+              dio.options.headers['userId'] = data['userId'];
             }
             if (response.data is Map) {
               return response.data[_responseFormat.dataKey];
