@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/bench/controllers/enter_school_from_controller.dart';
 
+import '../../../component/school_push_buttton.dart';
 import '../../../data/base_style.dart';
 import '../../../data/school_theme_data.dart';
 
@@ -141,31 +142,34 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
               SizedBox(
                 height: 20.h,
               ),
-              Wrap(
+              Row(
                 children: [
                   Checkbox(
                     value: true,
                     activeColor: SchoolConfig.primaryColor, //选中时的颜色
                     onChanged: (value) {},
                   ),
-                  Text(
-                    '本人承诺以上信息真实有效，如有虚假本人承担一切责任',
-                    style: BaseStyle.smallStyle,
-                  )
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Text(
+                          '本人承诺以上信息真实有效，如有虚假本人承担一切责任',
+                          style: BaseStyle.smallStyle,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
               SizedBox(
                 height: 50.h,
               ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  '提交',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500),
-                ),
+              SchoolPushButton(
+                title: '提交',
+                onTap: () {},
+              ),
+              SizedBox(
+                height: 20.h,
               ),
             ],
           ),
