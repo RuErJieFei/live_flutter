@@ -11,6 +11,16 @@ class SchedulePageController extends GetxController {
 
   final count = 0.obs;
   final unClickColor = Colors.black.obs;
+  /// 日程新增页面的开始时间
+  var selectedStartDay = DateTime
+      .now()
+      .obs;
+  /// 日程新增页面的开始时间
+  var selectedEndDay = DateTime
+      .now()
+      .obs;
+
+  var isAllDay = false.obs;
   /// 日程列表
   var scheduleList = [].obs;
 

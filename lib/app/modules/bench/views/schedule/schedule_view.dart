@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:wit_niit/app/modules/bench/controllers/schedule_controller.dart';
+import 'package:wit_niit/app/modules/bench/views/schedule/schedule_add_view.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_will_do.dart';
+import '../../../../data/theme_data.dart';
 
 class SchedulePageView extends GetView<SchedulePageController> {
   const SchedulePageView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    final size = MediaQuery
-        .of(context)
-        .size;
-
-    var selectedDay = DateTime
-        .now()
-        .obs;
-
-    var _focusedDay = DateTime
-        .now()
-        .obs;
+    final size = MediaQuery.of(context).size;
+    var selectedDay = DateTime.now().obs;
+    var _focusedDay = DateTime.now().obs;
     Get.put(SchedulePageController());
     initializeDateFormatting();
     return Scaffold(
@@ -31,59 +24,58 @@ class SchedulePageView extends GetView<SchedulePageController> {
         title: Obx(() {
           return Text('${_focusedDay.value.year}年${_focusedDay.value.month}月');
         }),
-        // title: Text("日程"),
-
         centerTitle: false,
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+          _popupMenu(context)
         ],
       ),
-      bottomNavigationBar:
-        BottomAppBar(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 80.h,
-                child: Column(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Get.to(()=>SchedulePageView());
-                        },
-                        icon: Icon(
-                          Icons.insert_invitation,
-                          color: Colors.blue,
-                        )),
-                    Text("日程",style: TextStyle(color: Colors.blue),)
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 120.w,
-              ),
-              Container(
-                height: 80.h,
-                child: Column(
-                  children: [
-                    IconButton(
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 80.h,
+              child: Column(
+                children: [
+                  IconButton(
                       onPressed: () {
-                        Get.to(()=>ScheduleWillDoView());
+                        Get.to(() => SchedulePageView());
                       },
                       icon: Icon(
-                        Icons.check_circle_outline,
-                      ),
+                        Icons.insert_invitation,
+                        color: Colors.blue,
+                      )),
+                  Text(
+                    "日程",
+                    style: TextStyle(color: Colors.blue),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 120.w,
+            ),
+            Container(
+              height: 80.h,
+              child: Column(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Get.to(() => ScheduleWillDoView());
+                    },
+                    icon: Icon(
+                      Icons.check_circle_outline,
                     ),
-                    Text("待办")
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                  Text("待办")
+                ],
+              ),
+            )
+          ],
         ),
-
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -110,7 +102,7 @@ class SchedulePageView extends GetView<SchedulePageController> {
                         outsideDaysVisible: true,
                         markerMargin: EdgeInsets.only(top: 8),
                         cellMargin:
-                        EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                            EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                         todayDecoration: BoxDecoration(
                           color: Colors.blue,
                           shape: BoxShape.circle,
@@ -135,17 +127,12 @@ class SchedulePageView extends GetView<SchedulePageController> {
               ),
             ),
             Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width
-                  .w,
+              width: MediaQuery.of(context).size.width.w,
               height: size.width * 0.18.h,
               padding: EdgeInsets.all(12),
               child: Obx(() {
                 return Text(
-                  "今天 . ${selectedDay.value.month}月${selectedDay.value
-                      .day}日 星期${selectedDay.value.weekday}",
+                  "今天 . ${selectedDay.value.month}月${selectedDay.value.day}日 星期${selectedDay.value.weekday}",
                   style: TextStyle(
                     fontSize: 18.sp,
                   ),
@@ -158,41 +145,41 @@ class SchedulePageView extends GetView<SchedulePageController> {
                 height: size.width * 0.7.h,
                 child: ListView.builder(
                     itemCount: controller.scheduleList.length,
-                    itemExtent: size.width * 0.15.w,
+                    itemExtent: size.width * 0.2.w,
                     itemBuilder: (BuildContext c, index) {
-                      return IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
+                      return Row(
+                        // crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 50.w,
+                            child: Text(
                               controller.scheduleList[index].time,
                             ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            Container(
-                              width: 2.h,
-                              height: size.width * 0.12.h,
-                              color: Colors.blue,
-                            ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            Column(
+                          ),
+                          Container(
+                            width: 2.h,
+                            height: size.width * 0.15.h,
+                            color: Colors.blue,
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          SizedBox(
+                            height: 80.h,
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(controller.scheduleList[index].topic ??
                                     "(无主题)"),
                                 SizedBox(
-                                  height: 10.h,
+                                  height: 15.h,
                                 ),
                                 Text(controller.scheduleList[index].address ??
                                     ""),
                               ],
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       );
                     }),
               );
@@ -202,4 +189,53 @@ class SchedulePageView extends GetView<SchedulePageController> {
       ),
     );
   }
+}
+
+Widget _popupMenu(BuildContext context) {
+  return PopupMenuButton(
+    offset: Offset(0, 50),
+    elevation: 2,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(5),
+        bottomLeft: Radius.circular(5),
+        bottomRight: Radius.circular(20),
+      ),
+    ),
+    onSelected: (v) {
+      if (v == '预定会议') {
+        EasyLoading.showToast('预定会议');
+      } else if (v == '新建日程') {
+        Get.to(() => ScheduleAddView());
+      }
+    },
+    itemBuilder: (context) {
+      return <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: '预定会议',
+          child: Wrap(
+            spacing: 10,
+            children: [
+              Icon(Icons.check_box, color: Config.mainColor),
+              Text('预定会议',
+                  style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: '新建日程',
+          child: Wrap(
+            spacing: 10,
+            children: [
+              Icon(Icons.assessment, color: Config.mainColor),
+              Text('新建日程',
+                  style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
+            ],
+          ),
+        ),
+      ];
+    },
+    child: Icon(Icons.add),
+  );
 }

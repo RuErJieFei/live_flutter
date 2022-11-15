@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/bench/controllers/schedule_controller.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_view.dart';
 
+import '../bench_view.dart';
+
 class ScheduleWillDoView extends GetView<SchedulePageController> {
   const ScheduleWillDoView({Key? key}) : super(key: key);
 
@@ -17,6 +19,7 @@ class ScheduleWillDoView extends GetView<SchedulePageController> {
     Get.put(SchedulePageController());
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: () { Get.to(()=>BenchView()); }, icon: Icon(Icons.arrow_back),),
         title: Text("待办"),
         centerTitle: false,
         actions: [
