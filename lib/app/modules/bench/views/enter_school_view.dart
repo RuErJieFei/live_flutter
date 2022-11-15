@@ -100,7 +100,7 @@ class EnterSchoolView extends GetView<EnterSchoolController> {
                   InkWell(
                     child: columnApp(IconFont.icon_fangzi, '入校申请'),
                     onTap: () {
-                      Get.to(EnterSchoolIndexView(),
+                      Get.to(() => EnterSchoolIndexView(),
                           binding: EnterSchoolIndexBinding());
                     },
                   ),

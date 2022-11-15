@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/data/iconfont.dart';
+import 'package:wit_niit/app/modules/bench/bindings/enter_school_history_binding.dart';
+import 'package:wit_niit/app/modules/bench/views/enter_school_history_view.dart';
 
 import '../../../data/base_style.dart';
 import '../../../data/school_theme_data.dart';
@@ -157,7 +159,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.to(EnterSchoolFromView(),
+                    Get.to(() => EnterSchoolFromView(),
                         binding: EnterSchoolFromBinding());
                   },
                   child: rowList(
@@ -166,10 +168,16 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
                     '提交申请入校',
                   ),
                 ),
-                rowList(
-                  IconFont.icon_wendang1,
-                  '历史记录',
-                  '查看历史记录',
+                InkWell(
+                  onTap: () {
+                    Get.to(() => EnterSchoolHistoryView(),
+                        binding: EnterSchoolHistoryBinding());
+                  },
+                  child: rowList(
+                    IconFont.icon_wendang1,
+                    '历史记录',
+                    '查看历史记录',
+                  ),
                 ),
               ],
             ),

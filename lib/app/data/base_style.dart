@@ -23,6 +23,14 @@ class BaseStyle {
   static TextStyle grayContentStyle =
       TextStyle(color: Colors.grey.shade700, fontSize: 16.sp);
 
+  /// 浅灰色大号加粗字体
+  static TextStyle grayBoldBigContentStyle = TextStyle(
+      color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 20.sp);
+
+  /// 浅灰色中号加粗字体
+  static TextStyle grayCContentStyle =
+      TextStyle(color: Colors.grey, fontSize: 16.sp);
+
   /// 灰色小号字体
   static TextStyle graySmallStyle =
       TextStyle(color: Colors.grey.shade500, fontSize: 14.sp);
@@ -52,10 +60,23 @@ class BaseStyle {
   static TextStyle schoolContentStyle =
       TextStyle(color: SchoolConfig.primaryColor, fontSize: 16.sp);
 
+  static TextStyle schoolS4ContentStyle = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: 16.sp,
+    color: SchoolConfig.primarySwatchColor.shade400,
+  );
+
   /// 智慧入校主题色中号加粗字体
   static TextStyle schoolBoldContentStyle = TextStyle(
     color: SchoolConfig.primaryColor,
     fontSize: 16.sp,
+    fontWeight: FontWeight.bold,
+  );
+
+  /// 智慧入校主题色大号加粗字体
+  static TextStyle schoolBoldBigContentStyle = TextStyle(
+    color: SchoolConfig.primaryColor,
+    fontSize: 20.sp,
     fontWeight: FontWeight.bold,
   );
 

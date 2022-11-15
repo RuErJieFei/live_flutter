@@ -17,6 +17,7 @@ class SchoolConfig {
       100: Color(0xFFC5DDDA),
       200: Color(_primaryColorValue),
       300: Color(0xFF6C896F),
+      400: Color(0xFF4A7F81),
     },
   );
 }
