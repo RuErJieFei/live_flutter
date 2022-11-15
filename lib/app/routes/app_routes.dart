@@ -22,6 +22,7 @@ abstract class Routes {
   static const MICRO_DISK = _Paths.MICRO_DISK;
   static const SCHOOL_CALENDAR = _Paths.SCHOOL_CALENDAR;
   static const TIMETABLE = _Paths.TIMETABLE;
+  static const PERSONAL = _Paths.PERSONAL;
 }
 
 abstract class _Paths {
@@ -43,4 +44,5 @@ abstract class _Paths {
   static const MICRO_DISK = '/micro-disk';
   static const SCHOOL_CALENDAR = '/school-calendar';
   static const TIMETABLE = '/timetable';
+  static const PERSONAL = '/personal';
 }
