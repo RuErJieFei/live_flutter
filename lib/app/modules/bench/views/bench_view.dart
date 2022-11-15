@@ -1,5 +1,6 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/bench/controllers/bench_controller.dart';
@@ -22,6 +23,7 @@ class BenchView extends GetView<BenchController> {
               icon: Icon(Icons.edit_road),
               onPressed: () {
                 LogUtil.v('编辑工作台');
+                EasyLoading.showToast('${(2 / 3).ceil()}');
               },
             ),
           )
@@ -74,8 +76,8 @@ class BenchView extends GetView<BenchController> {
             shrinkWrap: true,
             // 不可滑动
             physics: NeverScrollableScrollPhysics(),
-            // 个数
-            itemCount: list.length,
+            // 个数, 3的倍数，向上取整
+            itemCount: 3 * (list.length / 3).ceil(),
             //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               // 横轴元素个数
@@ -88,6 +90,10 @@ class BenchView extends GetView<BenchController> {
               childAspectRatio: 1,
             ),
             itemBuilder: (BuildContext context, int index) {
+              if (index >= list.length) {
+                return Container(color: Colors.white);
+              }
+
               return GestureDetector(
                 onTap: () {
                   Get.toNamed(list[index].route);
