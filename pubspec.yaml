@@ -50,6 +50,9 @@ dependencies:
   # 二维码扫描
   qr_code_scanner: ^1.0.1 # 不支持识别相册图，无动画
   #  flutter_scankit: ^1.2.4 # 安装后 ios 模拟器无法运行和打包
+  #日期时间选择器
+  flutter_datetime_picker:
+  date_format: ^2.0.7
 
 
 
