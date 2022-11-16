@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
 import 'package:wit_niit/app/modules/bench/controllers/schedule_controller.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_view.dart';
+import 'package:wit_niit/app/modules/bench/views/schedule/schedule_will_do_add_view.dart';
 
 import '../bench_view.dart';
 
@@ -25,7 +27,9 @@ class ScheduleWillDoView extends GetView<SchedulePageController> {
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+          IconButton(onPressed: () {
+            Get.to(() => ScheduleWillDoAddView());
+          }, icon: Icon(Icons.add)),
         ],
       ),
       bottomNavigationBar:
@@ -34,7 +38,7 @@ class ScheduleWillDoView extends GetView<SchedulePageController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 80.h,
+                height: 100.h,
                 child: Column(
                   children: [
                     IconButton(
@@ -53,7 +57,7 @@ class ScheduleWillDoView extends GetView<SchedulePageController> {
                 width: 120.w,
               ),
               Container(
-                height: 80.h,
+                height: 100.h,
                 child: Column(
                   children: [
                     IconButton(
@@ -87,3 +91,4 @@ class ScheduleWillDoView extends GetView<SchedulePageController> {
     );
   }
 }
+

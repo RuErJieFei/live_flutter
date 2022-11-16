@@ -36,7 +36,7 @@ class SchedulePageView extends GetView<SchedulePageController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 80.h,
+              height: 100.h,
               child: Column(
                 children: [
                   IconButton(
@@ -58,7 +58,7 @@ class SchedulePageView extends GetView<SchedulePageController> {
               width: 120.w,
             ),
             Container(
-              height: 80.h,
+              height: 100.h,
               child: Column(
                 children: [
                   IconButton(
@@ -80,8 +80,8 @@ class SchedulePageView extends GetView<SchedulePageController> {
         child: Column(
           children: [
             Container(
-              width: size.width.w,
-              height: size.height * 0.4.h,
+              width: size.width,
+              height: 320.h,
               child: Padding(
                 padding: EdgeInsets.only(top: 20),
                 child: Obx(() {

@@ -23,7 +23,8 @@ class SchedulePageController extends GetxController {
   var isAllDay = false.obs;
   /// 日程列表
   var scheduleList = [].obs;
-
+  /// 用户列表
+  var userList = [].obs;
   /// 添加一条记录到日程列表
   void addSchedule() {
     final Faker faker = Faker(); // 假数据

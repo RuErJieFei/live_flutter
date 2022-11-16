@@ -33,19 +33,19 @@ class ScheduleAddView extends GetView<SchedulePageController> {
           child: Column(
             children: [
               _Topic(context),
-              _SykDivider(context, 8),
+              SykDivider(context, 8),
               _Participants(context),
-              _SykDivider(context, 8),
+              SykDivider(context, 8),
               _TimeComponent(context),
-              _SykDivider(context, 8),
+              SykDivider(context, 8),
               _Address(context),
-              _SykDivider(context, 8),
+              SykDivider(context, 8),
               _Attachment(context),
-              _SykDivider(context, 8),
+              SykDivider(context, 8),
               _Description(context),
-              _SykDivider(context, 8),
+              SykDivider(context, 8),
               _MoreComponent(context),
-              // ElevatedButton(onPressed: (){}, child: Text("保存"))
+              ElevatedButton(onPressed: (){}, child: Text("保存"))
             ],
           ),
         ),
@@ -102,14 +102,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
     );
   }
 
-  Widget _SykDivider(BuildContext context, double thick) {
-    return Divider(
-      thickness: thick.h,
-      color: Colors.grey.shade200,
-      indent: 0,
-      endIndent: 0,
-    );
-  }
+
 
   Widget _TimeComponent(BuildContext context) {
     return Obx(() {
@@ -159,7 +152,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 ),
               ],
             ),
-            _SykDivider(context, 2),
+            SykDivider(context, 2),
             Row(
               children: [
                 Text(
@@ -177,7 +170,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                     mm,
                     "月",
                     dd,
-                    "日      ",
+                    "日     ",
                     HH,
                     ":",
                     nn
@@ -199,7 +192,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 ),
               ],
             ),
-            _SykDivider(context, 2),
+            SykDivider(context, 2),
             Row(
               children: [
                 Text(
@@ -307,7 +300,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15))
               ],
             ),
-            _SykDivider(context, 2),
+            SykDivider(context, 2),
             Row(
               children: [
                 Text(
@@ -318,7 +311,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15))
               ],
             ),
-            _SykDivider(context, 2),
+            SykDivider(context, 2),
             Row(
               children: [
                 Text(
@@ -329,7 +322,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15))
               ],
             ),
-            _SykDivider(context, 2),
+            SykDivider(context, 2),
             Row(
               children: [
                 Text(
@@ -344,4 +337,13 @@ class ScheduleAddView extends GetView<SchedulePageController> {
         ),
       );
   }
+}
+
+Widget SykDivider(BuildContext context, double thick) {
+  return Divider(
+    thickness: thick.h,
+    color: Colors.grey.shade200,
+    indent: 0,
+    endIndent: 0,
+  );
 }

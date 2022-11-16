@@ -36,7 +36,6 @@ void main() async {
       // DeviceOrientation.landscapeRight,
     ],
   );
-
   ///打印log相关配置
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   LogUtil.init(isDebug: kDebugMode, maxLen: 800, tag: packageInfo.appName);
