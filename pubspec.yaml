@@ -53,6 +53,8 @@ dependencies:
   #日期时间选择器
   flutter_datetime_picker:
   date_format: ^2.0.7
+  # 地址选择器
+  city_pickers: ^1.1.3
 
 
 

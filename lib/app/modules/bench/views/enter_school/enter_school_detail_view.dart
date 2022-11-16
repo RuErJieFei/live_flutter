@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../component/current_time.dart';
-import '../../../data/base_style.dart';
-import '../../../data/school_theme_data.dart';
-import '../controllers/enter_school_detail_controller.dart';
+import '../../../../component/current_time.dart';
+import '../../../../data/base_style.dart';
+import '../../../../data/school_theme_data.dart';
+import '../../controllers/enter_school/enter_school_detail_controller.dart';
 
 class EnterSchoolDetailView extends GetView<EnterSchoolDetailController> {
   const EnterSchoolDetailView({Key? key}) : super(key: key);

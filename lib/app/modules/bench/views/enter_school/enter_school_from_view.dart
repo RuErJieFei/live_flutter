@@ -2,11 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:wit_niit/app/modules/bench/controllers/enter_school_from_controller.dart';
 
-import '../../../component/school_push_buttton.dart';
-import '../../../data/base_style.dart';
-import '../../../data/school_theme_data.dart';
+import '../../../../component/school_push_buttton.dart';
+import '../../../../data/base_style.dart';
+import '../../../../data/school_theme_data.dart';
+import '../../controllers/enter_school/enter_school_from_controller.dart';
 
 class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
   // const EnterSchoolFromView({Key? key}) : super(key: key);
@@ -289,6 +289,9 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
                 ],
               ),
             ),
+            onTap: () {
+              controller.getImage();
+            },
           ),
           PopupMenuDivider(),
           PopupMenuItem<String>(
@@ -310,6 +313,9 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
                 ],
               ),
             ),
+            onTap: () {
+              controller.getPhoto();
+            },
           ),
           PopupMenuDivider(),
           PopupMenuItem<String>(

@@ -1,13 +1,10 @@
+import 'package:city_pickers/city_pickers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class HealthReportController extends GetxController {
-  //TODO: Implement HealthReportController
-
-  final count = 0.obs;
   @override
-  void onInit() {
-    super.onInit();
-  }
+  void onInit() {}
 
   @override
   void onReady() {
@@ -19,5 +16,10 @@ class HealthReportController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  // 通过钩子事件, 主动唤起浮层.
+  Future<Result?> getResult(BuildContext context) async {
+    Result? result = await CityPickers.showFullPageCityPicker(context: context);
+
+    return result;
+  }
 }

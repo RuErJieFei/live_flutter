@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/data/iconfont.dart';
-import 'package:wit_niit/app/modules/bench/bindings/enter_school_history_binding.dart';
-import 'package:wit_niit/app/modules/bench/views/enter_school_history_view.dart';
 
-import '../../../data/base_style.dart';
-import '../../../data/school_theme_data.dart';
-import '../bindings/enter_school_from_binding.dart';
-import '../controllers/enter_school_index_controller.dart';
+import '../../../../data/base_style.dart';
+import '../../../../data/school_theme_data.dart';
+import '../../bindings/enter_school/enter_school_from_binding.dart';
+import '../../bindings/enter_school/enter_school_history_binding.dart';
+import '../../controllers/enter_school/enter_school_index_controller.dart';
 import 'enter_school_from_view.dart';
+import 'enter_school_history_view.dart';
 
 class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
   const EnterSchoolIndexView({Key? key}) : super(key: key);

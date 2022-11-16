@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:wit_niit/app/modules/bench/bindings/enter_school_index_binding.dart';
 
-import '../../../data/base_style.dart';
-import '../../../data/iconfont.dart';
-import '../../../data/school_theme_data.dart';
-import '../controllers/enter_school_controller.dart';
+import '../../../../data/base_style.dart';
+import '../../../../data/iconfont.dart';
+import '../../../../data/school_theme_data.dart';
+import '../../bindings/enter_school/enter_school_index_binding.dart';
+import '../../controllers/enter_school/enter_school_controller.dart';
 import 'enter_school_index_view.dart';
 
 class EnterSchoolView extends GetView<EnterSchoolController> {

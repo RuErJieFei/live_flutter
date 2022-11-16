@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:wit_niit/app/modules/bench/bindings/enter_school/enter_school_detail_binding.dart';
 
-import '../../../component/choice_chip_multiple.dart';
-import '../../../data/base_style.dart';
-import '../../../data/school_theme_data.dart';
-import '../controllers/enter_school_history_controller.dart';
+import '../../../../component/choice_chip_multiple.dart';
+import '../../../../data/base_style.dart';
+import '../../../../data/school_theme_data.dart';
+import '../../controllers/enter_school/enter_school_history_controller.dart';
+import 'enter_school_detail_view.dart';
 
 class EnterSchoolHistoryView extends GetView<EnterSchoolHistoryController> {
   const EnterSchoolHistoryView({Key? key}) : super(key: key);
@@ -177,7 +179,9 @@ class EnterSchoolHistoryView extends GetView<EnterSchoolHistoryController> {
                         ],
                       ),
                     ),
-                    Card('陈蓉琪', '2000100193', '2022-10-25', 0)
+                    Card('陈蓉琪', '2000100193', '2022-10-25', 0),
+                    Divider(),
+                    Card('陈蓉琪', '2000100193', '2022-10-25', 0),
                   ],
                 ),
               ),
@@ -187,27 +191,95 @@ class EnterSchoolHistoryView extends GetView<EnterSchoolHistoryController> {
 
   Widget Card(String name, String id, String date, int status) {
     return ListTile(
-      leading:
-          Image.network('https://avatars.githubusercontent.com/u/59445871?v=4'),
+      contentPadding: EdgeInsets.all(4.0),
+      isThreeLine: true,
+      leading: Container(
+        width: 55.w,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(
+              'https://tva1.sinaimg.cn/large/008vxvgGgy1h85rjouowrj302k03a0si.jpg',
+            ),
+            fit: BoxFit.fill,
+          ),
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+      ),
       title: Row(
         children: <Widget>[
           Text(
             name,
             style: BaseStyle.smallBBoldStyle,
           ),
-          Icon(
-            Icons.add_chart,
-            color: Colors.grey.shade700,
+          SizedBox(
+            width: 5.0,
           ),
           Text(
-            id,
+            'ID: $id',
             style: BaseStyle.graySmallStyle,
           ),
         ],
       ),
-      subtitle: Row(
-        children: [],
+      subtitle: Column(
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.gavel,
+                color: Colors.grey.shade700,
+                size: 16.0,
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+              Text(
+                status == 0 ? '【无风险】' : '【有风险】',
+                style: BaseStyle.schoolSmallStyle,
+              ),
+              Text(
+                date,
+                style: BaseStyle.graySmallStyle,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 5.0,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.assured_workload,
+                color: Colors.grey.shade700,
+                size: 16.0,
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+              Text(
+                '申请【$date】入校',
+                style: BaseStyle.graySmallStyle,
+              ),
+            ],
+          ),
+        ],
       ),
+      trailing: Container(
+        width: 40.w,
+        height: 40.h,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(
+              'https://tva1.sinaimg.cn/large/008vxvgGgy1h85rdt7lobj303y03yweb.jpg',
+            ),
+            fit: BoxFit.fill,
+          ),
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+      ),
+      onTap: () {
+        Get.to(() => EnterSchoolDetailView(),
+            binding: EnterSchoolDetailBinding());
+      },
     );
   }
 }
