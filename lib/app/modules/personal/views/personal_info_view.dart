@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
 import 'package:wit_niit/app/modules/personal/model/personal_info_model.dart';
@@ -59,10 +58,12 @@ class PersonalInfoItem extends GetView<PersonalInfoController> {
   Widget build(BuildContext context) {
     List<Widget> children = [];
     Widget avatar = ClipRRect(
+      borderRadius: BorderRadius.circular(10),
       child: Image.network(
         '${personalInfo.content}',
         width: 40.w,
-        height: 40.h,
+        height: 40.w,
+        fit: BoxFit.cover,
       ),
     );
     Widget company = Icon(
@@ -92,15 +93,18 @@ class PersonalInfoItem extends GetView<PersonalInfoController> {
         children.add(infoText);
       }
       children.add(arrow);
-    }
-    else {
+    } else if (personalInfo.label == '职务') {
+      children.add(infoText);
+    } else {
       children.add(infoText);
       children.add(arrow);
     }
 
     return ListTile(
         onTap: personalInfo.onPress,
-        leading: Text(personalInfo.label,),
+        leading: Text(
+          personalInfo.label,
+        ),
         trailing: Wrap(
           spacing: 5.w,
           crossAxisAlignment: WrapCrossAlignment.center,

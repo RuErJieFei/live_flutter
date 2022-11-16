@@ -1,12 +1,13 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:get/get.dart';
 import 'package:wit_niit/app/data/base_data.dart';
 import 'package:wit_niit/app/data/base_style.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
+import 'package:wit_niit/app/modules/personal/bindings/personal_status_binding.dart';
+import 'package:wit_niit/app/modules/personal/views/personal_status_view.dart';
 
 import '../controllers/personal_controller.dart';
 
@@ -40,17 +41,18 @@ class PersonalView extends GetView<PersonalController> {
             Card(
               elevation: 8,
               shadowColor: Colors.black.withOpacity(0.3),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Semantics(
-                      label: '单击进入个人信息页面',
-                      child: InkWell(
-                        // 命名路由跳转
-                        onTap: () => Get.toNamed(('/personal/info')),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Semantics(
+                    label: '单击进入个人信息页面',
+                    child: InkWell(
+                      // 命名路由跳转
+                      onTap: () => Get.toNamed(('/personal/info')),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -62,7 +64,11 @@ class PersonalView extends GetView<PersonalController> {
                                   alignment: WrapAlignment.center,
                                   spacing: 5.w,
                                   children: [
-                                    Text('AI南工',style: BaseStyle.grayContentStyle,semanticsLabel: '所在企业：AI南工',),
+                                    Text(
+                                      'AI南工',
+                                      style: BaseStyle.grayContentStyle,
+                                      semanticsLabel: '所在企业：AI南工',
+                                    ),
                                     Icon(
                                       Icons.check_circle_outline,
                                       color: Colors.green,
@@ -70,10 +76,12 @@ class PersonalView extends GetView<PersonalController> {
                                   ],
                                 ),
                                 ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
                                     '${user?.photo}',
                                     width: 64.w,
-                                    height: 64.h,
+                                    height: 64.w,
+                                    fit: BoxFit.cover,
                                   ),
                                 )
                               ],
@@ -83,21 +91,41 @@ class PersonalView extends GetView<PersonalController> {
                               semanticsLabel: '用户名称：${user?.name}',
                               style: TextStyle(fontSize: 20.sp),
                             ),
-                            Divider(color: Colors.grey.shade500, height: 30.h,),
                           ],
                         ),
                       ),
                     ),
-                    Wrap(
-                      spacing: 10.w,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Icon(Icons.add_reaction_outlined, size: 14, color: Colors.grey,),
-                        Text('添加个人状态...', style: BaseStyle.graySmallStyle,),
-                      ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Divider(
+                      height: 0,
                     ),
-                  ],
-                ),
+                  ),
+                  InkWell(
+                    onTap: () => Get.to(() => PersonalStatusView(),
+                        binding: PersonalStatusBinding()),
+                    child: Container(
+                      padding: EdgeInsets.all(20.0),
+                      width: Get.width,
+                      child: Wrap(
+                        spacing: 10.w,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_reaction_outlined,
+                            size: 14,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            '添加个人状态...',
+                            style: BaseStyle.graySmallStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Container(
@@ -109,7 +137,8 @@ class PersonalView extends GetView<PersonalController> {
                     child: Card(
                       elevation: 8,
                       shadowColor: Colors.black.withOpacity(0.3),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       child: Padding(
                         padding: EdgeInsets.all(Get.width / 14),
                         child: Column(
@@ -138,7 +167,8 @@ class PersonalView extends GetView<PersonalController> {
                     child: Card(
                       elevation: 8,
                       shadowColor: Colors.black.withOpacity(0.3),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       child: Padding(
                         padding: EdgeInsets.all(Get.width / 14),
                         child: Column(

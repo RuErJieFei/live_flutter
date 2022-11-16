@@ -10,6 +10,9 @@ class BaseStyle {
   static TextStyle fs16 = TextStyle(fontSize: 16.sp);
   static TextStyle fs16bold =
       TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold);
+  static TextStyle fs18 = TextStyle(fontSize: 18.sp);
+  static TextStyle fs18bold =
+      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold);
   static TextStyle fs26 =
       TextStyle(fontSize: 26.sp, fontWeight: FontWeight.bold);
 

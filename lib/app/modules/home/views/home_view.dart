@@ -63,6 +63,14 @@ class HomeView extends StatelessWidget {
             ),
             SizedBox(height: 30),
             MyButton(
+              onTap: () {
+                LogUtil.v('清除缓存');
+                SpUtil.clear();
+              },
+              title: '清除缓存',
+            ),
+            SizedBox(height: 30),
+            MyButton(
                 onTap: () {
                   Get.bottomSheet(
                       Container(
