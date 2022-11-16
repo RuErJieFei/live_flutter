@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
+import 'package:wit_niit/app/modules/personal/views/personal_view.dart';
 import 'package:wit_niit/app/routes/app_pages.dart';
 
 /// 创建时间：2022/11/8
@@ -16,7 +17,8 @@ class LeftDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = SpUtil.getObj("user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
+    UserModel? user = SpUtil.getObj(
+        "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
     return Drawer(
       elevation: 0,
       child: Column(
@@ -27,13 +29,22 @@ class LeftDrawer extends StatelessWidget {
               image: NetworkImage('http://img.w2gd.top/up/texture9.png'),
               fit: BoxFit.cover,
             )),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage('${user?.photo}'),
+            currentAccountPicture: GestureDetector(
+              onTap: () {
+                // 先返回一层 关闭掉 drawer
+                // 这样返回时 drawer 就是已经关闭的了
+                Get.back();
+                Get.to(() => PersonalView());
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage('${user?.photo}'),
+              ),
             ),
             otherAccountsPictures: <Widget>[
               CircleAvatar(
                 backgroundColor: Colors.white,
-                backgroundImage: NetworkImage('http://img.w2gd.top/up/logo.png'),
+                backgroundImage:
+                    NetworkImage('http://img.w2gd.top/up/logo.png'),
               ),
             ],
             accountName: Text(
@@ -44,6 +55,10 @@ class LeftDrawer extends StatelessWidget {
             accountEmail: Text('${user?.email}'),
             onDetailsPressed: () {
               LogUtil.v('----');
+              // 先返回一层 关闭掉 drawer
+              // 这样返回时 drawer 就是已经关闭的了
+              Get.back();
+              Get.to(() => PersonalView());
             },
           ),
           ListTile(leading: Text('手机号'), title: Text('${user?.phone}')),

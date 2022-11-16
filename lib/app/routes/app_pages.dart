@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
+import 'package:wit_niit/app/modules/personal/views/personal_info_view.dart';
 
 import '../modules/ask_leave/bindings/ask_leave_binding.dart';
 import '../modules/ask_leave/views/ask_leave_view.dart';
@@ -34,6 +36,8 @@ import '../modules/network/bindings/network_binding.dart';
 import '../modules/network/views/network_view.dart';
 import '../modules/notice/bindings/notice_binding.dart';
 import '../modules/notice/views/notice_view.dart';
+import '../modules/personal/bindings/personal_binding.dart';
+import '../modules/personal/views/personal_view.dart';
 import '../modules/school_calendar/bindings/school_calendar_binding.dart';
 import '../modules/school_calendar/views/school_calendar_view.dart';
 import '../modules/timetable/bindings/timetable_binding.dart';
@@ -151,6 +155,19 @@ class AppPages {
       name: _Paths.TIMETABLE,
       page: () => const TimetableView(),
       binding: TimetableBinding(),
+    ),
+    GetPage(
+      name: _Paths.PERSONAL,
+      page: () => const PersonalView(),
+      binding: PersonalBinding(),
+        children: [
+          GetPage(
+              name: '/info',
+              page: () => PersonalInfoView(),
+              binding: BindingsBuilder(() {
+                Get.lazyPut(() => PersonalInfoController());
+              })),
+        ]
     ),
   ];
 }
