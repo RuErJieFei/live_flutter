@@ -68,45 +68,50 @@ class _DemoMessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ListView(
-        children: const [
-          _DateLable(lable: 'Yesterday'),
-          _MessageTile(
-            message: '刚刚把衣服洗了',
-            messageDate: '12:01 PM',
-          ),
-          _MessageOwnTile(
-            message: '用的洗衣粉吗？',
-            messageDate: '12:02 PM',
-          ),
-          _MessageTile(
-            message: '洗衣液',
-            messageDate: '12:02 PM',
-          ),
-          _MessageOwnTile(
-            message: '啥牌子的',
-            messageDate: '12:03 PM',
-          ),
-          _MessageTile(
-            message: '蓝月亮!',
-            messageDate: '12:03 PM',
-          ),
-          _MessageOwnTile(
-            message: '加了多少水？',
-            messageDate: '12:03 PM',
-          ),
-          _MessageTile(
-            message: '不晓得，洗衣机自己加的',
-            messageDate: '12:03 PM',
-          ),
-        ],
+    return GestureDetector(
+      // 关闭键盘
+      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: ListView(
+          children: const [
+            _DateLable(lable: 'Yesterday'),
+            _MessageTile(
+              message: '刚刚把衣服洗了',
+              messageDate: '12:01 PM',
+            ),
+            _MessageOwnTile(
+              message: '用的洗衣粉吗？',
+              messageDate: '12:02 PM',
+            ),
+            _MessageTile(
+              message: '洗衣液',
+              messageDate: '12:02 PM',
+            ),
+            _MessageOwnTile(
+              message: '啥牌子的',
+              messageDate: '12:03 PM',
+            ),
+            _MessageTile(
+              message: '蓝月亮!',
+              messageDate: '12:03 PM',
+            ),
+            _MessageOwnTile(
+              message: '加了多少水？',
+              messageDate: '12:03 PM',
+            ),
+            _MessageTile(
+              message: '不晓得，洗衣机自己加的',
+              messageDate: '12:03 PM',
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
+/// 消息框
 class _MessageTile extends StatelessWidget {
   const _MessageTile({
     Key? key,

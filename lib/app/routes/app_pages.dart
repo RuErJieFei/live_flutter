@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_info_view.dart';
+import 'package:wit_niit/app/routes/route_auth_middleware.dart';
 
 import '../modules/ask_leave/bindings/ask_leave_binding.dart';
 import '../modules/ask_leave/views/ask_leave_view.dart';
@@ -44,7 +45,6 @@ import '../modules/timetable/bindings/timetable_binding.dart';
 import '../modules/timetable/views/timetable_view.dart';
 import '../modules/wit_classroom/bindings/wit_classroom_binding.dart';
 import '../modules/wit_classroom/views/wit_classroom_view.dart';
-import 'route_auth_middleware.dart';
 
 part 'app_routes.dart';
 
@@ -157,9 +157,9 @@ class AppPages {
       binding: TimetableBinding(),
     ),
     GetPage(
-      name: _Paths.PERSONAL,
-      page: () => const PersonalView(),
-      binding: PersonalBinding(),
+        name: _Paths.PERSONAL,
+        page: () => const PersonalView(),
+        binding: PersonalBinding(),
         children: [
           GetPage(
               name: '/info',
@@ -167,7 +167,6 @@ class AppPages {
               binding: BindingsBuilder(() {
                 Get.lazyPut(() => PersonalInfoController());
               })),
-        ]
-    ),
+        ]),
   ];
 }

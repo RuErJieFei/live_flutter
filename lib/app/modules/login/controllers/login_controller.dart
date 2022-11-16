@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:authing_sdk/client.dart';
 import 'package:authing_sdk/result.dart';
-import 'package:authing_sdk/user.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,8 +40,8 @@ class LoginController extends GetxController {
     } else if (Platform.isIOS) {
       value = SystemUiOverlayStyle.dark;
     }
-    accountTf.text = '17314433312';
-    passwordTf.text = '123456';
+    accountTf.text = '13851826167';
+    passwordTf.text = 'hlh320123678';
   }
 
   @override
@@ -97,8 +96,7 @@ class LoginController extends GetxController {
 
   /// 请求登录
   void requestLogin() async {
-    // var params = Map<String, Object>();
-    AuthResult result;
+    // AuthResult result;
     if (loginType == 0) {
       if (!BaseExtend.isValue(accountTf.text)) {
         EasyLoading.showToast('请输入账号');
@@ -113,14 +111,16 @@ class LoginController extends GetxController {
       // result = await AuthClient.loginByAccount(accountTf.text, passwordTf.text);
       /// 手机号&密码 登录
       var dataForm = {"phone": accountTf.text, "password": passwordTf.text};
+      EasyLoading.show(status: '正在登录');
       request.post('/users/phone', data: dataForm).then((data) {
-        // 存储用户信息和token
-        UserModel user = UserModel.fromJson(data);
-        SpUtil.putObject("user", user);
-        SpUtil.putString('userId', user.id as String);
-        SpUtil.putString('token', user.token);
+        SpUtil.putString('userId', data["id"]);
+        SpUtil.putString('token', data["token"]); // 存储token
+        EasyLoading.dismiss();
         //  跳转到首页，取消之前所有路由
         Get.offAllNamed(Routes.INDEX);
+
+        /// 获取用户信息
+        getUserInfo(data["id"]);
       }).catchError((_) {
         EasyLoading.showError('用户名或密码错误');
       });
@@ -129,7 +129,6 @@ class LoginController extends GetxController {
         EasyLoading.showToast('请输入手机号');
         return;
       }
-      LogUtil.v('手机号:${RegexUtil.isTel(phoneTf.text)}');
       if (phoneTf.text.length != 11) {
         EasyLoading.showToast('请正确手机号格式');
         return;
@@ -140,39 +139,27 @@ class LoginController extends GetxController {
       }
 
       /// Authing 手机验证码登录/注册
-      result = await AuthClient.loginByPhoneCode(phoneTf.text, vCodeTf.text);
-      if (result.code != 200) {
-        EasyLoading.showError(result.message);
-        return;
-      }
-      User? user = result.user;
-      //
-      UserModel theUser = UserModel(
-          token: user!.token,
-          phone: user.phone,
-          email: user.email,
-          photo: user.photo,
-          name: user.name,
-          registerSource: ["basic:phone-code"]);
-      SpUtil.putObject("user", theUser);
-      SpUtil.putString('userId', user.id);
-      SpUtil.putString('token', user.token);
-      //  跳转到首页，取消之前所有路由
-      Get.offAllNamed(Routes.INDEX);
+      // result = await AuthClient.loginByPhoneCode(phoneTf.text, vCodeTf.text);
+      // if (result.code != 200) {
+      //   EasyLoading.showError(result.message);
+      //   return;
+      // }
+      // User? user = result.user;
+      var dataForm = {"phone": phoneTf.text, "code": vCodeTf.text};
+      EasyLoading.show(status: '正在登录');
+      request.post('/users/login', data: dataForm).then((data) {
+        SpUtil.putString('userId', data["id"]);
+        SpUtil.putString('token', data["token"]); // 存储token
+        EasyLoading.dismiss();
+        //  跳转到首页，取消之前所有路由
+        Get.offAllNamed(Routes.INDEX);
+
+        /// 获取用户信息
+        getUserInfo(data["id"]);
+      }).catchError((_) {
+        EasyLoading.showError('验证码错误');
+      });
     }
-    // if (result.code != 200) {
-    //   EasyLoading.showError(result.message);
-    //   return;
-    // }
-    // User? user = result.user;
-    // LogUtil.v('登录成功！！！${user?.token}');
-    // SpUtil.putString('token', user!.token);
-    // SpUtil.putString('username', user.name);
-    // SpUtil.putString('email', user.email);
-    // SpUtil.putString('avatar', user.photo);
-    // SpUtil.putString('phone', user.phone);
-    //
-    // Get.offAllNamed(Routes.INDEX);
   }
 
   /// Authing 邮箱注册
@@ -184,9 +171,12 @@ class LoginController extends GetxController {
   }
 
   ///  Authing 获取当前登录用户信息
-  void getUserInfo() async {
-    AuthResult result = await AuthClient.getCurrentUser();
-    User? user = result.user; // user info
-    LogUtil.v('返回 头像>>>${result.user?.photo}');
+  void getUserInfo(id) async {
+    // AuthResult result = await AuthClient.getCurrentUser();
+    // User? user = result.user; // user info
+
+    var data = await request.get("/users/getUser/$id");
+    UserModel user = UserModel.fromJson(data);
+    SpUtil.putObject("user", user);
   }
 }

@@ -218,11 +218,13 @@ class Request {
   Future<T> get<T>(
     String path, {
     Map<String, dynamic>? params,
+    data,
     bool isHasToken = false,
     Map<String, dynamic>? headers,
   }) {
     LogUtil.v('请求参数params: $params');
-    return _request(path, method: 'get', params: params, isHasToken: isHasToken, headers: headers);
+    return _request(path,
+        method: 'get', params: params, data: data, isHasToken: isHasToken, headers: headers);
   }
 
   /// post方法

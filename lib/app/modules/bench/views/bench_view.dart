@@ -54,7 +54,7 @@ class BenchView extends GetView<BenchController> {
       margin: EdgeInsets.only(bottom: 12.h),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Color(0xffdedbdb),
+        color: Color(0xffe7e4e4),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       clipBehavior: Clip.antiAlias,
@@ -83,9 +83,9 @@ class BenchView extends GetView<BenchController> {
               // 横轴元素个数
               crossAxisCount: 3,
               // 主轴间距
-              mainAxisSpacing: 1.0,
+              mainAxisSpacing: 0.5,
               // 从轴间距
-              crossAxisSpacing: 1.0,
+              crossAxisSpacing: 0.5,
               // 子组件宽高长度比例
               childAspectRatio: 1,
             ),
