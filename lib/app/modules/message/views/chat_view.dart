@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/get.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/message/controllers/chat_controller.dart';
+import 'package:wit_niit/app/modules/message/model/chatmenu_item.dart';
 import 'package:wit_niit/app/modules/message/model/message_model.dart';
 import 'package:wit_niit/app/modules/message/widget/avatar.dart';
 import 'package:wit_niit/app/modules/message/widget/glowing_action_button.dart';
@@ -16,6 +17,7 @@ class ChatView extends GetView<ChatController> {
 
   @override
   Widget build(BuildContext context) {
+    var c = Get.find<ChatController>();
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
@@ -55,7 +57,7 @@ class ChatView extends GetView<ChatController> {
       ),
       body: Column(
         children: const [
-          Expanded(child: _DemoMessageList()),
+          Expanded(child: _MessageList()),
           _ActionBar(),
         ],
       ),
@@ -63,202 +65,32 @@ class ChatView extends GetView<ChatController> {
   }
 }
 
-class _DemoMessageList extends StatelessWidget {
-  const _DemoMessageList({Key? key}) : super(key: key);
+/// 聊天内容渲染
+class _MessageList extends GetView<ChatController> {
+  const _MessageList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       // 关闭键盘
-      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+        controller.hiddenMenu.value = true;
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: ListView(
-          children: const [
-            _DateLable(lable: 'Yesterday'),
-            _MessageTile(
-              message: '刚刚把衣服洗了',
-              messageDate: '12:01 PM',
-            ),
-            _MessageOwnTile(
-              message: '用的洗衣粉吗？',
-              messageDate: '12:02 PM',
-            ),
-            _MessageTile(
-              message: '洗衣液',
-              messageDate: '12:02 PM',
-            ),
-            _MessageOwnTile(
-              message: '啥牌子的',
-              messageDate: '12:03 PM',
-            ),
-            _MessageTile(
-              message: '蓝月亮!',
-              messageDate: '12:03 PM',
-            ),
-            _MessageOwnTile(
-              message: '加了多少水？',
-              messageDate: '12:03 PM',
-            ),
-            _MessageTile(
-              message: '不晓得，洗衣机自己加的',
-              messageDate: '12:03 PM',
-            ),
-          ],
-        ),
+        child: Obx(() {
+          return ListView(
+            controller: controller.scroll,
+            children: controller.msgList,
+          );
+        }),
       ),
     );
   }
 }
 
-/// 消息框
-class _MessageTile extends StatelessWidget {
-  const _MessageTile({
-    Key? key,
-    required this.message,
-    required this.messageDate,
-  }) : super(key: key);
-
-  final String message;
-  final String messageDate;
-
-  static const _borderRadius = 26.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(_borderRadius),
-                  topRight: Radius.circular(_borderRadius),
-                  bottomRight: Radius.circular(_borderRadius),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20),
-                child: Text(message),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                messageDate,
-                style: const TextStyle(
-                  // color: AppColors.textFaded,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// 我的消息框
-class _MessageOwnTile extends StatelessWidget {
-  const _MessageOwnTile({
-    Key? key,
-    required this.message,
-    required this.messageDate,
-  }) : super(key: key);
-
-  final String message;
-  final String messageDate;
-
-  static const _borderRadius = 26.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: Config.viceColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(_borderRadius),
-                  bottomRight: Radius.circular(_borderRadius),
-                  bottomLeft: Radius.circular(_borderRadius),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20),
-                child: Text(
-                  message,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                messageDate,
-                style: const TextStyle(
-                  color: Config.viceColor,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _DateLable extends StatelessWidget {
-  const _DateLable({
-    Key? key,
-    required this.lable,
-  }) : super(key: key);
-
-  final String lable;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12),
-            child: Text(
-              lable,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                // color: AppColors.textFaded,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
+/// 顶部Appbar
 class _AppBarTitle extends StatelessWidget {
   const _AppBarTitle({
     Key? key,
@@ -274,9 +106,7 @@ class _AppBarTitle extends StatelessWidget {
         Avatar.small(
           url: messageData.profilePicture,
         ),
-        const SizedBox(
-          width: 16,
-        ),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -304,7 +134,8 @@ class _AppBarTitle extends StatelessWidget {
   }
 }
 
-class _ActionBar extends StatelessWidget {
+/// 底部操作栏
+class _ActionBar extends GetView<ChatController> {
   const _ActionBar({Key? key}) : super(key: key);
 
   @override
@@ -312,47 +143,120 @@ class _ActionBar extends StatelessWidget {
     return SafeArea(
       bottom: true,
       top: false,
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  width: 2,
-                  color: Theme.of(context).dividerColor,
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      width: 2,
+                      color: Theme.of(context).dividerColor,
+                    ),
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: ImageIcon(AssetImage('images/public/voice.png'), size: 30),
                 ),
               ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Icon(
-                CupertinoIcons.camera_fill,
-              ),
-            ),
-          ),
-          const Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: TextField(
-                style: TextStyle(fontSize: 14),
-                decoration: InputDecoration(
-                  hintText: 'Type something...',
-                  border: InputBorder.none,
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 16.0),
+                  child: TextField(
+                    minLines: 1,
+                    maxLines: 4,
+                    controller: controller.msgTf,
+                    onChanged: (v) {
+                      if (v.length > 0) {
+                        controller.hasContent.value = true;
+                      } else {
+                        controller.hasContent.value = false;
+                      }
+                    },
+                    onTap: () {
+                      controller.hiddenMenu.value = true; // 隐藏菜单
+                      controller.scrollToBottom(); // 滚动到底部
+                    },
+                    style: TextStyle(fontSize: 14),
+                    decoration: InputDecoration(
+                      hintText: 'Type something...',
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Container(child: Image.asset('images/public/emoji.png', width: 40.w)),
+              Container(
+                width: 60.w,
+                padding: const EdgeInsets.only(left: 6, right: 14.0),
+                child: Obx(() {
+                  return controller.hasContent.value
+                      ? GlowingActionButton(
+                          color: Config.mainColor,
+                          icon: Icons.send_rounded,
+                          size: 40.w,
+                          onPressed: () {
+                            controller.sendMsg();
+                          },
+                        )
+                      : IconButton(
+                          onPressed: () {
+                            controller.hiddenMenu.value = false; // 显示菜单
+                            FocusScope.of(context).requestFocus(FocusNode()); //收起键盘
+                            controller.scrollToBottom(); // 滚动到底部
+                          },
+                          icon: Icon(Icons.add_circle_outline, size: 35.w),
+                        );
+                }),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12, right: 24.0),
-            child: GlowingActionButton(
-              color: Config.mainColor,
-              icon: Icons.send_rounded,
-              onPressed: () {
-                print('TODO: send a message');
-              },
-            ),
-          ),
+          Obx(() {
+            return Offstage(offstage: controller.hiddenMenu.value, child: _menu());
+          }),
         ],
+      ),
+    );
+  }
+
+  /// 底部菜单
+  Widget _menu() {
+    return Container(
+      height: 200.h,
+      color: Color(0xfff3f3f3),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: GridView.builder(
+        itemCount: controller.ChatMenuList.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 1,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          ChatMenuItem item = controller.ChatMenuList[index];
+          return GestureDetector(
+            onTap: item.onTap,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.white,
+                    ),
+                    // color: Colors.white,
+                    child: Image.asset(item.imageUrl),
+                  ),
+                ),
+                Text(item.title),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

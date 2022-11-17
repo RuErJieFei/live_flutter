@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/data/helpers.dart';
+import 'package:wit_niit/app/modules/message/bindings/chat_binding.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/message_model.dart';
 import 'package:wit_niit/app/modules/message/model/story_data.dart';
@@ -47,7 +48,7 @@ class _MessageTitle extends GetView<MessageController> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => ChatView(messageData: messageData));
+        Get.to(() => ChatView(messageData: messageData), binding: ChatBinding());
       },
       child: Container(
         height: 100.h,
