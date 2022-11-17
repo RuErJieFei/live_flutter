@@ -2,6 +2,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:wit_niit/app/modules/message/model/chatmenu_item.dart';
 import 'package:wit_niit/app/modules/message/widget/MessageTile.dart';
@@ -33,6 +34,7 @@ class ChatController extends GetxController {
     MessageOwnTile(
       message: '用的洗衣粉吗？',
       messageDate: '12:02',
+      widget: TextMsg(message: '加了多少水？'),
     ),
     MessageTile(
       message: '洗衣液',
@@ -41,6 +43,7 @@ class ChatController extends GetxController {
     MessageOwnTile(
       message: '啥牌子的',
       messageDate: '12:03',
+      widget: TextMsg(message: '加了多少水？'),
     ),
     MessageTile(
       message: '蓝月亮!',
@@ -49,10 +52,16 @@ class ChatController extends GetxController {
     MessageOwnTile(
       message: '加了多少水？',
       messageDate: '12:03',
+      widget: TextMsg(message: '加了多少水？'),
     ),
     MessageTile(
       message: '不晓得，洗衣机自己加的',
       messageDate: '12:03',
+    ),
+    MessageOwnTile(
+      message: '加了多少水？',
+      messageDate: '12:03',
+      widget: ImgMsg(imgUrl: 'http://img.w2gd.top/up/logo.png'),
     ),
   ].obs;
   //TODO: 通信
@@ -79,6 +88,7 @@ class ChatController extends GetxController {
         MessageOwnTile(
           message: msgTf.text,
           messageDate: "${now.hour}:${now.minute}",
+          widget: TextMsg(message: msgTf.text),
         ),
       );
       // 滚动到底部、输入清空
@@ -96,9 +106,57 @@ class ChatController extends GetxController {
     });
   }
 
+  late List ChatMenuList;
+
   @override
   void onInit() {
     super.onInit();
+
+    /// 聊天底部菜单列表
+    ChatMenuList = [
+      ChatMenuItem(
+        title: '图片',
+        imageUrl: 'images/public/picture.png',
+        onTap: () {
+          sendImageMsg();
+        },
+      ),
+      ChatMenuItem(
+        title: '拍摄',
+        imageUrl: 'images/public/skzb.png',
+        onTap: () {
+          EasyLoading.showToast('拍摄视频');
+        },
+      ),
+      ChatMenuItem(
+        title: '收藏',
+        imageUrl: 'images/public/xyyx.png',
+        onTap: () {
+          EasyLoading.showToast('分享收藏');
+        },
+      ),
+      ChatMenuItem(
+        title: '文件',
+        imageUrl: 'images/public/folder.png',
+        onTap: () {
+          EasyLoading.showToast('分享文件');
+        },
+      ),
+      ChatMenuItem(
+        title: '图文消息',
+        imageUrl: 'images/public/tw.png',
+        onTap: () {
+          EasyLoading.showToast('输入图文消息');
+        },
+      ),
+      ChatMenuItem(
+        title: '日程',
+        imageUrl: 'images/public/xl.png',
+        onTap: () {
+          EasyLoading.showToast('发送日程');
+        },
+      ),
+    ];
 
     /// 连接 websocket
     // chat();
@@ -117,49 +175,69 @@ class ChatController extends GetxController {
     super.onClose();
   }
 
-  /// 聊天底部菜单列表
-  final ChatMenuList = [
-    ChatMenuItem(
-      title: '图片',
-      imageUrl: 'images/public/picture.png',
-      onTap: () {
-        EasyLoading.showToast('选择图片');
-      },
-    ),
-    ChatMenuItem(
-      title: '拍摄',
-      imageUrl: 'images/public/skzb.png',
-      onTap: () {
-        EasyLoading.showToast('拍摄视频');
-      },
-    ),
-    ChatMenuItem(
-      title: '收藏',
-      imageUrl: 'images/public/xyyx.png',
-      onTap: () {
-        EasyLoading.showToast('分享收藏');
-      },
-    ),
-    ChatMenuItem(
-      title: '文件',
-      imageUrl: 'images/public/folder.png',
-      onTap: () {
-        EasyLoading.showToast('分享文件');
-      },
-    ),
-    ChatMenuItem(
-      title: '图文消息',
-      imageUrl: 'images/public/tw.png',
-      onTap: () {
-        EasyLoading.showToast('输入图文消息');
-      },
-    ),
-    ChatMenuItem(
-      title: '日程',
-      imageUrl: 'images/public/xl.png',
-      onTap: () {
-        EasyLoading.showToast('发送日程');
-      },
-    ),
-  ];
+  /// 发送图片消息
+  void sendImageMsg() async {
+    EasyLoading.showToast('选择图片');
+    List<Media>? res = await ImagesPicker.pick(count: 1, pickType: PickType.image);
+    if (res != null) {
+      var path = res[0].path; // 本地图片地址
+      LogUtil.v(path);
+      var now = new DateTime.now();
+      msgList.add(
+        MessageOwnTile(
+          message: '',
+          messageDate: "${now.hour}:${now.minute}",
+          widget: ImgFileMsg(filepath: path),
+        ),
+      );
+    }
+
+    scrollToBottom();
+  }
+
+  // /// 聊天底部菜单列表
+  // final ChatMenuList = [
+  //   ChatMenuItem(
+  //     title: '图片',
+  //     imageUrl: 'images/public/picture.png',
+  //     onTap: () {
+  //       sendImageMsg();
+  //     },
+  //   ),
+  //   ChatMenuItem(
+  //     title: '拍摄',
+  //     imageUrl: 'images/public/skzb.png',
+  //     onTap: () {
+  //       EasyLoading.showToast('拍摄视频');
+  //     },
+  //   ),
+  //   ChatMenuItem(
+  //     title: '收藏',
+  //     imageUrl: 'images/public/xyyx.png',
+  //     onTap: () {
+  //       EasyLoading.showToast('分享收藏');
+  //     },
+  //   ),
+  //   ChatMenuItem(
+  //     title: '文件',
+  //     imageUrl: 'images/public/folder.png',
+  //     onTap: () {
+  //       EasyLoading.showToast('分享文件');
+  //     },
+  //   ),
+  //   ChatMenuItem(
+  //     title: '图文消息',
+  //     imageUrl: 'images/public/tw.png',
+  //     onTap: () {
+  //       EasyLoading.showToast('输入图文消息');
+  //     },
+  //   ),
+  //   ChatMenuItem(
+  //     title: '日程',
+  //     imageUrl: 'images/public/xl.png',
+  //     onTap: () {
+  //       EasyLoading.showToast('发送日程');
+  //     },
+  //   ),
+  // ];
 }

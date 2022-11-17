@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 创建时间：2022/11/17
 /// 作者：w2gd
@@ -36,8 +37,11 @@ class MessageTile extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20),
-                child: Text(message),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                child: Text(
+                  message,
+                  style: TextStyle(fontSize: 16.sp),
+                ),
               ),
             ),
             Padding(

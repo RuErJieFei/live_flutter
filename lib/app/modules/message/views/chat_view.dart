@@ -197,6 +197,7 @@ class _ActionBar extends GetView<ChatController> {
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
                     controller.hiddenEmoji.value = false; // 显示emoji
+                    controller.hiddenMenu.value = true; // 隐藏菜单
                     controller.scrollToBottom();
                   },
                   child: Image.asset('images/public/emoji.png', width: 40.w),
@@ -218,6 +219,7 @@ class _ActionBar extends GetView<ChatController> {
                       : IconButton(
                           onPressed: () {
                             controller.hiddenMenu.value = false; // 显示菜单
+                            controller.hiddenEmoji.value = true; // 隐藏emoji
                             FocusScope.of(context).requestFocus(FocusNode()); //收起键盘
                             controller.scrollToBottom(); // 滚动到底部
                           },
