@@ -42,6 +42,7 @@ class BenchController extends GetxController {
     BenchItem('日程', 'images/public/rc.png', Routes.Schedule),
     BenchItem('校历', 'images/public/xl.png', Routes.SCHOOL_CALENDAR),
     BenchItem('课程表', 'images/public/kcb.png', Routes.TIMETABLE),
+    BenchItem('校园问卷', 'images/public/xywj.png', Routes.SURVEY),
   ];
 }
 

@@ -23,6 +23,7 @@ abstract class Routes {
   static const SCHOOL_CALENDAR = _Paths.SCHOOL_CALENDAR;
   static const TIMETABLE = _Paths.TIMETABLE;
   static const PERSONAL = _Paths.PERSONAL;
+  static const SURVEY = _Paths.SURVEY;
 }
 
 abstract class _Paths {
@@ -45,4 +46,5 @@ abstract class _Paths {
   static const SCHOOL_CALENDAR = '/school-calendar';
   static const TIMETABLE = '/timetable';
   static const PERSONAL = '/personal';
+  static const SURVEY = '/survey';
 }

@@ -13,10 +13,10 @@ const String policy = '''
 ''';
 
 ///阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录RAM控制台创建RAM账号。
-const String ossAccessKeyId = '*******';
+const String ossAccessKeyId = 'LTAI5tFSpdDgJnbY5SNtwRJZ';
 
 ///用于来生成Signature的
-const String accessKeySecret = '*******';
+const String accessKeySecret = 'IkC1JHE8UK86p9XojrWkKpufFOO3UR';
 
 ///这里yourBucketName替换成你们的BucketName
 ///oss-cn-hangzhou： Endpoint以杭州为例，其它Region请按实际情况填写
@@ -51,7 +51,7 @@ Future uploadImage(File imgFile) async {
   String fileName = basename(imgFile.path);
 
   /// 让阿里云创建一个flutter的文件夹
-  fileName = 'liuzhounpc/$fileName';
+  fileName = 'wit_niit/$fileName';
   var formData = FormData.fromMap({
     'key': fileName,
     'success_action_status': 200,

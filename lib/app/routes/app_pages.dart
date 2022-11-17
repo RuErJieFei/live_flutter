@@ -1,7 +1,4 @@
 import 'package:get/get.dart';
-import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
-import 'package:wit_niit/app/modules/personal/views/personal_info_view.dart';
-import 'package:wit_niit/app/routes/route_auth_middleware.dart';
 
 import '../modules/ask_leave/bindings/ask_leave_binding.dart';
 import '../modules/ask_leave/views/ask_leave_view.dart';
@@ -38,13 +35,18 @@ import '../modules/network/views/network_view.dart';
 import '../modules/notice/bindings/notice_binding.dart';
 import '../modules/notice/views/notice_view.dart';
 import '../modules/personal/bindings/personal_binding.dart';
+import '../modules/personal/controllers/personal_info_controller.dart';
+import '../modules/personal/views/personal_info_view.dart';
 import '../modules/personal/views/personal_view.dart';
 import '../modules/school_calendar/bindings/school_calendar_binding.dart';
 import '../modules/school_calendar/views/school_calendar_view.dart';
+import '../modules/survey/bindings/survey_binding.dart';
+import '../modules/survey/views/survey_view.dart';
 import '../modules/timetable/bindings/timetable_binding.dart';
 import '../modules/timetable/views/timetable_view.dart';
 import '../modules/wit_classroom/bindings/wit_classroom_binding.dart';
 import '../modules/wit_classroom/views/wit_classroom_view.dart';
+import 'route_auth_middleware.dart';
 
 part 'app_routes.dart';
 
@@ -168,5 +170,10 @@ class AppPages {
                 Get.lazyPut(() => PersonalInfoController());
               })),
         ]),
+    GetPage(
+      name: _Paths.SURVEY,
+      page: () => const SurveyView(),
+      binding: SurveyBinding(),
+    ),
   ];
 }
