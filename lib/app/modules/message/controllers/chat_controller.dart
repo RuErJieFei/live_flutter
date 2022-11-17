@@ -17,6 +17,8 @@ class ChatController extends GetxController {
   var hasContent = false.obs;
   // 是否隐藏底部菜单
   var hiddenMenu = true.obs;
+  // 是否隐藏 emoji 选择器
+  var hiddenEmoji = true.obs;
   // 输入框控制器
   TextEditingController msgTf = TextEditingController();
   // 滚动控制器

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as emoji;
+import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -72,10 +76,10 @@ class _MessageList extends GetView<ChatController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // 关闭键盘
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-        controller.hiddenMenu.value = true;
+        FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
+        controller.hiddenMenu.value = true; // 隐藏菜单
+        controller.hiddenEmoji.value = true; // 隐藏 emoji
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -177,6 +181,7 @@ class _ActionBar extends GetView<ChatController> {
                     },
                     onTap: () {
                       controller.hiddenMenu.value = true; // 隐藏菜单
+                      controller.hiddenEmoji.value = true; // 隐藏emoji
                       controller.scrollToBottom(); // 滚动到底部
                     },
                     style: TextStyle(fontSize: 14),
@@ -187,7 +192,16 @@ class _ActionBar extends GetView<ChatController> {
                   ),
                 ),
               ),
-              Container(child: Image.asset('images/public/emoji.png', width: 40.w)),
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
+                    controller.hiddenEmoji.value = false; // 显示emoji
+                    controller.scrollToBottom();
+                  },
+                  child: Image.asset('images/public/emoji.png', width: 40.w),
+                ),
+              ),
               Container(
                 width: 60.w,
                 padding: const EdgeInsets.only(left: 6, right: 14.0),
@@ -215,6 +229,9 @@ class _ActionBar extends GetView<ChatController> {
           ),
           Obx(() {
             return Offstage(offstage: controller.hiddenMenu.value, child: _menu());
+          }),
+          Obx(() {
+            return Offstage(offstage: controller.hiddenEmoji.value, child: _emojiMenu());
           }),
         ],
       ),
@@ -257,6 +274,52 @@ class _ActionBar extends GetView<ChatController> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  /// emoji
+  Widget _emojiMenu() {
+    return SizedBox(
+      height: 250,
+      child: emoji.EmojiPicker(
+        onEmojiSelected: (emoji.Category? category, emoji.Emoji? emoji) {
+          LogUtil.v('$emoji');
+          controller.hasContent.value = true;
+        },
+        onBackspacePressed: () {
+          controller.msgTf.text.length - 1;
+        },
+        textEditingController: controller.msgTf,
+        config: emoji.Config(
+          columns: 7,
+          emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+          verticalSpacing: 0,
+          horizontalSpacing: 0,
+          gridPadding: EdgeInsets.zero,
+          initCategory: emoji.Category.RECENT,
+          bgColor: const Color(0xFFF2F2F2),
+          indicatorColor: Colors.blue,
+          iconColor: Colors.grey,
+          iconColorSelected: Colors.blue,
+          backspaceColor: Colors.blue,
+          skinToneDialogBgColor: Colors.white,
+          skinToneIndicatorColor: Colors.grey,
+          enableSkinTones: true,
+          showRecentsTab: true,
+          recentsLimit: 28,
+          replaceEmojiOnLimitExceed: false,
+          noRecents: const Text(
+            'No Recents',
+            style: TextStyle(fontSize: 20, color: Colors.black26),
+            textAlign: TextAlign.center,
+          ),
+          loadingIndicator: const SizedBox.shrink(),
+          tabIndicatorAnimDuration: kTabScrollDuration,
+          categoryIcons: const emoji.CategoryIcons(),
+          buttonMode: emoji.ButtonMode.MATERIAL,
+          checkPlatformCompatibility: true,
+        ),
       ),
     );
   }
