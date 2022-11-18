@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
+import 'package:wit_niit/app/modules/personal/bindings/setting_binding.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_view.dart';
+import 'package:wit_niit/app/modules/personal/views/setting_view.dart';
 import 'package:wit_niit/app/routes/app_pages.dart';
 
 /// 创建时间：2022/11/8
@@ -67,7 +69,8 @@ class LeftDrawer extends StatelessWidget {
             leading: new Icon(Icons.settings),
             title: new Text("设置"),
             onTap: () {
-              // Get.to(()=> )
+              Get.back();
+              Get.to(() => SettingView(), binding: SettingBinding());
             },
           ),
           Expanded(child: SizedBox()),

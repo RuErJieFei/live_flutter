@@ -7,11 +7,10 @@ import 'package:flutter/material.dart';
 ///
 /// @Description 个人信息页面操作模型
 
-@immutable
 class PersonalInfo {
   final String label;
-  final String content;
-  final VoidCallback onPress;
+  String? content;
+  VoidCallback? onPress;
 
-  PersonalInfo(this.label, this.content, this.onPress);
+  PersonalInfo(this.label, {this.content, this.onPress});
 }

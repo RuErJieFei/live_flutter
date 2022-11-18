@@ -39,55 +39,49 @@ class PersonalInfoController extends GetxController {
     });
 
     personalInfoList.add(
-      PersonalInfo(
-          '头像',
-          '${user?.photo}',
-          () => Get.to(() => PersonalAvatarView(),
+      PersonalInfo('头像',
+          content: '${user?.photo}',
+          onPress: () => Get.to(() => PersonalAvatarView(),
               binding: PersonalAvatarBinding())),
     );
     personalInfoList.add(
-      PersonalInfo(
-          '姓名',
-          '${user?.name}',
-          () =>
+      PersonalInfo('姓名',
+          content: '${user?.name}',
+          onPress: () =>
               Get.to(() => PersonalNameView(), binding: PersonalNameBinding())),
     );
     personalInfoList.add(
-      PersonalInfo(
-          '性别',
-          '${gender}',
-          () => Get.to(() => PersonalGenderView(),
+      PersonalInfo('性别',
+          content: '${gender}',
+          onPress: () => Get.to(() => PersonalGenderView(),
               binding: PersonalGenderBinding())),
     );
     // personalInfoList.add(PersonalInfo('个人状态', '😃开心', () => Get.to(() => PersonalInfoView())),);
     personalInfoList.add(
-      PersonalInfo(
-          '个人状态',
-          '暂无',
-          () => Get.to(() => PersonalStatusView(),
+      PersonalInfo('个人状态',
+          content: '暂无',
+          onPress: () => Get.to(() => PersonalStatusView(),
               binding: PersonalStatusBinding())),
     );
     // ?? -> user?.company为空，返回操作符 右边的值
     // personalInfoList.add(PersonalInfo('所在企业', '${user?.company??'暂无'}', () => LogUtil.v('跳转页面')),);
     personalInfoList.add(
-      PersonalInfo(
-          '手机',
-          '${user?.phone}',
-          () => Get.to(() => PersonalPhoneView(),
+      PersonalInfo('手机',
+          content: '${user?.phone}',
+          onPress: () => Get.to(() => PersonalPhoneView(),
               binding: PersonalPhoneBinding())),
     );
     personalInfoList.add(
-      PersonalInfo(
-          '邮箱',
-          '${user?.email}',
-          () => Get.to(() => PersonalEmailView(),
+      PersonalInfo('邮箱',
+          content: '${user?.email}',
+          onPress: () => Get.to(() => PersonalEmailView(),
               binding: PersonalEmailBinding())),
     );
     personalInfoList.add(
-      PersonalInfo('职务', '暂无', () => () => LogUtil.v('跳转页面')),
+      PersonalInfo('职务', content: '暂无', onPress: () => () => LogUtil.v('跳转页面')),
     );
     personalInfoList.add(
-      PersonalInfo('组别', '暂无', () => LogUtil.v('跳转页面')),
+      PersonalInfo('组别', content: '暂无', onPress: () => LogUtil.v('跳转页面')),
     );
   }
 
