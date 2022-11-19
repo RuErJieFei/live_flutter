@@ -30,7 +30,7 @@ class ForgotPasswordView extends GetView<PasswordController> {
             /// 下一步
             SizedBox(height: 30),
             MyButton(
-              onTap: () => controller.verification(),
+              onTap: () => controller.nextStep(),
               title: '下一步',
             )
           ],

@@ -1,10 +1,11 @@
-import 'package:authing_sdk/client.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/config/base_extend.dart';
 import 'package:wit_niit/app/modules/login/views/reset_password_page.dart';
+import 'package:wit_niit/app/routes/app_pages.dart';
+import 'package:wit_niit/main.dart';
 
 /// 创建时间：2022/11/19
 /// 作者：w2gd
@@ -69,13 +70,21 @@ class PasswordController extends GetxController {
     if (!sendCodeBtn) {
       LogUtil.v('获取验证码~~');
       startTimer();
-      AuthClient.sendSms(phoneTf.text, "+86");
+      // AuthClient.sendSms(phoneTf.text, "+86");
+      request.post('/users/sendSms', data: {"phone": phoneTf.text});
     }
   }
 
-  /// 验证手机号与验证码
-  verification() async {
-    LogUtil.v('验证手机号后进入下一步');
+  /// 下一步
+  nextStep() async {
+    if (phoneTf.text.length != 11) {
+      EasyLoading.showToast('请输入正确的手机号');
+      return;
+    }
+    if (vCodeTf.text.length == 0) {
+      EasyLoading.showToast('请输入验证码');
+      return;
+    }
     Get.to(() => ResetPasswordPage());
   }
 
@@ -91,8 +100,19 @@ class PasswordController extends GetxController {
       EasyLoading.showToast('两次密码输入不一致');
       return;
     }
-    LogUtil.v('重置密码');
-    Get.back();
-    Get.back();
+    var dataForm = {
+      "phone": phoneTf.text,
+      "code": vCodeTf.text,
+      "password": passwordTf.text,
+    };
+    request.post('/users/resetPwd', data: dataForm).then((value) {
+      LogUtil.v('返回》》》》 $value');
+      EasyLoading.showSuccess('修改成功');
+      Get.offAllNamed(Routes.LOGIN);
+    }).catchError((_) {
+      EasyLoading.showError('修改失败，请重试');
+      vCodeTf.text = '';
+      Get.back();
+    });
   }
 }

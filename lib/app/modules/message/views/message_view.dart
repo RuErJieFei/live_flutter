@@ -54,7 +54,6 @@ class MessageView extends GetView<MessageController> {
         } else if (v == '加微信') {
           EasyLoading.showToast('加微信');
         } else if (v == '扫一扫') {
-          // EasyLoading.showToast('扫一扫');
           Get.to(() => ScanView());
         } else if (v == '休息一下') {
           showDialog(context: context, builder: (_) => _haveARest());

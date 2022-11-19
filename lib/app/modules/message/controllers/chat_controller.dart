@@ -8,6 +8,7 @@ import 'package:wit_niit/app/modules/message/model/chatmenu_item.dart';
 import 'package:wit_niit/app/modules/message/widget/MessageTile.dart';
 import 'package:wit_niit/app/modules/message/widget/date_bar.dart';
 import 'package:wit_niit/app/modules/message/widget/my_message_tile.dart';
+import 'package:wit_niit/main.dart';
 
 /// 创建时间：2022/11/9
 /// 作者：w2gd
@@ -68,34 +69,16 @@ class ChatController extends GetxController {
   var channel;
   void chat() async {
     LogUtil.v('创建一个WebSocketChannel连接到一台服务器');
-    channel = IOWebSocketChannel.connect(Uri.parse('ws://api.w2gd.top:6881/websocket/1'));
-    // channel = IOWebSocketChannel.connect('ws://echo.websocket.org');
+    var id = SpUtil.getString('userId');
+    // channel = IOWebSocketChannel.connect(Uri.parse('${NetUrl.socket_HostName}$id'));
+    // channel = IOWebSocketChannel.connect(Uri.parse('ws://api.w2gd.top:8083/websocket/$id'));
+    channel = IOWebSocketChannel.connect(Uri.parse('wss://6007j505z7.oicp.vip/websocket/$id'));
     LogUtil.v('连接完成～～');
     channel.stream.listen((msg) {
       LogUtil.v('监听消息 ～～');
       channel.sink.add('received!');
       // channel.sink.close(status.goingAway); // 消息关闭
     });
-  }
-
-  //TODO: 发送文字消息
-  void sendMsg() async {
-    // channel.sink.add('你好哇，WD');
-    if (msgTf.text.length != 0) {
-      LogUtil.v('发送消息～～');
-      var now = new DateTime.now();
-      msgList.add(
-        MessageOwnTile(
-          message: msgTf.text,
-          messageDate: "${now.hour}:${now.minute}",
-          widget: TextMsg(message: msgTf.text),
-        ),
-      );
-      // 滚动到底部、输入清空
-      scrollToBottom();
-      msgTf.text = '';
-      hasContent.value = false;
-    }
   }
 
   /// 滚动到底部
@@ -159,7 +142,7 @@ class ChatController extends GetxController {
     ];
 
     /// 连接 websocket
-    // chat();
+    chat();
   }
 
   @override
@@ -171,11 +154,36 @@ class ChatController extends GetxController {
   @override
   void onClose() {
     LogUtil.v('消息关闭');
-    // channel.sink.close(); // 消息关闭
+    channel.sink.close(); // 消息关闭
     super.onClose();
   }
 
-  /// 发送图片消息
+  //TODO: 发送文字消息
+  void sendMsg() async {
+    // channel.sink.add('你好哇，WD');
+    if (msgTf.text.length != 0) {
+      LogUtil.v('发送消息～～');
+      var dataForm = {"msg": msgTf.text, "userId": "63749d21ab61959622cb14b5"};
+      request.post('https://6007j505z7.oicp.vip/ws/sendsingle', data: dataForm).then((value) {
+        LogUtil.v('发送消息返回 $value');
+      });
+
+      var now = new DateTime.now();
+      msgList.add(
+        MessageOwnTile(
+          message: msgTf.text,
+          messageDate: "${now.hour}:${now.minute}",
+          widget: TextMsg(message: msgTf.text),
+        ),
+      );
+      // 滚动到底部、输入清空
+      scrollToBottom();
+      msgTf.text = '';
+      hasContent.value = false;
+    }
+  }
+
+  //TODO 发送图片消息
   void sendImageMsg() async {
     EasyLoading.showToast('选择图片');
     List<Media>? res = await ImagesPicker.pick(count: 1, pickType: PickType.image);
