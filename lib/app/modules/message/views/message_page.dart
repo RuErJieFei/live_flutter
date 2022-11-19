@@ -2,9 +2,11 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:wit_niit/app/data/helpers.dart';
 import 'package:wit_niit/app/modules/message/bindings/chat_binding.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
+import 'package:wit_niit/app/modules/message/model/contact_model.dart';
 import 'package:wit_niit/app/modules/message/model/message_model.dart';
 import 'package:wit_niit/app/modules/message/model/story_data.dart';
 import 'package:wit_niit/app/modules/message/widget/avatar.dart';
@@ -93,7 +95,6 @@ class _MessageTitle extends GetView<MessageController> {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 12,
-                          // color: AppColors.textFaded,
                         ),
                       ),
                     ),
@@ -109,16 +110,13 @@ class _MessageTitle extends GetView<MessageController> {
                     const SizedBox(height: 4),
                     Text(
                       messageData.dateMessage.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 11,
+                      style: TextStyle(
+                        fontSize: 11.sp,
                         letterSpacing: -0.2,
                         fontWeight: FontWeight.w600,
-                        // color: AppColors.textFaded,
                       ),
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
+                    const SizedBox(height: 8),
                     Container(
                       width: 18,
                       height: 18,
@@ -160,7 +158,7 @@ class _Stories extends GetView<MessageController> {
             Padding(
               padding: EdgeInsets.only(left: 16.w, top: 4.h, bottom: 7.h),
               child: Text(
-                '最近聊天',
+                '联系人',
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 15.sp,
@@ -169,44 +167,56 @@ class _Stories extends GetView<MessageController> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (BuildContext context, int index) {
-                  final faker = Faker();
-                  final avatar = Helpers.randomPictureUrl();
-                  final name = faker.person.name();
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 60.w,
-                      child: InkWell(
-                        /// 点击与他发起聊天
-                        onTap: () {
-                          Get.to(
-                            () => ChatView(
-                              messageData: MessageData(
-                                senderName: name,
-                                message: '',
-                                messageDate: Helpers.randomDate(),
-                                dateMessage: '',
-                                profilePicture: avatar,
-                              ),
+              child: Obx(() {
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.contactList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    ContactModel contact = controller.contactList[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 60.w,
+                        child: InkWell(
+                          /// 点击与他发起聊天
+                          onTap: () {
+                            final Faker faker = Faker(); // 假数据
+                            final date = Helpers.randomDate();
+                            MessageData data = MessageData(
+                              id: contact.id,
+                              senderName: contact.name ?? 'null',
+                              message: faker.lorem.sentence(),
+                              messageDate: date,
+                              dateMessage: Jiffy(date).fromNow(),
+                              profilePicture: contact.photo!,
+                            );
+                            Get.to(
+                              () => ChatView(messageData: data),
+                              binding: ChatBinding(),
+                              arguments: contact.id, // 联系人的id
+                            )?.then((value) {
+                              /// 更新最新消息
+                              /// 判断消息列表中是否存在与这个用户的消息，若不存在，则添加
+                              bool flag = controller.messageList.any((ele) {
+                                return ele.id == contact.id;
+                              });
+                              if (!flag) {
+                                controller.addMessage(data);
+                              }
+                            });
+                          },
+                          child: _StoryCard(
+                            storyData: StoryData(
+                              name: contact.name ?? 'null',
+                              url: contact.photo!,
                             ),
-                          );
-                          // controller.addMessage();
-                        },
-                        child: _StoryCard(
-                          storyData: StoryData(
-                            name: name,
-                            url: avatar,
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                );
+              }),
             )
           ],
         ),

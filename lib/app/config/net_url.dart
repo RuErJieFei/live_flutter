@@ -9,7 +9,7 @@ class NetUrl {
   static const String kHttp_HostName = "http://121.40.208.79:10000/api";
 
   /// WebSocket
-  static const String socket_HostName = "ws://121.40.208.79:10000/api/message/websocket/";
+  static const String socket_HostName = "ws://121.40.208.79:8083/websocket/";
 
   ///账户登录
   static const String user_login = '/user/login';
