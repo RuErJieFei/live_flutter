@@ -38,7 +38,7 @@ class ScheduleWillDoView extends GetView<SchedulePageController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 100.h,
+                height: 85.h,
                 child: Column(
                   children: [
                     IconButton(
@@ -57,7 +57,7 @@ class ScheduleWillDoView extends GetView<SchedulePageController> {
                 width: 120.w,
               ),
               Container(
-                height: 100.h,
+                height: 85.h,
                 child: Column(
                   children: [
                     IconButton(
