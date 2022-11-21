@@ -93,4 +93,8 @@ class BaseStyle {
   /// 智慧入校主题色小号字体
   static TextStyle schoolSmallStyle =
       TextStyle(color: SchoolConfig.primaryColor, fontSize: 14.sp);
+
+  /// 通讯录标题
+  static TextStyle messageMiddleStyle =
+      TextStyle(color: Colors.black, fontSize: 22.sp);
 }

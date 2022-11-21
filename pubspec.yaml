@@ -81,6 +81,7 @@ flutter:
     - images/public/
     - images/login/
     - images/school/
+    - images/contacts/
 
   fonts:
     - family: iconfont
