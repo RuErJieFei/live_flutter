@@ -10,6 +10,9 @@ class MessageController extends GetxController {
   /// 最新消息列表
   var messageList = <MessageData>[].obs;
 
+  // 正在私聊的对象的id
+  final currentFriendId = ''.obs;
+
   //TODO: 通信
   var channel;
   void linkSocket() async {
@@ -25,7 +28,7 @@ class MessageController extends GetxController {
 
   /// 添加一条记录到消息列表
   void addMessage(MessageData data) {
-    messageList.add(data);
+    messageList.insert(0, data); // 数组头部插入数据
   }
 
   @override
@@ -56,7 +59,8 @@ class MessageController extends GetxController {
   /// 获取 Authing 用户池列表
   void getContacts() async {
     Map<String, dynamic> params = {"page": 1, "limit": 50};
-    List res = await request.get('/users/userlist', params: params);
+    // List res = await request.get('/users/userlist', params: params);
+    List res = await request.get('${NetUrl.user_HostName}/users/userlist', params: params);
     res.forEach((e) {
       ContactModel contact = ContactModel.fromJson(e);
       contactList.add(contact);
