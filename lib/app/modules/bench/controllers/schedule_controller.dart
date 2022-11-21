@@ -1,10 +1,13 @@
+
 import 'package:faker/faker.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wit_niit/app/modules/bench/model/schedule_model.dart';
-
+import 'package:wit_niit/main.dart';
 import '../../../data/helpers.dart';
+import '../model/schedule_model_release.dart';
 
 class SchedulePageController extends GetxController {
   //TODO: Implement BenchController
@@ -15,11 +18,10 @@ class SchedulePageController extends GetxController {
   var selectedStartDay = DateTime
       .now()
       .obs;
-  /// 日程新增页面的开始时间
+  /// 日程新增页面的结束时间
   var selectedEndDay = DateTime
       .now()
       .obs;
-
   var isAllDay = false.obs;
   /// 日程列表
   var scheduleList = [].obs;
@@ -39,12 +41,14 @@ class SchedulePageController extends GetxController {
     );
     scheduleList.add(data);
   }
+
+
   @override
   void onInit() {
     super.onInit();
-    for (int i = 1; i <= 8; i++) {
-      addSchedule();
-    }
+    // for (int i = 1; i <= 8; i++) {
+    //   addSchedule();
+    // }
   }
 
   @override
