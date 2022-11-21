@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:wit_niit/app/data/base_data.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
 import 'package:wit_niit/app/modules/personal/model/personal_info_model.dart';
 
@@ -10,7 +11,7 @@ class PersonalInfoView extends GetView<PersonalInfoController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // backgroundColor: BaseData.kBackColor,
+        backgroundColor: BaseData.kBackColor,
         appBar: AppBar(
           title: const Text('个人信息'),
           centerTitle: true,
@@ -19,15 +20,16 @@ class PersonalInfoView extends GetView<PersonalInfoController> {
           return ListView.separated(
             itemCount: controller.personalInfoList.length,
             separatorBuilder: (BuildContext context, int index) {
-              if (index == 2 || index == 4 || index == 6) {
+              if (index == 2 || index == 5) {
                 return Divider(
                   thickness: 10,
-                  color: Colors.grey.shade200,
+                  color: BaseData.kBackColor,
                 );
               } else {
                 return Divider(
                   indent: 15,
                   endIndent: 15,
+                  height: 1,
                 );
               }
             },
@@ -70,7 +72,7 @@ class PersonalInfoItem extends GetView<PersonalInfoController> {
       Icons.check_circle_outline,
       color: Colors.green,
     );
-    Widget infoText = Text(personalInfo.content);
+    Widget infoText = Text(personalInfo.content ?? '');
     Widget arrow = Icon(
       Icons.arrow_forward_ios_rounded,
       size: 16,
@@ -100,15 +102,18 @@ class PersonalInfoItem extends GetView<PersonalInfoController> {
       children.add(arrow);
     }
 
-    return ListTile(
-        onTap: personalInfo.onPress,
-        leading: Text(
-          personalInfo.label,
-        ),
-        trailing: Wrap(
-          spacing: 5.w,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: children,
-        ));
+    return Container(
+      color: Colors.white,
+      child: ListTile(
+          onTap: personalInfo.onPress,
+          leading: Text(
+            personalInfo.label,
+          ),
+          trailing: Wrap(
+            spacing: 5.w,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: children,
+          )),
+    );
   }
 }

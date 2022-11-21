@@ -1,4 +1,3 @@
-import 'package:flustars/flustars.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/personal/model/personal_status_model.dart';
 
@@ -30,13 +29,11 @@ class PersonalStatusController extends GetxController {
   void changeSelected(PersonalStatus personalStatus) {
     personalStatusList.forEach((element) {
       if (personalStatus == element) {
-        element.isSelect = element.isSelect == true ? false : true;
-        LogUtil.v('当前是：${element.statusLabel} 状态为：${element.isSelect}');
+        element.isSelect = true;
       } else {
         element.isSelect = false;
       }
-      LogUtil.v('${element.statusLabel}:${element.isSelect}');
     });
-    LogUtil.v('------------');
+    personalStatusList.refresh();
   }
 }
