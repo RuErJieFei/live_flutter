@@ -7,6 +7,7 @@ import 'package:wit_niit/app/component/bg_container.dart';
 import 'package:wit_niit/app/component/bg_gradinent.dart';
 import 'package:wit_niit/app/component/my_Botton.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
+import 'package:wit_niit/app/modules/login/bindings/password_binding.dart';
 import 'package:wit_niit/app/modules/login/controllers/login_controller.dart';
 import 'package:wit_niit/app/modules/login/views/forgot_password_view.dart';
 
@@ -325,8 +326,7 @@ class LoginView extends GetView<LoginController> {
   _forgotPasswordWidget() {
     return InkWell(
       onTap: () {
-        LogUtil.v('忘记密码');
-        Get.to(ForgotPasswordView());
+        Get.to(ForgotPasswordView(), binding: PasswordBinding());
       },
       child: Container(
         alignment: Alignment.centerRight,

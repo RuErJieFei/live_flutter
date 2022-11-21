@@ -2,17 +2,11 @@ class NetUrl {
   ///本地地址
   // static const String kHttp_HostName = 'http://192.168.50.241:8080/niit-api';
 
-  ///测试
+  ///正式 (网关地址)
+  static const String kHttp_HostName = "http://121.40.208.79:10000/api";
 
-  // static const String kHttp_HostName = "http://124.221.232.15:8082";
-
-  // static const String kHttp_HostName = "http://124.221.232.15:8080";
-
-  static const String kHttp_HostName = "http://172.19.48.1:8081";
-
-
-  ///正式
-  // static const String kHttp_HostName = "https://";
+  /// WebSocket
+  static const String socket_HostName = "ws://121.40.208.79:8083/websocket/";
 
   ///账户登录
   static const String user_login = '/user/login';

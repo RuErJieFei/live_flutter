@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:wit_niit/app/modules/bench/controllers/schedule_controller.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_add_view.dart';
+import 'package:wit_niit/app/modules/bench/views/schedule/schedule_detail_view.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_will_do.dart';
 import '../../../../data/theme_data.dart';
 
@@ -36,7 +37,7 @@ class SchedulePageView extends GetView<SchedulePageController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 100.h,
+              height: 85.h,
               child: Column(
                 children: [
                   IconButton(
@@ -58,7 +59,7 @@ class SchedulePageView extends GetView<SchedulePageController> {
               width: 120.w,
             ),
             Container(
-              height: 100.h,
+              height: 85.h,
               child: Column(
                 children: [
                   IconButton(
@@ -147,39 +148,44 @@ class SchedulePageView extends GetView<SchedulePageController> {
                     itemCount: controller.scheduleList.length,
                     itemExtent: size.width * 0.2.w,
                     itemBuilder: (BuildContext c, index) {
-                      return Row(
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 50.w,
-                            child: Text(
-                              controller.scheduleList[index].time,
+                      return GestureDetector(
+                        onTap: () {
+                          Get.to(() => ScheduleDetailView(index));
+                        },
+                        child: Row(
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 50.w,
+                              child: Text(
+                                controller.scheduleList[index].time,
+                              ),
                             ),
-                          ),
-                          Container(
-                            width: 2.h,
-                            height: size.width * 0.15.h,
-                            color: Colors.blue,
-                          ),
-                          SizedBox(
-                            width: 20.w,
-                          ),
-                          SizedBox(
-                            height: 80.h,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(controller.scheduleList[index].topic ??
-                                    "(无主题)"),
-                                SizedBox(
-                                  height: 15.h,
-                                ),
-                                Text(controller.scheduleList[index].address ??
-                                    ""),
-                              ],
+                            Container(
+                              width: 2.h,
+                              height: size.width * 0.15.h,
+                              color: Colors.blue,
                             ),
-                          )
-                        ],
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            SizedBox(
+                              height: 80.h,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(controller.scheduleList[index].topic ??
+                                      "(无主题)"),
+                                  SizedBox(
+                                    height: 15.h,
+                                  ),
+                                  Text(controller.scheduleList[index].address ??
+                                      ""),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       );
                     }),
               );

@@ -33,6 +33,9 @@ class SchedulePageController extends GetxController {
       topic: faker.job.title(),
       address: faker.address.city(),
       time: Jiffy(date).format("HH:ss"),
+      organizerName: faker.person.name(),
+        durationTime: faker.date.dateTime().minute,
+      description: faker.food.dish()
     );
     scheduleList.add(data);
   }

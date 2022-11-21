@@ -51,10 +51,9 @@ class MessageView extends GetView<MessageController> {
       onSelected: (v) {
         if (v == '发起群聊') {
           EasyLoading.showToast('发起群聊');
-        } else if (v == '加微信') {
-          EasyLoading.showToast('加微信');
+        } else if (v == '添加好友') {
+          EasyLoading.showToast('添加好友');
         } else if (v == '扫一扫') {
-          // EasyLoading.showToast('扫一扫');
           Get.to(() => ScanView());
         } else if (v == '休息一下') {
           showDialog(context: context, builder: (_) => _haveARest());
@@ -73,12 +72,12 @@ class MessageView extends GetView<MessageController> {
             ),
           ),
           PopupMenuItem<String>(
-            value: '加微信',
+            value: '添加好友',
             child: Wrap(
               spacing: 10,
               children: [
                 Icon(Icons.wechat, color: Config.mainColor),
-                Text('加微信', style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
+                Text('添加好友', style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
               ],
             ),
           ),

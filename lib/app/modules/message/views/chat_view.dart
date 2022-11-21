@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as emoji;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
@@ -17,7 +21,6 @@ class ChatView extends GetView<ChatController> {
 
   @override
   Widget build(BuildContext context) {
-    var c = Get.find<ChatController>();
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
@@ -56,9 +59,9 @@ class ChatView extends GetView<ChatController> {
         ],
       ),
       body: Column(
-        children: const [
+        children: [
           Expanded(child: _MessageList()),
-          _ActionBar(),
+          _ActionBar(messageData.id),
         ],
       ),
     );
@@ -72,10 +75,10 @@ class _MessageList extends GetView<ChatController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // 关闭键盘
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-        controller.hiddenMenu.value = true;
+        FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
+        controller.hiddenMenu.value = true; // 隐藏菜单
+        controller.hiddenEmoji.value = true; // 隐藏 emoji
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -136,7 +139,9 @@ class _AppBarTitle extends StatelessWidget {
 
 /// 底部操作栏
 class _ActionBar extends GetView<ChatController> {
-  const _ActionBar({Key? key}) : super(key: key);
+  final String contactId;
+
+  const _ActionBar(this.contactId, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +182,7 @@ class _ActionBar extends GetView<ChatController> {
                     },
                     onTap: () {
                       controller.hiddenMenu.value = true; // 隐藏菜单
+                      controller.hiddenEmoji.value = true; // 隐藏emoji
                       controller.scrollToBottom(); // 滚动到底部
                     },
                     style: TextStyle(fontSize: 14),
@@ -187,7 +193,17 @@ class _ActionBar extends GetView<ChatController> {
                   ),
                 ),
               ),
-              Container(child: Image.asset('images/public/emoji.png', width: 40.w)),
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
+                    controller.hiddenEmoji.value = false; // 显示emoji
+                    controller.hiddenMenu.value = true; // 隐藏菜单
+                    controller.scrollToBottom();
+                  },
+                  child: Image.asset('images/public/emoji.png', width: 40.w),
+                ),
+              ),
               Container(
                 width: 60.w,
                 padding: const EdgeInsets.only(left: 6, right: 14.0),
@@ -198,12 +214,13 @@ class _ActionBar extends GetView<ChatController> {
                           icon: Icons.send_rounded,
                           size: 40.w,
                           onPressed: () {
-                            controller.sendMsg();
+                            controller.sendMsg(contactId);
                           },
                         )
                       : IconButton(
                           onPressed: () {
                             controller.hiddenMenu.value = false; // 显示菜单
+                            controller.hiddenEmoji.value = true; // 隐藏emoji
                             FocusScope.of(context).requestFocus(FocusNode()); //收起键盘
                             controller.scrollToBottom(); // 滚动到底部
                           },
@@ -216,6 +233,9 @@ class _ActionBar extends GetView<ChatController> {
           Obx(() {
             return Offstage(offstage: controller.hiddenMenu.value, child: _menu());
           }),
+          Obx(() {
+            return Offstage(offstage: controller.hiddenEmoji.value, child: _emojiMenu());
+          }),
         ],
       ),
     );
@@ -223,12 +243,57 @@ class _ActionBar extends GetView<ChatController> {
 
   /// 底部菜单
   Widget _menu() {
+    /// 聊天底部菜单列表
+    final List ChatMenuList = [
+      ChatMenuItem(
+        title: '图片',
+        imageUrl: 'images/public/picture.png',
+        onTap: () {
+          controller.sendImageMsg();
+        },
+      ),
+      ChatMenuItem(
+        title: '拍摄',
+        imageUrl: 'images/public/skzb.png',
+        onTap: () {
+          EasyLoading.showToast('拍摄视频');
+        },
+      ),
+      ChatMenuItem(
+        title: '收藏',
+        imageUrl: 'images/public/xyyx.png',
+        onTap: () {
+          EasyLoading.showToast('分享收藏');
+        },
+      ),
+      ChatMenuItem(
+        title: '文件',
+        imageUrl: 'images/public/folder.png',
+        onTap: () {
+          EasyLoading.showToast('分享文件');
+        },
+      ),
+      ChatMenuItem(
+        title: '图文消息',
+        imageUrl: 'images/public/tw.png',
+        onTap: () {
+          EasyLoading.showToast('输入图文消息');
+        },
+      ),
+      ChatMenuItem(
+        title: '日程',
+        imageUrl: 'images/public/xl.png',
+        onTap: () {
+          EasyLoading.showToast('发送日程');
+        },
+      ),
+    ];
     return Container(
       height: 200.h,
       color: Color(0xfff3f3f3),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: GridView.builder(
-        itemCount: controller.ChatMenuList.length,
+        itemCount: ChatMenuList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
           mainAxisSpacing: 10,
@@ -236,7 +301,7 @@ class _ActionBar extends GetView<ChatController> {
           childAspectRatio: 1,
         ),
         itemBuilder: (BuildContext context, int index) {
-          ChatMenuItem item = controller.ChatMenuList[index];
+          ChatMenuItem item = ChatMenuList[index];
           return GestureDetector(
             onTap: item.onTap,
             child: Column(
@@ -248,7 +313,6 @@ class _ActionBar extends GetView<ChatController> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       color: Colors.white,
                     ),
-                    // color: Colors.white,
                     child: Image.asset(item.imageUrl),
                   ),
                 ),
@@ -257,6 +321,51 @@ class _ActionBar extends GetView<ChatController> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  /// emoji
+  Widget _emojiMenu() {
+    return SizedBox(
+      height: 250,
+      child: emoji.EmojiPicker(
+        onEmojiSelected: (emoji.Category? category, emoji.Emoji? emoji) {
+          controller.hasContent.value = true;
+        },
+        onBackspacePressed: () {
+          controller.msgTf.text.length - 1;
+        },
+        textEditingController: controller.msgTf,
+        config: emoji.Config(
+          columns: 7,
+          emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+          verticalSpacing: 0,
+          horizontalSpacing: 0,
+          gridPadding: EdgeInsets.zero,
+          initCategory: emoji.Category.RECENT,
+          bgColor: const Color(0xFFF2F2F2),
+          indicatorColor: Colors.blue,
+          iconColor: Colors.grey,
+          iconColorSelected: Colors.blue,
+          backspaceColor: Colors.blue,
+          skinToneDialogBgColor: Colors.white,
+          skinToneIndicatorColor: Colors.grey,
+          enableSkinTones: true,
+          showRecentsTab: true,
+          recentsLimit: 28,
+          replaceEmojiOnLimitExceed: false,
+          noRecents: const Text(
+            'No Recents',
+            style: TextStyle(fontSize: 20, color: Colors.black26),
+            textAlign: TextAlign.center,
+          ),
+          loadingIndicator: const SizedBox.shrink(),
+          tabIndicatorAnimDuration: kTabScrollDuration,
+          categoryIcons: const emoji.CategoryIcons(),
+          buttonMode: emoji.ButtonMode.MATERIAL,
+          checkPlatformCompatibility: true,
+        ),
       ),
     );
   }

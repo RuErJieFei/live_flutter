@@ -26,7 +26,7 @@ class PersonalPhoneView extends GetView<PersonalPhoneController> {
           alignment: Alignment.center,
           children: [
             Positioned(
-              top: 50,
+              top: 50.h,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
