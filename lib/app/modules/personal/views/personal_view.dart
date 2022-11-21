@@ -1,11 +1,9 @@
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/data/base_data.dart';
 import 'package:wit_niit/app/data/base_style.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
-import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_status_binding.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_status_view.dart';
 
@@ -16,8 +14,6 @@ class PersonalView extends GetView<PersonalController> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = SpUtil.getObj(
-        "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
     return Scaffold(
       // 背景色
       backgroundColor: BaseData.kBackColor,
@@ -75,22 +71,27 @@ class PersonalView extends GetView<PersonalController> {
                                     ),
                                   ],
                                 ),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    '${user?.photo}',
-                                    width: 64.w,
-                                    height: 64.w,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
+                                Obx(() {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      '${controller.user.value.photo}',
+                                      width: 64.w,
+                                      height: 64.w,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                })
                               ],
                             ),
-                            Text(
-                              '${user?.name}',
-                              semanticsLabel: '用户名称：${user?.name}',
-                              style: TextStyle(fontSize: 20.sp),
-                            ),
+                            Obx(() {
+                              return Text(
+                                '${controller.user.value.name}',
+                                semanticsLabel:
+                                    '用户名称：${controller.user.value.name}',
+                                style: TextStyle(fontSize: 20.sp),
+                              );
+                            }),
                           ],
                         ),
                       ),

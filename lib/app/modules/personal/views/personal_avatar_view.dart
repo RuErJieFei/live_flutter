@@ -3,14 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
+import 'package:wit_niit/app/modules/personal/controllers/personal_avatar_controller.dart';
 
-class PersonalAvatarView extends GetView {
+class PersonalAvatarView extends GetView<PersonalAvatarController> {
   const PersonalAvatarView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     UserModel? user = SpUtil.getObj(
         "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
+
+    Widget avatarWidget = Obx(() {
+      LogUtil.v(controller.avatar.value);
+      // return controller.avatar.value.isURL
+      return Container(
+        height: Get.width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(controller.avatar.value))),
+      );
+      // Container(
+      //         height: Get.width,
+      //         decoration: BoxDecoration(
+      //             image: DecorationImage(
+      //                 fit: BoxFit.cover,
+      //                 image: FileImage(File(controller.avatar.value)))),
+      //       );
+    });
+    // });
 
     return Scaffold(
       backgroundColor: Colors.black87,
@@ -27,10 +48,19 @@ class PersonalAvatarView extends GetView {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextButton(
-                          onPressed: () => LogUtil.v('从手机相册选择'),
+                          onPressed: () => controller.openImageList(),
                           child: Container(
                             child: Text(
-                              '从手机相册选择',
+                              '相册选择',
+                              textAlign: TextAlign.center,
+                            ),
+                            width: Get.width,
+                          )),
+                      TextButton(
+                          onPressed: () => controller.openCamera(),
+                          child: Container(
+                            child: Text(
+                              '相机拍摄',
                               textAlign: TextAlign.center,
                             ),
                             width: Get.width,
@@ -40,7 +70,8 @@ class PersonalAvatarView extends GetView {
                         height: 0.h,
                       ),
                       TextButton(
-                          onPressed: () => LogUtil.v('保存到手机'),
+                          onPressed: () =>
+                              controller.saveAvatarLocal(user?.photo),
                           child: Container(
                             child: Text(
                               '保存到手机',
@@ -68,13 +99,7 @@ class PersonalAvatarView extends GetView {
               icon: Icon(Icons.more_vert_outlined))
         ],
       ),
-      body: Center(
-          child: Container(
-        height: Get.width,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.cover, image: NetworkImage('${user?.photo}'))),
-      )),
+      body: Center(child: avatarWidget),
     );
   }
 }

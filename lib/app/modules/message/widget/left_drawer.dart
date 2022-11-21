@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
+import 'package:wit_niit/app/modules/personal/bindings/personal_binding.dart';
 import 'package:wit_niit/app/modules/personal/bindings/setting_binding.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_view.dart';
 import 'package:wit_niit/app/modules/personal/views/setting_view.dart';
@@ -36,7 +37,7 @@ class LeftDrawer extends StatelessWidget {
                 // 先返回一层 关闭掉 drawer
                 // 这样返回时 drawer 就是已经关闭的了
                 Get.back();
-                Get.to(() => PersonalView());
+                Get.to(() => PersonalView(), binding: PersonalBinding());
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage('${user?.photo}'),
@@ -60,7 +61,7 @@ class LeftDrawer extends StatelessWidget {
               // 先返回一层 关闭掉 drawer
               // 这样返回时 drawer 就是已经关闭的了
               Get.back();
-              Get.to(() => PersonalView());
+              Get.to(() => PersonalView(), binding: PersonalBinding());
             },
           ),
           ListTile(leading: Text('手机号'), title: Text('${user?.phone}')),
