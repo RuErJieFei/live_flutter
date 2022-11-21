@@ -50,6 +50,7 @@ class _MessageTitle extends GetView<MessageController> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        controller.currentFriendId.value = messageData.id;
         Get.to(() => ChatView(messageData: messageData), binding: ChatBinding());
       },
       child: Container(
@@ -190,6 +191,7 @@ class _Stories extends GetView<MessageController> {
                               dateMessage: Jiffy(date).fromNow(),
                               profilePicture: contact.photo!,
                             );
+                            controller.currentFriendId.value = contact.id;
                             Get.to(
                               () => ChatView(messageData: data),
                               binding: ChatBinding(),
