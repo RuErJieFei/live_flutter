@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:wit_niit/app/component/image_show_server.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 
 /// 创建时间：2022/11/17
@@ -138,7 +140,19 @@ class ImgMsg extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 120.w,
-      child: Image.network(imgUrl!),
+      child: GestureDetector(
+        onTap: () {
+          // 查看大图
+          List _showList = [imgUrl];
+          Get.to(
+            () => ImageShowServer(
+              type: 1,
+              photoList: _showList,
+            ),
+          );
+        },
+        child: Image.network(imgUrl!),
+      ),
     );
   }
 }
@@ -152,7 +166,16 @@ class ImgFileMsg extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 120.w,
-      child: Image.file(File(filepath)),
+      child: GestureDetector(
+        onTap: () {
+          // 查看大图
+          List _showList = [filepath];
+          Get.to(
+            () => ImageShowServer(photoList: _showList),
+          );
+        },
+        child: Image.file(File(filepath)),
+      ),
     );
   }
 }
