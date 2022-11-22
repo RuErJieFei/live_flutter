@@ -1,4 +1,3 @@
-import 'package:flustars/flustars.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/contacts/model/type_model.dart';
 import 'package:wit_niit/main.dart';
