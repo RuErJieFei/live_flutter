@@ -4,11 +4,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
-import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
-import 'package:wit_niit/app/modules/message/model/private_chat_record.dart';
 import 'package:wit_niit/app/modules/message/widget/my_message_tile.dart';
-import 'package:wit_niit/main.dart';
 
 /// 创建时间：2022/11/9
 /// 作者：w2gd
@@ -28,11 +25,11 @@ class ChatController extends GetxController {
   // 消息列表
   var msgList = <Widget>[].obs;
   // DateBar(lable: 'Yesterday');
-  var msgCT = Get.find<MessageController>();
+  var msgCto = Get.find<MessageController>();
   // 我的信息
   // UserModel? user = SpUtil.getObj("user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
 
-  /// 滚动到底部
+  // Todo: 滚动到底部
   void scrollToBottom() {
     Future.delayed(Duration(milliseconds: 300), () {
       scroll.animateTo(scroll.position.maxScrollExtent,
@@ -44,32 +41,38 @@ class ChatController extends GetxController {
   late Conversation conversation;
   void createSession() async {
     try {
-      conversation = await msgCT.me.createConversation(
+      conversation = await msgCto.me.createConversation(
         isUnique: true,
-        members: {'${msgCT.currentFriendId}'},
-        name: '${SpUtil.getString('userId')}&${msgCT.currentFriendId}',
+        members: {'${msgCto.currentFriendId}'},
+        name: '${SpUtil.getString('userId')}&${msgCto.currentFriendId}',
       );
-
-      getChatRecord();
+      msgCto.recordList.clear(); // 清空上一个会话的聊天记录
+      getChatRecord(); // 获取当前会话的聊天记录
     } catch (e) {
       EasyLoading.showError('创建会话失败:$e');
     }
   }
 
   // Todo: 获取聊天记录
-  void getChatRecord() async {
+  Future getChatRecord() async {
     // limit 取值范围 1~100，如调用 queryMessage 时不带 limit 参数，默认获取 20 条消息记录
     try {
-      List<Message> messages = await conversation.queryMessage();
-      messages.forEach((e) {
-        LogUtil.v('${e.stringContent}');
-        // LogUtil.v('${e.}');
-        LogUtil.v('${e.id}-${e.fromClientID}-${e.sentDate}');
-        // msgList.add(
-        //
-        //
-        // );
-      });
+      List<Message> messages = await conversation.queryMessage(limit: 50);
+      String? myId = SpUtil.getString('userId');
+      List<Widget> list = messages
+          .map((e) {
+            if (myId == e.fromClientID) {
+              /// 文字消息
+              return msgCto.getMyMsgWidget(e);
+            } else {
+              return msgCto.getMsgWidget(e);
+            }
+          })
+          .cast<Widget>()
+          .toList();
+      msgCto.recordList.assignAll(list);
+      scrollToBottom();
+      return true;
     } catch (e) {
       LogUtil.v(e);
     }
@@ -79,22 +82,15 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     createSession(); // 创建私聊会话
+    // 每次监听到变化都回调
+    ever(msgCto.msgCount, (callback) {
+      scrollToBottom();
+    });
   }
 
   @override
   void onReady() {
     super.onReady();
-    scroll.jumpTo(scroll.position.maxScrollExtent); // 滚动到底部
-    // 接收消息
-    msgCT.me.onMessage = ({
-      Client? client,
-      Conversation? conversation,
-      Message? message,
-    }) {
-      if (message?.stringContent != null) {
-        print('收到的消息是：${message?.stringContent}');
-      }
-    };
   }
 
   @override
@@ -111,21 +107,18 @@ class ChatController extends GetxController {
         textMessage.text = msgTf.text;
         // 向对话中发送一条消息
         await conversation.send(message: textMessage);
+        var msg = msgCto.getMyMsgWidget(textMessage);
+        if (msg != null) {
+          msgCto.recordList.add(msg);
+          // 滚动到底部、输入清空
+          scrollToBottom();
+          msgTf.clear();
+          hasContent.value = false;
+        }
       } catch (e) {
         EasyLoading.showError('发送失败$e');
       }
-
-      var now = new DateTime.now();
-      msgList.add(
-        MessageOwnTile(
-          messageDate: "${now.hour}:${now.minute}",
-          widget: TextMsg(message: msgTf.text),
-        ),
-      );
-      // 滚动到底部、输入清空
-      scrollToBottom();
-      msgTf.text = '';
-      hasContent.value = false;
+      return;
     }
   }
 
@@ -145,37 +138,5 @@ class ChatController extends GetxController {
       );
     }
     scrollToBottom();
-  }
-
-  /// 获取私聊记录： 1是私聊，2是群聊
-  /// type: 1是文字，2是文件
-  void getSingleHistory(toId) async {
-    String? myId = SpUtil.getString('userId');
-    List chatList = await request.get('${NetUrl.msg_HostName}/ws/singlehistory/$myId&$toId');
-    // 聊天记录渲染
-    chatList.forEach((e) {
-      PrivateChatRecord record = PrivateChatRecord.fromJson(e);
-      // 我发送给对方的消息
-      if (myId == record.fromId) {
-        // 文字消息
-        if (record.type == 1) {
-          msgList.add(
-            MessageOwnTile(
-              messageDate: record.createTime,
-              widget: TextMsg(message: record.content),
-            ),
-          );
-        }
-      } else if (toId == record.fromId) {
-        if (record.type == 1) {
-          msgList.add(
-            MessageTile(
-              messageDate: record.createTime,
-              widget: TextMsg(message: record.content),
-            ),
-          );
-        }
-      }
-    });
   }
 }

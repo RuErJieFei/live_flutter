@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/message/controllers/chat_controller.dart';
+import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/chatmenu_item.dart';
 import 'package:wit_niit/app/modules/message/model/message_model.dart';
 import 'package:wit_niit/app/modules/message/widget/avatar.dart';
@@ -74,6 +75,7 @@ class _MessageList extends GetView<ChatController> {
 
   @override
   Widget build(BuildContext context) {
+    var msgCto = Get.find<MessageController>();
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
@@ -85,7 +87,7 @@ class _MessageList extends GetView<ChatController> {
         child: Obx(() {
           return ListView(
             controller: controller.scroll,
-            children: controller.msgList,
+            children: msgCto.recordList,
           );
         }),
       ),
@@ -120,15 +122,6 @@ class _AppBarTitle extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 20.sp),
               ),
-              // const SizedBox(height: 2),
-              // const Text(
-              //   'Online now',
-              //   style: TextStyle(
-              //     fontSize: 10,
-              //     fontWeight: FontWeight.bold,
-              //     color: Colors.green,
-              //   ),
-              // ),
             ],
           ),
         )

@@ -45,17 +45,17 @@ class MessageOwnTile extends StatelessWidget {
                 child: widget,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                messageDate,
-                style: TextStyle(
-                  color: Config.viceColor,
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 8.0),
+            //   child: Text(
+            //     messageDate,
+            //     style: TextStyle(
+            //       color: Config.viceColor,
+            //       fontSize: 10.sp,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -100,16 +100,16 @@ class MessageTile extends StatelessWidget {
                 child: widget,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                messageDate,
-                style: TextStyle(
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 8.0),
+            //   child: Text(
+            //     messageDate,
+            //     style: TextStyle(
+            //       fontSize: 10.sp,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -117,16 +117,17 @@ class MessageTile extends StatelessWidget {
   }
 }
 
-/// 文本消息
+/// 文本消息: 0我的， 1其他人
 class TextMsg extends StatelessWidget {
   final String message;
-  const TextMsg({Key? key, required this.message}) : super(key: key);
+  final int type;
+  const TextMsg({Key? key, required this.message, this.type = 0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
       message,
-      style: TextStyle(color: Colors.white, fontSize: 16.sp),
+      style: TextStyle(color: type == 0 ? Colors.white : null, fontSize: 16.sp),
     );
   }
 }

@@ -113,7 +113,7 @@ class LoginController extends GetxController {
       /// 手机号&密码 登录
       var dataForm = {"phone": accountTf.text, "password": passwordTf.text};
       EasyLoading.show(status: '正在登录');
-      request.post('/users/phone', data: dataForm).then((data) {
+      request.post('${NetUrl.user_HostName}/users/phone', data: dataForm).then((data) {
         SpUtil.putString('userId', data["id"]);
         SpUtil.putString('token', data["token"]); // 存储token
         EasyLoading.dismiss();
