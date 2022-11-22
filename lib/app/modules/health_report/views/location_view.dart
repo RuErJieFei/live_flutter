@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_baidu_mapapi_base/flutter_baidu_mapapi_base.dart'
+    show BMFMapSDK, BMF_COORD_TYPE;
 import 'package:flutter_baidu_mapapi_base/src/map/bmf_models.dart';
 import 'package:flutter_baidu_mapapi_map/flutter_baidu_mapapi_map.dart';
 import 'package:flutter_baidu_mapapi_search/flutter_baidu_mapapi_search.dart';
@@ -216,15 +220,20 @@ class MapRouteState extends State<LocationView> {
 
   //  设置定位参数
   void _setLocOption() {
-    androidOption.setCoorType("bd09ll"); // 设置返回的位置坐标系类型
-    androidOption.setIsNeedAltitude(true); // 设置是否需要返回海拔高度信息
-    androidOption.setIsNeedAddress(true); // 设置是否需要返回地址信息
-    androidOption.setIsNeedLocationPoiList(true); // 设置是否需要返回周边poi信息
-    androidOption.setIsNeedNewVersionRgc(true); // 设置是否需要返回最新版本rgc信息
-    androidOption.setIsNeedLocationDescribe(true); // 设置是否需要返回位置描述
-    androidOption.setOpenGps(true); // 设置是否需要使用gps
-    androidOption.setLocationMode(BMFLocationMode.hightAccuracy); // 设置定位模式
-    androidOption.setScanspan(1000); // 设置发起定位请求时间间隔
+    if (Platform.isIOS) {
+      BMFMapSDK.setApiKeyAndCoordType(
+          'OegaCZ8Nom0Az78EXbql6x7fa4FDDx7u', BMF_COORD_TYPE.BD09LL);
+    } else if (Platform.isAndroid) {
+      androidOption.setCoorType("bd09ll"); // 设置返回的位置坐标系类型
+      androidOption.setIsNeedAltitude(true); // 设置是否需要返回海拔高度信息
+      androidOption.setIsNeedAddress(true); // 设置是否需要返回地址信息
+      androidOption.setIsNeedLocationPoiList(true); // 设置是否需要返回周边poi信息
+      androidOption.setIsNeedNewVersionRgc(true); // 设置是否需要返回最新版本rgc信息
+      androidOption.setIsNeedLocationDescribe(true); // 设置是否需要返回位置描述
+      androidOption.setOpenGps(true); // 设置是否需要使用gps
+      androidOption.setLocationMode(BMFLocationMode.hightAccuracy); // 设置定位模式
+      androidOption.setScanspan(1000); // 设置发起定位请求时间间隔
+    }
     Map androidMap = androidOption.getMap();
     Map iosdMap = iosOption.getMap();
     _locationPlugin.prepareLoc(androidMap, iosdMap); //ios和安卓定位设置
