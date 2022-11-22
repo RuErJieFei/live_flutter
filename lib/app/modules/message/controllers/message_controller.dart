@@ -1,5 +1,6 @@
 import 'package:flustars/flustars.dart';
 import 'package:get/get.dart';
+import 'package:leancloud_official_plugin/leancloud_plugin.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
@@ -7,6 +8,9 @@ import 'package:wit_niit/app/modules/message/model/message_model.dart';
 import 'package:wit_niit/main.dart';
 
 class MessageController extends GetxController {
+  /// 创建一个 Client
+  Client me = Client(id: '${SpUtil.getString('userId')}');
+
   /// 最新消息列表
   var messageList = <MessageData>[].obs;
 
@@ -32,24 +36,22 @@ class MessageController extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    await me.open(); // 我登录
     getContacts(); // 获取通讯录
-    // 初始化消息列表
-    // for (int i = 1; i <= 4; i++) {
-    //   addMessage();
-    // }
   }
 
   @override
   void onReady() {
     super.onReady();
-    linkSocket(); // 连接web_socket
+    // linkSocket(); // 连接web_socket
   }
 
   @override
   void onClose() {
-    channel.sink.close(); // 关闭连接
+    me.close(); // 下线
+    // channel.sink.close(); // 关闭连接
     super.onClose();
   }
 

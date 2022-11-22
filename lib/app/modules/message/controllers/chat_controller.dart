@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:images_picker/images_picker.dart';
+import 'package:leancloud_official_plugin/leancloud_plugin.dart';
 import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/private_chat_record.dart';
@@ -27,27 +28,7 @@ class ChatController extends GetxController {
   // 消息列表
   var msgList = <Widget>[].obs;
   // DateBar(lable: 'Yesterday');
-
-  //TODO: 通信
-  // var channel;
-  // void chat() async {
-  //   LogUtil.v('创建一个WebSocketChannel连接到一台服务器');
-  //   var id = SpUtil.getString('userId');
-  //   // channel = IOWebSocketChannel.connect(Uri.parse('${NetUrl.socket_HostName}$id'));
-  //   channel = IOWebSocketChannel.connect(Uri.parse('wss://6007j505z7.oicp.vip/websocket/$id'));
-  //   LogUtil.v('连接完成～～');
-  //   channel.stream.listen((msg) {
-  //     LogUtil.v('监听消息 ～～$msg');
-  //     var now = new DateTime.now();
-  //     channel.sink.add('received!');
-  //     msgList.add(
-  //       MessageTile(
-  //         message: msg,
-  //         messageDate: "${now.hour}:${now.minute}",
-  //       ),
-  //     );
-  //   });
-  // }
+  var msgCT = Get.find<MessageController>();
 
   /// 滚动到底部
   void scrollToBottom() {
@@ -57,10 +38,26 @@ class ChatController extends GetxController {
     });
   }
 
+  /// 创建私聊会话
+  late Conversation conversation;
+  void createSession() async {
+    try {
+      // 创建 me 与 Jerry 之间的对话
+      conversation = await msgCT.me.createConversation(
+        isUnique: true,
+        members: {'${msgCT.currentFriendId}'},
+        name: '${SpUtil.getString('userId')}&${msgCT.currentFriendId}',
+      );
+    } catch (e) {
+      EasyLoading.showError('创建会话失败:$e');
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
-    getSingleHistory(Get.find<MessageController>().currentFriendId); // 获取聊天记录
+    createSession(); // 创建私聊会话
+    // getSingleHistory(Get.find<MessageController>().currentFriendId); // 获取聊天记录
   }
 
   @override
@@ -78,15 +75,22 @@ class ChatController extends GetxController {
   void sendMsg(id) async {
     LogUtil.v('联系人id: $id');
     if (msgTf.text.length != 0) {
-      LogUtil.v('发送消息～～');
-      var dataForm = {
-        "msg": msgTf.text,
-        "userId": id,
-        "fromId": SpUtil.getString('userId'),
-      };
-      request.post('${NetUrl.msg_HostName}/ws/sendsingle', data: dataForm).then((value) {
-        LogUtil.v('发送消息返回 $value');
-      });
+      // var dataForm = {
+      //   "msg": msgTf.text,
+      //   "userId": id,
+      //   "fromId": SpUtil.getString('userId'),
+      // };
+      // request.post('${NetUrl.msg_HostName}/ws/sendsingle', data: dataForm).then((value) {
+      //   LogUtil.v('发送消息返回 $value');
+      // });
+
+      try {
+        TextMessage textMessage = TextMessage();
+        textMessage.text = msgTf.text;
+        await conversation.send(message: textMessage);
+      } catch (e) {
+        EasyLoading.showError('发送失败$e');
+      }
 
       var now = new DateTime.now();
       msgList.add(

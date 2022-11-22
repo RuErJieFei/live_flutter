@@ -59,6 +59,11 @@ dependencies:
   emoji_picker_flutter: ^1.5.0
   # 生成二维码
   qr_flutter: ^4.0.0
+  # 即使通信
+  leancloud_official_plugin: ^1.0.1
+  # 数据存储
+  leancloud_storage: ^0.7.10
+
 
 
 
@@ -67,7 +72,7 @@ dev_dependencies:
   # 启动画面
   flutter_native_splash: ^2.2.10
   # 启动图标
-  flutter_launcher_icons: ^0.11.0
+#  flutter_launcher_icons: ^0.11.0
   flutter_test: 
     sdk: flutter
   flutter_ume: ^1.0.1
