@@ -1,7 +1,6 @@
 import 'package:flustars/flustars.dart';
 import 'package:get/get.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
 import 'package:wit_niit/app/modules/message/model/message_model.dart';
@@ -17,41 +16,26 @@ class MessageController extends GetxController {
   // 正在私聊的对象的id
   final currentFriendId = ''.obs;
 
-  //TODO: 通信
-  var channel;
-  void linkSocket() async {
-    LogUtil.v('创建一个WebSocketChannel连接到一台服务器');
-    var id = SpUtil.getString('userId');
-    channel = IOWebSocketChannel.connect(Uri.parse('${NetUrl.socket_HostName}$id'));
-    LogUtil.v('连接完成～～');
-    channel.stream.listen((msg) {
-      LogUtil.v('监听消息 ～～$msg');
-      channel.sink.add('received!');
-    });
-  }
-
   /// 添加一条记录到消息列表
   void addMessage(MessageData data) {
     messageList.insert(0, data); // 数组头部插入数据
   }
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    await me.open(); // 我登录
     getContacts(); // 获取通讯录
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
-    // linkSocket(); // 连接web_socket
+    await me.open(); // 我登录
   }
 
   @override
   void onClose() {
     me.close(); // 下线
-    // channel.sink.close(); // 关闭连接
     super.onClose();
   }
 

@@ -29,6 +29,8 @@ class ChatController extends GetxController {
   var msgList = <Widget>[].obs;
   // DateBar(lable: 'Yesterday');
   var msgCT = Get.find<MessageController>();
+  // 我的信息
+  // UserModel? user = SpUtil.getObj("user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
 
   /// 滚动到底部
   void scrollToBottom() {
@@ -38,18 +40,38 @@ class ChatController extends GetxController {
     });
   }
 
-  /// 创建私聊会话
+  // Todo: 创建私聊会话
   late Conversation conversation;
   void createSession() async {
     try {
-      // 创建 me 与 Jerry 之间的对话
       conversation = await msgCT.me.createConversation(
         isUnique: true,
         members: {'${msgCT.currentFriendId}'},
         name: '${SpUtil.getString('userId')}&${msgCT.currentFriendId}',
       );
+
+      getChatRecord();
     } catch (e) {
       EasyLoading.showError('创建会话失败:$e');
+    }
+  }
+
+  // Todo: 获取聊天记录
+  void getChatRecord() async {
+    // limit 取值范围 1~100，如调用 queryMessage 时不带 limit 参数，默认获取 20 条消息记录
+    try {
+      List<Message> messages = await conversation.queryMessage();
+      messages.forEach((e) {
+        LogUtil.v('${e.stringContent}');
+        // LogUtil.v('${e.}');
+        LogUtil.v('${e.id}-${e.fromClientID}-${e.sentDate}');
+        // msgList.add(
+        //
+        //
+        // );
+      });
+    } catch (e) {
+      LogUtil.v(e);
     }
   }
 
@@ -57,13 +79,22 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     createSession(); // 创建私聊会话
-    // getSingleHistory(Get.find<MessageController>().currentFriendId); // 获取聊天记录
   }
 
   @override
   void onReady() {
     super.onReady();
     scroll.jumpTo(scroll.position.maxScrollExtent); // 滚动到底部
+    // 接收消息
+    msgCT.me.onMessage = ({
+      Client? client,
+      Conversation? conversation,
+      Message? message,
+    }) {
+      if (message?.stringContent != null) {
+        print('收到的消息是：${message?.stringContent}');
+      }
+    };
   }
 
   @override
@@ -75,18 +106,10 @@ class ChatController extends GetxController {
   void sendMsg(id) async {
     LogUtil.v('联系人id: $id');
     if (msgTf.text.length != 0) {
-      // var dataForm = {
-      //   "msg": msgTf.text,
-      //   "userId": id,
-      //   "fromId": SpUtil.getString('userId'),
-      // };
-      // request.post('${NetUrl.msg_HostName}/ws/sendsingle', data: dataForm).then((value) {
-      //   LogUtil.v('发送消息返回 $value');
-      // });
-
       try {
         TextMessage textMessage = TextMessage();
         textMessage.text = msgTf.text;
+        // 向对话中发送一条消息
         await conversation.send(message: textMessage);
       } catch (e) {
         EasyLoading.showError('发送失败$e');
