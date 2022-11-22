@@ -59,6 +59,12 @@ dependencies:
   emoji_picker_flutter: ^1.5.0
   # 生成二维码
   qr_flutter: ^4.0.0
+  # 百度地图
+  flutter_bmflocation: ^3.3.0
+  flutter_baidu_mapapi_map: ^3.0.0+2
+  flutter_baidu_mapapi_search: ^3.0.0
+  # 权限请求
+  permission_handler: ^10.2.0
 
 
 
@@ -82,8 +88,28 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/public/
     - images/login/
+    - images/public/
+    - images/public/emoji.png
+    - images/public/folder.png
+    - images/public/jksb.png
+    - images/public/kcb.png
+    - images/public/ngzx.png
+    - images/public/picture.png
+    - images/public/qrcode.png
+    - images/public/rc.png
+    - images/public/skzb.png
+    - images/public/tw.png
+    - images/public/tzgg.png
+    - images/public/voice.png
+    - images/public/wlbz.png
+    - images/public/wp.png
+    - images/public/xl.png
+    - images/public/xsqj.png
+    - images/public/xywj.png
+    - images/public/xyyx.png
+    - images/public/zhjs.png
+    - images/public/zhrx.png
     - images/school/
 
   fonts:
