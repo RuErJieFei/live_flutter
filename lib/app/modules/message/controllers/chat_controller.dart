@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:images_picker/images_picker.dart';
+import 'package:wit_niit/app/config/net_url.dart';
+import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
+import 'package:wit_niit/app/modules/message/model/private_chat_record.dart';
 import 'package:wit_niit/app/modules/message/widget/my_message_tile.dart';
 import 'package:wit_niit/main.dart';
 
@@ -23,21 +26,7 @@ class ChatController extends GetxController {
   ScrollController scroll = ScrollController();
   // 消息列表
   var msgList = <Widget>[].obs;
-  // DateBar(lable: 'Yesterday'),
-  // MessageTile(
-  //   message: '蓝月亮!',
-  //   messageDate: '12:03',
-  // ),
-  // MessageOwnTile(
-  //   message: '加了多少水？',
-  //   messageDate: '12:03',
-  //   widget: TextMsg(message: '加了多少水？'),
-  // ),
-  // MessageOwnTile(
-  //   message: '加了多少水？',
-  //   messageDate: '12:03',
-  //   widget: ImgMsg(imgUrl: 'http://img.w2gd.top/up/logo.png'),
-  // ),
+  // DateBar(lable: 'Yesterday');
 
   //TODO: 通信
   // var channel;
@@ -71,7 +60,7 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // getSingleHistory(); // 获取聊天记录
+    getSingleHistory(Get.find<MessageController>().currentFriendId); // 获取聊天记录
   }
 
   @override
@@ -95,15 +84,13 @@ class ChatController extends GetxController {
         "userId": id,
         "fromId": SpUtil.getString('userId'),
       };
-      request.post('http://121.40.208.79:8083/ws/sendsingle', data: dataForm).then((value) {
-        // https://6007j505z7.oicp.vip/ws/sendsingle'
+      request.post('${NetUrl.msg_HostName}/ws/sendsingle', data: dataForm).then((value) {
         LogUtil.v('发送消息返回 $value');
       });
 
       var now = new DateTime.now();
       msgList.add(
         MessageOwnTile(
-          message: msgTf.text,
           messageDate: "${now.hour}:${now.minute}",
           widget: TextMsg(message: msgTf.text),
         ),
@@ -125,7 +112,6 @@ class ChatController extends GetxController {
       var now = new DateTime.now();
       msgList.add(
         MessageOwnTile(
-          message: '',
           messageDate: "${now.hour}:${now.minute}",
           widget: ImgFileMsg(filepath: path),
         ),
@@ -134,8 +120,35 @@ class ChatController extends GetxController {
     scrollToBottom();
   }
 
-  /// 获取私聊记录
-  void getSingleHistory() async {
-    var data = await request.get('http://121.40.208.79:8082/ws/singlehistory/{userId}');
+  /// 获取私聊记录： 1是私聊，2是群聊
+  /// type: 1是文字，2是文件
+  void getSingleHistory(toId) async {
+    String? myId = SpUtil.getString('userId');
+    List chatList = await request.get('${NetUrl.msg_HostName}/ws/singlehistory/$myId&$toId');
+    // 聊天记录渲染
+    chatList.forEach((e) {
+      PrivateChatRecord record = PrivateChatRecord.fromJson(e);
+      // 我发送给对方的消息
+      if (myId == record.fromId) {
+        // 文字消息
+        if (record.type == 1) {
+          msgList.add(
+            MessageOwnTile(
+              messageDate: record.createTime,
+              widget: TextMsg(message: record.content),
+            ),
+          );
+        }
+      } else if (toId == record.fromId) {
+        if (record.type == 1) {
+          msgList.add(
+            MessageTile(
+              messageDate: record.createTime,
+              widget: TextMsg(message: record.content),
+            ),
+          );
+        }
+      }
+    });
   }
 }

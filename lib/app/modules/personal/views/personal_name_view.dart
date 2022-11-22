@@ -16,7 +16,7 @@ class PersonalNameView extends GetView<PersonalNameController> {
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () => controller.changeName(),
             child:
                 Text('确定', style: BaseStyle.topStyle.copyWith(fontSize: 16.sp)),
           )

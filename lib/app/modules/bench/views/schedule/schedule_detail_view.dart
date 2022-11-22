@@ -5,7 +5,6 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:wit_niit/app/modules/bench/controllers/schedule_controller.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_add_view.dart';
-
 import '../../../../data/theme_data.dart';
 
 class ScheduleDetailView extends GetView<SchedulePageController> {
@@ -80,7 +79,7 @@ class ScheduleDetailView extends GetView<SchedulePageController> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    Text("${controller.scheduleList[index].time}",
+                    Text("${controller.scheduleList[index].startTime}",
                         style: TextStyle(fontSize: 22.sp)),
                     SizedBox(
                       height: 10.h,
@@ -167,7 +166,8 @@ class ScheduleDetailView extends GetView<SchedulePageController> {
                         SizedBox(
                           width: 15.w,
                         ),
-                        Text("${controller.scheduleList[index].organizerName}"),
+                        // Text("${controller.scheduleList[index].organizationId}"),
+                        Text("接口选择"),
                         SizedBox(
                           width: 70.w,
                         ),
@@ -199,7 +199,8 @@ class ScheduleDetailView extends GetView<SchedulePageController> {
                         SizedBox(
                           width: 15.w,
                         ),
-                        Text("${controller.scheduleList[index].organizerName}"),
+                        // Text("${controller.scheduleList[index].participantId}"),
+                        Text("接口选择"),
                         SizedBox(
                           width: 70.w,
                         ),
@@ -257,7 +258,7 @@ class ScheduleDetailView extends GetView<SchedulePageController> {
                       children: [
                         Text("提醒" ,style: TextStyle(fontSize: 18.sp)),
                         SizedBox(width: 60.w,),
-                        Text("${controller.scheduleList[index].durationTime}分钟前", style: TextStyle(fontSize: 18.sp)),
+                        Text("${controller.scheduleList[index].alertTime}分钟前", style: TextStyle(fontSize: 18.sp)),
                       ],
                     ),
 

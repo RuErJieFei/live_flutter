@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/config/base_extend.dart';
+import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/routes/app_pages.dart';
 import 'package:wit_niit/main.dart';
@@ -175,7 +176,7 @@ class LoginController extends GetxController {
     // AuthResult result = await AuthClient.getCurrentUser();
     // User? user = result.user; // user info
 
-    var data = await request.get("/users/getUser/$id");
+    var data = await request.get("${NetUrl.user_HostName}/users/getUser/$id");
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }

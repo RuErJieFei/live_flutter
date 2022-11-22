@@ -17,18 +17,14 @@ import 'package:wit_niit/app/modules/personal/views/personal_status_view.dart';
 
 class PersonalInfoController extends GetxController {
   /// 个人信息列表数据
-  var personalInfoList = [].obs;
+  var personalInfoList = <PersonalInfo>[].obs;
 
   /// 添加个人列表信息数据
   void addInfo() {
     UserModel? user = SpUtil.getObj(
         "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
     // 性别列表
-    Map<String, String> genderList = {
-      "M": "男",
-      "F": "女",
-      "U": "未知",
-    };
+    Map<String, String> genderList = {"M": "男", "F": "女"};
     // 用户性别
     String gender = '';
     genderList.forEach((key, value) {
@@ -81,7 +77,9 @@ class PersonalInfoController extends GetxController {
       PersonalInfo('职务', content: '暂无', onPress: () => () => LogUtil.v('跳转页面')),
     );
     personalInfoList.add(
-      PersonalInfo('组别', content: '暂无', onPress: () => LogUtil.v('跳转页面')),
+      PersonalInfo('组别',
+          content: '${user?.college}/${user?.classes}',
+          onPress: () => LogUtil.v('跳转页面')),
     );
   }
 
@@ -100,5 +98,23 @@ class PersonalInfoController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  // 改变头像
+  void changeAvatar(String avatarUrl) {
+    personalInfoList[0].content = avatarUrl;
+    personalInfoList.refresh();
+  }
+
+  // 改变用户名
+  void changeName(String name) {
+    personalInfoList[1].content = name;
+    personalInfoList.refresh();
+  }
+
+  // 改变性别
+  void changeGender(String gender) {
+    personalInfoList[2].content = gender;
+    personalInfoList.refresh();
   }
 }

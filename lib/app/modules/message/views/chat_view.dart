@@ -106,7 +106,7 @@ class _AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Avatar.small(
+        Avatar.medium(
           url: messageData.profilePicture,
         ),
         const SizedBox(width: 16),
@@ -118,17 +118,17 @@ class _AppBarTitle extends StatelessWidget {
               Text(
                 messageData.senderName,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 20.sp),
               ),
-              const SizedBox(height: 2),
-              const Text(
-                'Online now',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                ),
-              ),
+              // const SizedBox(height: 2),
+              // const Text(
+              //   'Online now',
+              //   style: TextStyle(
+              //     fontSize: 10,
+              //     fontWeight: FontWeight.bold,
+              //     color: Colors.green,
+              //   ),
+              // ),
             ],
           ),
         )
