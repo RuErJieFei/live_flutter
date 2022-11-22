@@ -1,4 +1,3 @@
-import 'package:authing_sdk/result.dart';
 import 'package:flustars/flustars.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/contacts/model/type_model.dart';
@@ -6,20 +5,6 @@ import 'package:wit_niit/main.dart';
 
 class ContactsController extends GetxController {
   //TODO: Implement ContactsController
-
-  final count = 0.obs;
-  final _page = 0;
-  final _size = 3;
-  List<TypeModel>? list;
-
-  ///获取通讯类型列表
-  void getTypeList() async {
-    var dataFrom = {"page": _page, "size": _size};
-    request.post("/api/type/list", params: dataFrom).then((data) {
-      List result = data['data'];
-      list = result.map((e) => TypeModel.fromJson(e)).toList();
-    });
-  }
 
   @override
   void onInit() {
@@ -37,5 +22,16 @@ class ContactsController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  final _page = 0;
+  final _size = 10;
+  List<TypeModel> list = <TypeModel>[].obs;
+
+  ///获取通讯类型列表
+  void getTypeList() async {
+    Map<String, int> params = {"page": _page, "size": _size};
+    await request.post("/community/type/list", params: params).then((data) {
+      List result = data['data'];
+      list = result.map((e) => TypeModel.fromJson(e)).toList();
+    });
+  }
 }

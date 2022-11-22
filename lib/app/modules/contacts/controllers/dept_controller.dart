@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class DeptController extends GetxController {
   //TODO: Implement DeptController
 
-  final count = 0.obs;
+  final typeId = 0.obs;
 
   @override
   void onInit() {
@@ -20,5 +20,4 @@ class DeptController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
 }
