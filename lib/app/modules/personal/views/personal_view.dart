@@ -6,6 +6,7 @@ import 'package:wit_niit/app/data/base_style.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_status_binding.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_status_view.dart';
+import 'package:wit_niit/app/routes/app_pages.dart';
 
 import '../controllers/personal_controller.dart';
 
@@ -27,7 +28,7 @@ class PersonalView extends GetView<PersonalController> {
             color: Colors.black87,
             size: 32,
           ),
-          onPressed: () => Get.back(),
+          onPressed: () => Get.offAllNamed(Routes.INDEX),
         ),
       ),
       body: Padding(

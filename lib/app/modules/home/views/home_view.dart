@@ -24,7 +24,8 @@ class HomeView extends StatelessWidget {
         actions: [
           InkWell(
             child: Icon(Icons.dark_mode_outlined),
-            onTap: () => Get.changeTheme(Get.isDarkMode ? defaultTheme : appDarkTheme),
+            onTap: () =>
+                Get.changeTheme(Get.isDarkMode ? defaultTheme : appDarkTheme),
           ),
           SizedBox(width: 20)
         ],
@@ -101,7 +102,10 @@ class HomeView extends StatelessWidget {
         onPressed: () {
           controller.increment();
           Map<String, dynamic> params = {"type": "敏捷开发", "content": "有一个能跑就行"};
-          request.get('/get', params: params).then((value) => LogUtil.v(value)).catchError((_) {
+          request
+              .get('/get', params: params)
+              .then((value) => LogUtil.v(value))
+              .catchError((_) {
             EasyLoading.showError('数据解析异常');
           });
         },
