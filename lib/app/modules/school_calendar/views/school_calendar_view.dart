@@ -224,6 +224,7 @@ class SchoolCalendarView extends GetView<SchoolCalendarController> {
         child: FloatingActionButton(
           backgroundColor: Config.mainColor, onPressed: () {
           // Get.to(() => CustomTableCalendar());
+          _focusedDay.value = DateTime.now();
         },
           child: Text("今", style: TextStyle(
               fontSize: 25
