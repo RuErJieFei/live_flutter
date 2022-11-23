@@ -155,7 +155,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.TIMETABLE,
-      page: () => const TimetableView(),
+      page: () =>  TimetableView(),
       binding: TimetableBinding(),
     ),
     GetPage(
