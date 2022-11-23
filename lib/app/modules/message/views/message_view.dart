@@ -52,6 +52,7 @@ class MessageView extends GetView<MessageController> {
         if (v == '发起群聊') {
           EasyLoading.showToast('发起群聊');
         } else if (v == '添加好友') {
+          controller.updateConversationList();
           EasyLoading.showToast('添加好友');
         } else if (v == '扫一扫') {
           Get.to(() => ScanView());
@@ -77,7 +78,7 @@ class MessageView extends GetView<MessageController> {
               spacing: 10,
               children: [
                 Icon(Icons.wechat, color: Config.mainColor),
-                Text('添加好友', style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
+                Text('更新会话', style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
               ],
             ),
           ),

@@ -133,9 +133,9 @@ class TextMsg extends StatelessWidget {
 }
 
 /// 远程图片消息
-class ImgMsg extends StatelessWidget {
+class ImgNetMsg extends StatelessWidget {
   final String? imgUrl;
-  const ImgMsg({Key? key, this.imgUrl}) : super(key: key);
+  const ImgNetMsg({Key? key, this.imgUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

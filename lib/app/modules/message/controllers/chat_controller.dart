@@ -1,11 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
-import 'package:wit_niit/app/modules/message/widget/my_message_tile.dart';
 
 /// 创建时间：2022/11/9
 /// 作者：w2gd
@@ -32,8 +34,10 @@ class ChatController extends GetxController {
   // Todo: 滚动到底部
   void scrollToBottom() {
     Future.delayed(Duration(milliseconds: 300), () {
-      scroll.animateTo(scroll.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300), curve: Curves.linear);
+      if (scroll.hasClients) {
+        scroll.animateTo(scroll.position.maxScrollExtent,
+            duration: Duration(milliseconds: 300), curve: Curves.linear);
+      }
     });
   }
 
@@ -84,7 +88,11 @@ class ChatController extends GetxController {
     createSession(); // 创建私聊会话
     // 每次监听到变化都回调
     ever(msgCto.msgCount, (callback) {
-      scrollToBottom();
+      try {
+        scrollToBottom();
+      } catch (e) {
+        LogUtil.v('----$e');
+      }
     });
   }
 
@@ -124,19 +132,26 @@ class ChatController extends GetxController {
 
   //TODO 发送图片消息
   void sendImageMsg() async {
-    EasyLoading.showToast('选择图片');
     List<Media>? res = await ImagesPicker.pick(count: 1, pickType: PickType.image);
     if (res != null) {
-      var path = res[0].path; // 本地图片地址
+      String path = res[0].path; // 本地图片地址
       LogUtil.v(path);
-      var now = new DateTime.now();
-      msgList.add(
-        MessageOwnTile(
-          messageDate: "${now.hour}:${now.minute}",
-          widget: ImgFileMsg(filepath: path),
-        ),
+      // 显示在聊天框
+      ByteData imageData = await rootBundle.load(path);
+      ImageMessage imageMessage = ImageMessage.from(
+        binaryData: imageData.buffer.asUint8List(),
+        format: path.split('.').last,
+        name: 'niit',
       );
+      var msg = msgCto.getMyMsgWidget(imageMessage, path: path, imageType: 0);
+      msgCto.recordList.add(msg);
+      scrollToBottom();
+      // 发送给云服务
+      try {
+        conversation.send(message: imageMessage);
+      } catch (e) {
+        EasyLoading.showError('图片发送失败');
+      }
     }
-    scrollToBottom();
   }
 }

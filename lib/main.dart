@@ -50,7 +50,7 @@ void main() async {
   LeanCloud.initialize(
     'DtL8wv4T5fXStZXc3Vu8b1Ov-gzGzoHsz',
     'AcSQcHf3pkFPCDKQP27CSWwu',
-    server: 'https://dtl8wv4t.lc-cn-n1-shared.com',
+    server: 'https://niit.w2gd.top',
     queryCache: new LCQueryCache(),
   );
   // LeanCloud调试日志，在 LeanCloud.initialize 初始化之后执行

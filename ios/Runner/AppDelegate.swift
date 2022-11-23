@@ -12,7 +12,7 @@ import LeanCloud
             try LCApplication.default.set(
                 id: "DtL8wv4T5fXStZXc3Vu8b1Ov-gzGzoHsz",
                 key: "AcSQcHf3pkFPCDKQP27CSWwu",
-                serverURL: "https://dtl8wv4t.lc-cn-n1-shared.com")
+                serverURL: "https://niit.w2gd.top")
             GeneratedPluginRegistrant.register(with: self)
             return super.application(application, didFinishLaunchingWithOptions: launchOptions)
         } catch {

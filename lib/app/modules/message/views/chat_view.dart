@@ -10,15 +10,14 @@ import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/message/controllers/chat_controller.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/chatmenu_item.dart';
-import 'package:wit_niit/app/modules/message/model/message_model.dart';
+import 'package:wit_niit/app/modules/message/model/contact_model.dart';
 import 'package:wit_niit/app/modules/message/widget/avatar.dart';
 import 'package:wit_niit/app/modules/message/widget/glowing_action_button.dart';
 import 'package:wit_niit/app/modules/message/widget/icon_background.dart';
 
 class ChatView extends GetView<ChatController> {
-  const ChatView({Key? key, required this.messageData}) : super(key: key);
-
-  final MessageData messageData;
+  const ChatView({Key? key, required this.contactInfo}) : super(key: key);
+  final ContactModel contactInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class ChatView extends GetView<ChatController> {
             },
           ),
         ),
-        title: _AppBarTitle(messageData: messageData),
+        title: _AppBarTitle(contactInfo: contactInfo),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -62,7 +61,7 @@ class ChatView extends GetView<ChatController> {
       body: Column(
         children: [
           Expanded(child: _MessageList()),
-          _ActionBar(messageData.id),
+          _ActionBar('${contactInfo.id}'),
         ],
       ),
     );
@@ -99,17 +98,17 @@ class _MessageList extends GetView<ChatController> {
 class _AppBarTitle extends StatelessWidget {
   const _AppBarTitle({
     Key? key,
-    required this.messageData,
+    required this.contactInfo,
   }) : super(key: key);
 
-  final MessageData messageData;
+  final ContactModel contactInfo;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Avatar.medium(
-          url: messageData.profilePicture,
+          url: '${contactInfo.photo}',
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -118,7 +117,7 @@ class _AppBarTitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                messageData.senderName,
+                '${contactInfo.name}',
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 20.sp),
               ),
