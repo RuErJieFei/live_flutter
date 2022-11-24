@@ -43,7 +43,16 @@ class ChatView extends GetView<ChatController> {
             child: Center(
               child: IconBorder(
                 icon: CupertinoIcons.video_camera_solid,
-                onTap: () {},
+                onTap: () {
+                  // var c = Get.find<MessageController>();
+                  // c.recordList.insert(
+                  //   0,
+                  //   MessageOwnTile(
+                  //     messageDate: '1234',
+                  //     widget: TextMsg(message: 'qwer'),
+                  //   ),
+                  // );
+                },
               ),
             ),
           ),
@@ -85,6 +94,7 @@ class _MessageList extends GetView<ChatController> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Obx(() {
           return ListView(
+            reverse: true,
             controller: controller.scroll,
             children: msgCto.recordList,
           );
@@ -175,7 +185,7 @@ class _ActionBar extends GetView<ChatController> {
                     onTap: () {
                       controller.hiddenMenu.value = true; // 隐藏菜单
                       controller.hiddenEmoji.value = true; // 隐藏emoji
-                      controller.scrollToBottom(); // 滚动到底部
+                      // controller.scrollToBottom(); // 滚动到底部
                     },
                     style: TextStyle(fontSize: 14),
                     decoration: InputDecoration(
@@ -191,7 +201,7 @@ class _ActionBar extends GetView<ChatController> {
                     FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
                     controller.hiddenEmoji.value = false; // 显示emoji
                     controller.hiddenMenu.value = true; // 隐藏菜单
-                    controller.scrollToBottom();
+                    // controller.scrollToBottom();
                   },
                   child: Image.asset('images/public/emoji.png', width: 40.w),
                 ),
@@ -214,7 +224,7 @@ class _ActionBar extends GetView<ChatController> {
                             controller.hiddenMenu.value = false; // 显示菜单
                             controller.hiddenEmoji.value = true; // 隐藏emoji
                             FocusScope.of(context).requestFocus(FocusNode()); //收起键盘
-                            controller.scrollToBottom(); // 滚动到底部
+                            // controller.scrollToBottom(); // 滚动到底部
                           },
                           icon: Icon(Icons.add_circle_outline, size: 35.w),
                         );

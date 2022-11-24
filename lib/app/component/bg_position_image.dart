@@ -9,7 +9,7 @@ class BGPositionImage {
     return CachedNetworkImage(
       imageUrl: imageUrl,
       placeholder: (context, url) {
-        LogUtil.v('占位===');
+        // LogUtil.v('占位===');
         return Image.asset(
           positionImage,
           fit: BoxFit.cover,

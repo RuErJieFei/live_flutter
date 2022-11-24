@@ -7,7 +7,6 @@ import 'package:wit_niit/app/modules/message/bindings/chat_binding.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
 import 'package:wit_niit/app/modules/message/model/story_data.dart';
-import 'package:wit_niit/app/modules/message/widget/avatar.dart';
 
 import 'chat_view.dart';
 
@@ -245,7 +244,13 @@ class _StoryCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Avatar.medium(url: storyData.url),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(25.r)),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: BGPositionImage.positionImage(storyData.url),
+        ),
         Expanded(
           child: Padding(
             padding: EdgeInsets.only(top: 10.h),

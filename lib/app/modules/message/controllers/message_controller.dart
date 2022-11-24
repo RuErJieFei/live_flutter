@@ -59,7 +59,8 @@ class MessageController extends GetxController {
           // LogUtil.v('id 相等${message.fromClientID}');
           // 添加到当前聊天记录列表
           var msg = getMsgWidget(message!);
-          recordList.add(msg);
+          // recordList.add(msg);
+          recordList.insert(0, msg);
           msgCount.value++;
         } else {
           // LogUtil.v('id 不相等${message.fromClientID}');

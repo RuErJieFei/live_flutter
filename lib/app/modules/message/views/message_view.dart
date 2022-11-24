@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
@@ -7,6 +6,7 @@ import 'package:wit_niit/app/modules/index/controllers/index_controller.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/views/message_page.dart';
 import 'package:wit_niit/app/modules/message/views/scan_view.dart';
+import 'package:wit_niit/app/modules/message/views/select_contact_view.dart';
 
 class MessageView extends GetView<MessageController> {
   const MessageView({Key? key}) : super(key: key);
@@ -50,10 +50,9 @@ class MessageView extends GetView<MessageController> {
       ),
       onSelected: (v) {
         if (v == '发起群聊') {
-          EasyLoading.showToast('发起群聊');
+          Get.to(() => SelectContactView());
         } else if (v == '添加好友') {
-          controller.updateConversationList();
-          EasyLoading.showToast('添加好友');
+          controller.updateConversationList(); // 更新会话
         } else if (v == '扫一扫') {
           Get.to(() => ScanView());
         } else if (v == '休息一下') {

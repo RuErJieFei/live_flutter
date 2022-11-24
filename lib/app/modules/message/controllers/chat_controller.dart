@@ -26,20 +26,17 @@ class ChatController extends GetxController {
   ScrollController scroll = ScrollController();
   // 消息列表
   var msgList = <Widget>[].obs;
-  // DateBar(lable: 'Yesterday');
   var msgCto = Get.find<MessageController>();
-  // 我的信息
-  // UserModel? user = SpUtil.getObj("user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
 
   // Todo: 滚动到底部
-  void scrollToBottom() {
-    Future.delayed(Duration(milliseconds: 300), () {
-      if (scroll.hasClients) {
-        scroll.animateTo(scroll.position.maxScrollExtent,
-            duration: Duration(milliseconds: 300), curve: Curves.linear);
-      }
-    });
-  }
+  // void scrollToBottom() {
+  //   Future.delayed(Duration(milliseconds: 300), () {
+  //     if (scroll.hasClients) {
+  //       scroll.animateTo(scroll.position.maxScrollExtent,
+  //           duration: Duration(milliseconds: 300), curve: Curves.linear);
+  //     }
+  //   });
+  // }
 
   // Todo: 创建私聊会话
   late Conversation conversation;
@@ -58,7 +55,7 @@ class ChatController extends GetxController {
   }
 
   // Todo: 获取聊天记录
-  Future getChatRecord() async {
+  void getChatRecord() async {
     // limit 取值范围 1~100，如调用 queryMessage 时不带 limit 参数，默认获取 20 条消息记录
     try {
       List<Message> messages = await conversation.queryMessage(limit: 50);
@@ -74,9 +71,9 @@ class ChatController extends GetxController {
           })
           .cast<Widget>()
           .toList();
-      msgCto.recordList.assignAll(list);
-      scrollToBottom();
-      return true;
+      msgCto.recordList.assignAll(list.reversed);
+      // scrollToBottom(); // 滚动到底部
+      conversation.read(); // 清空未读消息数
     } catch (e) {
       LogUtil.v(e);
     }
@@ -86,19 +83,16 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     createSession(); // 创建私聊会话
-    // 每次监听到变化都回调
-    ever(msgCto.msgCount, (callback) {
-      try {
-        scrollToBottom();
-      } catch (e) {
-        LogUtil.v('----$e');
-      }
-    });
   }
 
   @override
   void onReady() {
     super.onReady();
+    // 每次监听到变化都回调
+    ever(msgCto.msgCount, (callback) {
+      // scrollToBottom();
+      conversation.read();
+    });
   }
 
   @override
@@ -116,13 +110,12 @@ class ChatController extends GetxController {
         // 向对话中发送一条消息
         await conversation.send(message: textMessage);
         var msg = msgCto.getMyMsgWidget(textMessage);
-        if (msg != null) {
-          msgCto.recordList.add(msg);
-          // 滚动到底部、输入清空
-          scrollToBottom();
-          msgTf.clear();
-          hasContent.value = false;
-        }
+        // msgCto.recordList.add(msg);
+        msgCto.recordList.insert(0, msg);
+        // 滚动到底部、输入清空
+        // scrollToBottom();
+        msgTf.clear();
+        hasContent.value = false;
       } catch (e) {
         EasyLoading.showError('发送失败$e');
       }
@@ -144,8 +137,9 @@ class ChatController extends GetxController {
         name: 'niit',
       );
       var msg = msgCto.getMyMsgWidget(imageMessage, path: path, imageType: 0);
-      msgCto.recordList.add(msg);
-      scrollToBottom();
+      // msgCto.recordList.add(msg);
+      msgCto.recordList.insert(0, msg);
+      // scrollToBottom();
       // 发送给云服务
       try {
         conversation.send(message: imageMessage);
