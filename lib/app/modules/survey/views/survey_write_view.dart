@@ -5,6 +5,7 @@ import 'package:wit_niit/app/modules/survey/controllers/survey_write_controller.
 
 class SurveyWriteView extends GetView<SurveyWriteController> {
   const SurveyWriteView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,9 +33,45 @@ class SurveyWriteView extends GetView<SurveyWriteController> {
                   ),
                 ),
               )
-            : Container(
-                child: Text('内容'),
-              ),
+            : Container(child:
+                // Obx(() {
+                //   return ListView.builder(
+                //     shrinkWrap: true,
+                //     itemCount: controller.writeSurveyList.length,
+                //     itemBuilder: (BuildContext context, int index) {
+                //       return Container(
+                //         child:
+                //             Text(controller.writeSurveyList[index].toString()),
+                //       );
+                //     },
+                //   );
+                // }),
+                Obx(() {
+                return ReorderableListView(
+                  // padding: const EdgeInsets.symmetric(horizontal: 40),
+                  children: <Widget>[
+                    for (int index = 0;
+                        index < controller.writeSurveyList.length;
+                        index++)
+                      ListTile(
+                        key: Key('$index'),
+                        tileColor: controller.writeSurveyList[index].isOdd
+                            ? Colors.red
+                            : Colors.green,
+                        title:
+                            Text('Item ${controller.writeSurveyList[index]}'),
+                      ),
+                  ],
+                  onReorder: (int oldIndex, int newIndex) {
+                    if (oldIndex < newIndex) {
+                      newIndex -= 1;
+                    }
+                    final int item =
+                        controller.writeSurveyList.removeAt(oldIndex);
+                    controller.writeSurveyList.insert(newIndex, item);
+                  },
+                );
+              })),
       ),
     );
   }

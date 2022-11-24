@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class SurveyWriteController extends GetxController {
-  var writeSurveyList = [].obs;
+  var writeSurveyList = [1, 2, 3].obs;
   @override
   void onInit() {
     super.onInit();
