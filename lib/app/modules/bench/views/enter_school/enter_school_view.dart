@@ -126,6 +126,7 @@ class EnterSchoolView extends GetView<EnterSchoolController> {
           child: Icon(
             iconData,
             color: SchoolConfig.primaryColor,
+            size: 24.r,
           ),
         ),
         SizedBox(
