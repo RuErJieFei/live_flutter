@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/participants_add_view.dart';
 import '../../../../../main.dart';
 import '../../controllers/schedule_controller.dart';
@@ -15,12 +16,13 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    addScheduleInfo() async{
+    addScheduleInfo() async {
       var data = {
         "organizationId": SpUtil.getString("userId"),
         "topic": controller.topicController.value.text,
         // "participant": [1,2,3,4,5,7],
-        "startTime": formatDate(controller.selectedStartDay.value, [yyyy,"/",mm,"/",dd]),
+        "startTime": formatDate(
+            controller.selectedStartDay.value, [yyyy, "/", mm, "/", dd]),
         // "duration": 60,
         "isAllday": false,
         "address": controller.addressController.value.text,
@@ -31,10 +33,11 @@ class ScheduleAddView extends GetView<SchedulePageController> {
         "isActive": false,
         "calender": "选择日历"
       };
-      var resp = await request.post("/schedule/addSchedule",data:data);
+      var resp = await request
+          .post("/schedule/addSchedule", data: data);
       print(resp);
-
     }
+
     return Scaffold(
       /// 输入框超出解决
       resizeToAvoidBottomInset: false,
@@ -54,22 +57,24 @@ class ScheduleAddView extends GetView<SchedulePageController> {
           height: size.height,
           child: Column(
             children: [
-              Expanded(flex: 1,child: _Topic(context)),
+              Expanded(flex: 1, child: _Topic(context)),
               SykDivider(context, 8),
-              Expanded(flex:1,child: _Participants(context)),
+              Expanded(flex: 1, child: _Participants(context)),
               SykDivider(context, 8),
-              Expanded(flex:3,child: _TimeComponent(context)),
+              Expanded(flex: 3, child: _TimeComponent(context)),
               SykDivider(context, 8),
-              Expanded(flex: 1,child: _Address(context)),
+              Expanded(flex: 1, child: _Address(context)),
               SykDivider(context, 8),
-              Expanded(flex: 1,child: _Attachment(context)),
+              Expanded(flex: 1, child: _Attachment(context)),
               SykDivider(context, 8),
-              Expanded(flex: 1,child: _Description(context)),
+              Expanded(flex: 1, child: _Description(context)),
               SykDivider(context, 8),
-              Expanded(flex:5,child: _MoreComponent(context)),
-              ElevatedButton(onPressed: (){
-                addScheduleInfo();
-              }, child: Text("保存"))
+              Expanded(flex: 5, child: _MoreComponent(context)),
+              ElevatedButton(
+                  onPressed: () {
+                    addScheduleInfo();
+                  },
+                  child: Text("保存"))
             ],
           ),
         ),
@@ -82,7 +87,6 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   SchedulePageController get controller => super.controller;
 
   Widget _Topic(BuildContext context) {
-
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 50.h,
@@ -126,8 +130,6 @@ class ScheduleAddView extends GetView<SchedulePageController> {
     );
   }
 
-
-
   Widget _TimeComponent(BuildContext context) {
     return Obx(() {
       return Container(
@@ -144,31 +146,33 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 ),
                 Spacer(),
                 GestureDetector(
-                  child: controller.isAllDay.value ?Text("${formatDate(DateTime.now(), [
-                    mm,
-                    "月",
-                    dd,
-                    "日 ",
-                  ])}") :Text("${formatDate(controller.selectedStartDay.value, [
-                        mm,
-                        "月",
-                        dd,
-                        "日     ",
-                        HH,
-                        ":",
-                        nn
-                      ])}"),
+                  child: controller.isAllDay.value
+                      ? Text("${formatDate(DateTime.now(), [
+                              mm,
+                              "月",
+                              dd,
+                              "日 ",
+                            ])}")
+                      : Text("${formatDate(controller.selectedStartDay.value, [
+                              mm,
+                              "月",
+                              dd,
+                              "日     ",
+                              HH,
+                              ":",
+                              nn
+                            ])}"),
                   onTap: () {
                     DatePicker.showDateTimePicker(context,
                         maxTime: DateTime(2050, 12, 1),
                         minTime: DateTime(2020, 1, 1),
                         currentTime: DateTime.now(),
                         locale: LocaleType.zh, onChanged: (date) {
-                          if(controller.isAllDay.value == true) {
-                            controller.selectedStartDay.value = DateTime.now();
-                          }else{
-                            controller.selectedStartDay.value = date;
-                          }
+                      if (controller.isAllDay.value == true) {
+                        controller.selectedStartDay.value = DateTime.now();
+                      } else {
+                        controller.selectedStartDay.value = date;
+                      }
 
                       print('change ${controller.selectedStartDay.value}');
                     });
@@ -185,33 +189,35 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 ),
                 Spacer(),
                 GestureDetector(
-                  child: controller.isAllDay.value ?Text("${formatDate(DateTime.now(), [
-                    mm,
-                    "月",
-                    dd,
-                    "日 ",
-                  ])}") :Text("${formatDate(controller.selectedEndDay.value, [
-                    mm,
-                    "月",
-                    dd,
-                    "日     ",
-                    HH,
-                    ":",
-                    nn
-                  ])}"),
+                  child: controller.isAllDay.value
+                      ? Text("${formatDate(DateTime.now(), [
+                              mm,
+                              "月",
+                              dd,
+                              "日 ",
+                            ])}")
+                      : Text("${formatDate(controller.selectedEndDay.value, [
+                              mm,
+                              "月",
+                              dd,
+                              "日     ",
+                              HH,
+                              ":",
+                              nn
+                            ])}"),
                   onTap: () {
                     DatePicker.showDateTimePicker(context,
                         maxTime: DateTime(2050, 12, 1),
                         minTime: DateTime(2020, 1, 1),
                         currentTime: DateTime.now(),
                         locale: LocaleType.zh, onChanged: (date) {
-                          if(controller.isAllDay.value == true) {
-                            controller.selectedEndDay.value = DateTime.now();
-                          }else{
-                            controller.selectedEndDay.value = date;
-                          }
-                          print('change ${controller.selectedEndDay.value}');
-                        });
+                      if (controller.isAllDay.value == true) {
+                        controller.selectedEndDay.value = DateTime.now();
+                      } else {
+                        controller.selectedEndDay.value = date;
+                      }
+                      print('change ${controller.selectedEndDay.value}');
+                    });
                   },
                 ),
               ],
@@ -224,10 +230,13 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                   style: TextStyle(fontSize: 20.sp),
                 ),
                 Spacer(),
-                Switch(value: controller.isAllDay.value, onChanged: (val){
-                  controller.isAllDay.value = val;
-                  print(controller.isAllDay.value);
-                },)
+                Switch(
+                  value: controller.isAllDay.value,
+                  onChanged: (val) {
+                    controller.isAllDay.value = val;
+                    print(controller.isAllDay.value);
+                  },
+                )
               ],
             )
           ],
@@ -276,7 +285,6 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   }
 
   Widget _Description(BuildContext context) {
-
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 50.h,
@@ -284,13 +292,9 @@ class ScheduleAddView extends GetView<SchedulePageController> {
         controller: controller.descriptionController.value,
         maxLines: 3,
         //校验用户
-        validator: (value) {
-
-        },
+        validator: (value) {},
         //当 Form 表单调用保存方法 Save时回调的函数。
-        onSaved: (value) {
-
-        },
+        onSaved: (value) {},
         // 当用户确定已经完成编辑时触发
         onFieldSubmitted: (value) {},
         decoration: InputDecoration(
@@ -306,59 +310,69 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   }
 
   Widget _MoreComponent(BuildContext context) {
-    return
-     Container(
-        padding: EdgeInsets.only(left: 20, right: 20),
-        width: MediaQuery.of(context).size.width,
-        height: 300.h,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text(
-                  "提醒",
-                  style: TextStyle(fontSize: 20.sp),
-                ),
-                Spacer(),
-                IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15))
-              ],
-            ),
-            SykDivider(context, 2),
-            Row(
-              children: [
-                Text(
-                  "重复",
-                  style: TextStyle(fontSize: 20.sp),
-                ),
-                Spacer(),
-                IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15))
-              ],
-            ),
-            SykDivider(context, 2),
-            Row(
-              children: [
-                Text(
-                  "主动加入",
-                  style: TextStyle(fontSize: 20.sp),
-                ),
-                Spacer(),
-                IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15))
-              ],
-            ),
-            SykDivider(context, 2),
-            Row(
-              children: [
-                Text(
-                  "日历",
-                  style: TextStyle(fontSize: 20.sp),
-                ),
-                Spacer(),
-                IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15,))
-              ],
-            ),
-          ],
-        ),
-      );
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      width: MediaQuery.of(context).size.width,
+      height: 300.h,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                "提醒",
+                style: TextStyle(fontSize: 20.sp),
+              ),
+              Spacer(),
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.arrow_forward_ios, size: 15))
+            ],
+          ),
+          SykDivider(context, 2),
+          Row(
+            children: [
+              Text(
+                "重复",
+                style: TextStyle(fontSize: 20.sp),
+              ),
+              Spacer(),
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.arrow_forward_ios, size: 15))
+            ],
+          ),
+          SykDivider(context, 2),
+          Row(
+            children: [
+              Text(
+                "主动加入",
+                style: TextStyle(fontSize: 20.sp),
+              ),
+              Spacer(),
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.arrow_forward_ios, size: 15))
+            ],
+          ),
+          SykDivider(context, 2),
+          Row(
+            children: [
+              Text(
+                "日历",
+                style: TextStyle(fontSize: 20.sp),
+              ),
+              Spacer(),
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 15,
+                  ))
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 

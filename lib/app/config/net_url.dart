@@ -3,7 +3,7 @@ class NetUrl {
   // static const String kHttp_HostName = 'http://192.168.50.241:8080/niit-api';
 
   ///正式 (网关地址)
-  static const String kHttp_HostName = "http://121.40.208.79:1000/api";
+  static const String kHttp_HostName = "http://121.40.208.79:10000/api";
 
   /// WebSocket
   static const String socket_HostName = "ws://121.40.208.79:8083/websocket/";
@@ -19,6 +19,9 @@ class NetUrl {
 
   /// 校园网卷模块api
   static const String survey_HostName = "http://121.40.208.79:8085";
+
+  /// 日程模块api
+  static const String schedule_HostName = "http://121.40.208.79:9010";
 
   ///账户登录
   static const String user_login = '/user/login';
