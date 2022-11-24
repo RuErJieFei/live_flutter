@@ -88,7 +88,8 @@ class PersonalAvatarController extends GetxController {
         "name": "${user?.name}",
         "id": "${user?.id}"
       };
-      var modifyData = await request.post('/users/edit', data: dataForm);
+      var modifyData = await request.post('${NetUrl.user_HostName}/users/edit',
+          data: dataForm);
       if (modifyData["name"] != '') {
         /// 获取用户信息
         getUserInfo(modifyData["id"]);
