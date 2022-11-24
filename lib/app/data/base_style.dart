@@ -97,4 +97,8 @@ class BaseStyle {
   /// 通讯录标题
   static TextStyle messageMiddleStyle =
       TextStyle(color: Colors.black, fontSize: 22.sp);
+
+  /// 个人信息蓝色标题
+  static TextStyle messageBlueStyle =
+       TextStyle(color: Colors.blue,fontSize: 24.sp);
 }
