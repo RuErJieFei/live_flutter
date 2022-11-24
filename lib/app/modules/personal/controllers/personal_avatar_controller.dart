@@ -5,6 +5,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:images_picker/images_picker.dart';
+import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
@@ -70,7 +71,8 @@ class PersonalAvatarController extends GetxController {
       // 图片上传 formdata
       var formData = dio.FormData.fromMap(
           {'photo': await dio.MultipartFile.fromFile(path)});
-      var uploadAvatar = await request.post('/users/upload', data: formData);
+      var uploadAvatar = await request
+          .post('${NetUrl.user_HostName}/users/upload', data: formData);
 
       if (uploadAvatar != '') {
         avatar.value = uploadAvatar;
@@ -86,7 +88,8 @@ class PersonalAvatarController extends GetxController {
         "name": "${user?.name}",
         "id": "${user?.id}"
       };
-      var modifyData = await request.post('/users/edit', data: dataForm);
+      var modifyData = await request.post('${NetUrl.user_HostName}/users/edit',
+          data: dataForm);
       if (modifyData["name"] != '') {
         /// 获取用户信息
         getUserInfo(modifyData["id"]);
@@ -129,7 +132,11 @@ class PersonalAvatarController extends GetxController {
 
   /// 获取当前登录用户信息
   void getUserInfo(id) async {
-    var data = await request.get("/users/getUser/$id");
+    var token = SpUtil.getString('token');
+    var data = await request.get(
+      "${NetUrl.user_HostName}/users/getUser/$id",
+      headers: {"token": token},
+    );
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }

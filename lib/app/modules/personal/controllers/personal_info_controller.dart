@@ -5,6 +5,7 @@ import 'package:wit_niit/app/modules/personal/bindings/personal_avatar_binding.d
 import 'package:wit_niit/app/modules/personal/bindings/personal_email_binding.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_gender_binding.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_name_binding.dart';
+import 'package:wit_niit/app/modules/personal/bindings/personal_phone_bind_binding.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_phone_binding.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_status_binding.dart';
 import 'package:wit_niit/app/modules/personal/model/personal_info_model.dart';
@@ -12,6 +13,7 @@ import 'package:wit_niit/app/modules/personal/views/personal_avatar_view.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_email_view.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_gender_view.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_name_view.dart';
+import 'package:wit_niit/app/modules/personal/views/personal_phone_bind_view.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_phone_view.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_status_view.dart';
 
@@ -62,10 +64,15 @@ class PersonalInfoController extends GetxController {
     // ?? -> user?.company为空，返回操作符 右边的值
     // personalInfoList.add(PersonalInfo('所在企业', '${user?.company??'暂无'}', () => LogUtil.v('跳转页面')),);
     personalInfoList.add(
-      PersonalInfo('手机',
-          content: '${user?.phone}',
-          onPress: () => Get.to(() => PersonalPhoneView(),
-              binding: PersonalPhoneBinding())),
+      PersonalInfo('手机', content: '${user?.phone}', onPress: () {
+        // 如果手机号没有绑定
+        if (user?.phone != null) {
+          Get.to(() => PersonalPhoneView(), binding: PersonalPhoneBinding());
+        } else {
+          Get.to(() => PersonalPhoneBindView(),
+              binding: PersonalPhoneBindBinding());
+        }
+      }),
     );
     personalInfoList.add(
       PersonalInfo('邮箱',
@@ -115,6 +122,18 @@ class PersonalInfoController extends GetxController {
   // 改变性别
   void changeGender(String gender) {
     personalInfoList[2].content = gender;
+    personalInfoList.refresh();
+  }
+
+  // 改变手机号
+  void changePhone(String phone) {
+    personalInfoList[4].content = phone;
+    personalInfoList.refresh();
+  }
+
+  // 改变邮箱
+  void changeEmail(String email) {
+    personalInfoList[5].content = email;
     personalInfoList.refresh();
   }
 }

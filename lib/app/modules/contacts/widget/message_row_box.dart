@@ -11,8 +11,13 @@ import '../views/dept_view.dart';
 class MessageRowBox extends StatelessWidget {
   final String imgUrl;
   final String title;
+  final bool isUser;
 
-  MessageRowBox({Key? key, required this.imgUrl, required this.title})
+  MessageRowBox(
+      {Key? key,
+      required this.imgUrl,
+      required this.title,
+      required this.isUser})
       : super(key: key);
 
   @override
@@ -26,22 +31,40 @@ class MessageRowBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            width: 40.w,
-            height: 40.h,
-            margin: EdgeInsets.only(right: 10.0),
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage(
-                imgUrl,
-              ),
-              fit: BoxFit.cover,
-            )),
-          ),
-          Text(
-            title,
-            style: BaseStyle.messageMiddleStyle,
-          ),
+          if (!isUser)
+            Container(
+              width: 40,
+              height: 40,
+              margin: EdgeInsets.only(right: 10.0),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage(
+                  imgUrl,
+                ),
+                fit: BoxFit.cover,
+              )),
+            ),
+          if (isUser)
+            Container(
+              width: 40,
+              height: 40,
+              margin: EdgeInsets.only(right: 10.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                image: NetworkImage(
+                  imgUrl,
+                ),
+                fit: BoxFit.cover,
+              )),
+            ),
+          Expanded(
+            child: Text(
+              title,
+              overflow: TextOverflow.ellipsis,
+              style: BaseStyle.messageMiddleStyle,
+            ),
+          )
         ],
       ),
     );
