@@ -1,9 +1,11 @@
 import 'package:date_format/date_format.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/participants_add_view.dart';
+import '../../../../../main.dart';
 import '../../controllers/schedule_controller.dart';
 
 class ScheduleAddView extends GetView<SchedulePageController> {
@@ -12,7 +14,27 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    GlobalKey<FormState> AddKey = GlobalKey<FormState>();
+
+    addScheduleInfo() async{
+      var data = {
+        "organizationId": SpUtil.getString("userId"),
+        "topic": controller.topicController.value.text,
+        // "participant": [1,2,3,4,5,7],
+        "startTime": formatDate(controller.selectedStartDay.value, [yyyy,"/",mm,"/",dd]),
+        // "duration": 60,
+        "isAllday": false,
+        "address": controller.addressController.value.text,
+        // "attachment": ["djasjd","ksjkdk"],
+        "description": controller.descriptionController.value.text,
+        "alertTime": 15,
+        "isRepeat": false,
+        "isActive": false,
+        "calender": "选择日历"
+      };
+      var resp = await request.post("/schedule/addSchedule",data:data);
+      print(resp);
+
+    }
     return Scaffold(
       /// 输入框超出解决
       resizeToAvoidBottomInset: false,
@@ -32,20 +54,22 @@ class ScheduleAddView extends GetView<SchedulePageController> {
           height: size.height,
           child: Column(
             children: [
-              _Topic(context),
+              Expanded(flex: 1,child: _Topic(context)),
               SykDivider(context, 8),
-              _Participants(context),
+              Expanded(flex:1,child: _Participants(context)),
               SykDivider(context, 8),
-              _TimeComponent(context),
+              Expanded(flex:3,child: _TimeComponent(context)),
               SykDivider(context, 8),
-              _Address(context),
+              Expanded(flex: 1,child: _Address(context)),
               SykDivider(context, 8),
-              _Attachment(context),
+              Expanded(flex: 1,child: _Attachment(context)),
               SykDivider(context, 8),
-              _Description(context),
+              Expanded(flex: 1,child: _Description(context)),
               SykDivider(context, 8),
-              _MoreComponent(context),
-              ElevatedButton(onPressed: (){}, child: Text("保存"))
+              Expanded(flex:5,child: _MoreComponent(context)),
+              ElevatedButton(onPressed: (){
+                addScheduleInfo();
+              }, child: Text("保存"))
             ],
           ),
         ),
@@ -58,12 +82,12 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   SchedulePageController get controller => super.controller;
 
   Widget _Topic(BuildContext context) {
-    TextEditingController topicController = TextEditingController();
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 50.h,
       child: TextFormField(
-        controller: topicController,
+        controller: controller.topicController.value,
         maxLines: 1,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(left: 20),
@@ -109,7 +133,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
       return Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         width: MediaQuery.of(context).size.width,
-        height: 140.h,
+        height: 150.h,
         child: Column(
           children: [
             Row(
@@ -213,12 +237,11 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   }
 
   Widget _Address(BuildContext context) {
-    TextEditingController addressController = TextEditingController();
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 50.h,
       child: TextFormField(
-        controller: addressController,
+        controller: controller.addressController.value,
         maxLines: 1,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(left: 20),
@@ -253,12 +276,12 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   }
 
   Widget _Description(BuildContext context) {
-    TextEditingController descriptionController = TextEditingController();
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 50.h,
       child: TextFormField(
-        controller: descriptionController,
+        controller: controller.descriptionController.value,
         maxLines: 3,
         //校验用户
         validator: (value) {

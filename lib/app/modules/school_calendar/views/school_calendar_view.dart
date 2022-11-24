@@ -70,7 +70,6 @@ class SchoolCalendarView extends GetView<SchoolCalendarController> {
           });
     }
     return Scaffold(
-
       appBar: AppBar(
         leading: IconButton(onPressed: () {
           Get.back();

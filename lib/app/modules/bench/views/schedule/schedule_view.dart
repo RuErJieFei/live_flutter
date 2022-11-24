@@ -36,7 +36,7 @@ class SchedulePageView extends GetView<SchedulePageController> {
       print(day);
       Map<String,dynamic> params = {"date":day,"organizationId":userId};
       // var res = await Dio().get("http://121.40.208.79:10000/api/schedule/searchScheduleByUserIdAndDate",queryParameters: params);
-      var res = await request.get("/schedule/searchScheduleByUserIdAndDate",params: params);
+      var res = await request.get("http://121.40.208.79:9010/schedule/searchScheduleByUserIdAndDate",params: params);
       print(res);
       // var result = ScheduleModel.fromJson(json.decode(res.toString()));
       // print(result.data);
@@ -149,8 +149,13 @@ class SchedulePageView extends GetView<SchedulePageController> {
                       _focusedDay.value =
                           focusedDay1;
                       controller.scheduleList.value = await getScheduleByDate();
-                      controller.scheduleList.value= controller.scheduleList.map((element) => Data.fromJson(element)).toList();
-                      print(controller.scheduleList[0].scheduleId);// update `_focusedDay` here as well
+                      if(controller.scheduleList.isEmpty){
+                        print("数组为空");
+                        return;
+                      }else{
+                        controller.scheduleList.value = controller.scheduleList.map((element) => Data.fromJson(element)).toList();
+                      }
+
                     },
                     onPageChanged: (focusedDay2) {
                       _focusedDay.value = focusedDay2;
@@ -190,7 +195,7 @@ class SchedulePageView extends GetView<SchedulePageController> {
                             SizedBox(
                               width: 50.w,
                               child: Text(
-                                controller.scheduleList[index].startTime,
+                                formatDate(controller.scheduleList[index].startTime,[hh,":",nn]),
                               ),
                             ),
                             Container(

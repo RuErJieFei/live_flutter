@@ -1,13 +1,11 @@
 
 import 'package:faker/faker.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wit_niit/app/modules/bench/model/schedule_model.dart';
-import 'package:wit_niit/main.dart';
 import '../../../data/helpers.dart';
-import '../model/schedule_model_release.dart';
+
 
 class SchedulePageController extends GetxController {
   //TODO: Implement BenchController
@@ -27,7 +25,14 @@ class SchedulePageController extends GetxController {
   var scheduleList = [].obs;
   /// 用户列表
   var userList = [].obs;
+  /// 主题控制器
+  var topicController = TextEditingController().obs;
+  /// 地址
+  var addressController = TextEditingController().obs;
+  /// 描述
+  var descriptionController = TextEditingController().obs;
   /// 添加一条记录到日程列表
+
   void addSchedule() {
     final Faker faker = Faker(); // 假数据
     final date = Helpers.randomDate();
@@ -41,8 +46,6 @@ class SchedulePageController extends GetxController {
     );
     scheduleList.add(data);
   }
-
-
   @override
   void onInit() {
     super.onInit();
