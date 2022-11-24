@@ -2,10 +2,12 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:wit_niit/app/component/bg_gradinent.dart';
 import 'package:wit_niit/app/data/base_style.dart';
-import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
+import 'package:wit_niit/app/modules/personal/bindings/personal_phone_bind_binding.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_phone_controller.dart';
+import 'package:wit_niit/app/modules/personal/views/personal_phone_bind_view.dart';
 
 class PersonalPhoneView extends GetView<PersonalPhoneController> {
   const PersonalPhoneView({Key? key}) : super(key: key);
@@ -52,25 +54,24 @@ class PersonalPhoneView extends GetView<PersonalPhoneController> {
               ),
             ),
             Positioned(
-              bottom: 166.h,
-              child: TextButton(
-                onPressed: () => LogUtil.v('更换手机号'),
-                child: Container(
-                  // color: Config.mainColor.withOpacity(0.1),
-                  width: Get.width * 0.8,
-                  height: Get.width / 10,
-                  alignment: Alignment.center,
-                  child: Text(
-                    '更换手机号',
-                    textAlign: TextAlign.center,
-                    style: BaseStyle.topStyle.copyWith(color: Config.mainColor),
-                  ),
-                ),
-                style: TextButton.styleFrom(
-                  backgroundColor: Config.mainColor.withOpacity(0.07),
-                ),
-              ),
-            )
+                bottom: 166.h,
+                child: InkWell(
+                    onTap: () => Get.to(() => PersonalPhoneBindView(),
+                        binding: PersonalPhoneBindBinding()),
+                    child: BGGradient(
+                      alignment: Alignment.center,
+                      width: Get.width * 0.8,
+                      height: Get.width / 8,
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      child: Text(
+                        '更换手机号',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )))
           ],
         ),
       ),

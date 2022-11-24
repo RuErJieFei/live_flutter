@@ -113,7 +113,7 @@ class LoginController extends GetxController {
       /// 手机号&密码 登录
       var dataForm = {"phone": accountTf.text, "password": passwordTf.text};
       EasyLoading.show(status: '正在登录');
-      request.post('/users/phone', data: dataForm).then((data) {
+      request.post('${NetUrl.user_HostName}/users/phone', data: dataForm).then((data) {
         SpUtil.putString('userId', data["id"]);
         SpUtil.putString('token', data["token"]); // 存储token
         EasyLoading.dismiss();
@@ -121,7 +121,7 @@ class LoginController extends GetxController {
         Get.offAllNamed(Routes.INDEX);
 
         /// 获取用户信息
-        getUserInfo(data["id"]);
+        getUserInfo(data["id"], data["token"]);
       }).catchError((_) {
         EasyLoading.showError('用户名或密码错误');
       });
@@ -148,7 +148,7 @@ class LoginController extends GetxController {
       // User? user = result.user;
       var dataForm = {"phone": phoneTf.text, "code": vCodeTf.text};
       EasyLoading.show(status: '正在登录');
-      request.post('/users/login', data: dataForm).then((data) {
+      request.post('${NetUrl.user_HostName}/users/login', data: dataForm).then((data) {
         SpUtil.putString('userId', data["id"]);
         SpUtil.putString('token', data["token"]); // 存储token
         EasyLoading.dismiss();
@@ -156,7 +156,7 @@ class LoginController extends GetxController {
         Get.offAllNamed(Routes.INDEX);
 
         /// 获取用户信息
-        getUserInfo(data["id"]);
+        getUserInfo(data["id"], data["token"]);
       }).catchError((_) {
         EasyLoading.showError('验证码错误');
       });
@@ -172,11 +172,14 @@ class LoginController extends GetxController {
   }
 
   ///  Authing 获取当前登录用户信息
-  void getUserInfo(id) async {
+  void getUserInfo(id, token) async {
     // AuthResult result = await AuthClient.getCurrentUser();
     // User? user = result.user; // user info
 
-    var data = await request.get("${NetUrl.user_HostName}/users/getUser/$id");
+    var data = await request.get(
+      "${NetUrl.user_HostName}/users/getUser/$id",
+      headers: {"token": token},
+    );
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }

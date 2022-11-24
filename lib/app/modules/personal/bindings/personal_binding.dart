@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 
-import 'package:wit_niit/app/modules/personal/controllers/personal_avatar_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_ding_controller.dart';
-import 'package:wit_niit/app/modules/personal/controllers/personal_email_controller.dart';
+import 'package:wit_niit/app/modules/personal/controllers/personal_email_bind_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_gender_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_name_controller.dart';
+import 'package:wit_niit/app/modules/personal/controllers/personal_phone_bind_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_phone_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_status_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_wechat_controller.dart';
@@ -21,6 +21,12 @@ import '../controllers/personal_controller.dart';
 class PersonalBinding extends Bindings {
   @override
   void dependencies() {
+    Get.lazyPut<PersonalEmailBindController>(
+      () => PersonalEmailBindController(),
+    );
+    Get.lazyPut<PersonalPhoneBindController>(
+      () => PersonalPhoneBindController(),
+    );
     Get.lazyPut<PersonalDingController>(
       () => PersonalDingController(),
     );
