@@ -1,8 +1,10 @@
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
+import '../../../../main.dart';
 import '../../login/model/user_model.dart';
 
 class HealthReportController extends GetxController {
@@ -26,6 +28,14 @@ class HealthReportController extends GetxController {
   final numberOfCohabitants = 0.obs;
   final isQuarantine = 0.obs;
   final isSave = true.obs;
+  TextEditingController supplementaryNotes = TextEditingController();
+  final isTest48 = 0.obs;
+  final isAccinated = 0.obs;
+  final isSuspectedCovid19 = 0.obs;
+  final isAsymptomaticInfection = 0.obs;
+  final isContactSickPeople = 0.obs;
+  final isInformedByTeacher = 0.obs;
+  final isResponsibleForAuthenticity = 0.obs;
 
   String getTime() {
     DateTime today = new DateTime.now();
@@ -35,26 +45,6 @@ class HealthReportController extends GetxController {
   UserModel? user = SpUtil.getObj(
       "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
 
-  var data = {
-    "isHealthy": "1",
-    "reportTime": "2022-11-21 15:58:46",
-    "position": "定位信息",
-    "address": "江苏省-南京市-栖霞区",
-    "addressStreet": "仙林街道",
-    "isInSchool": "1",
-    "isInApartment": "0",
-    "isTransitHignrisk": "0",
-    "isStayHignrisk": "0",
-    "isContactHighriskPersonnel": "0",
-    "isGoAbroad": "0",
-    "isContactOverseasPersonnel": "0",
-    "isNormalTemperature": "1",
-    "isSymptom10": "0",
-    "healthCodeColor": 0,
-    "numberOfCohabitants": 0,
-    "isQuarantine": "0",
-    "supplementaryNotes": "补充信息"
-  };
   @override
   void onInit() {
     // address.value = user?.
@@ -83,5 +73,40 @@ class HealthReportController extends GetxController {
     locationName.value = address;
     longitude.value = long;
     latitude.value = lati;
+  }
+
+  void pushContent() {
+    var dataForm = {
+      "userId": user?.id,
+      "isHealthy": "0",
+      "reportTime": getTime(),
+      "position": 'locationName.value',
+      // "position": locationName.value,
+      "address": address.value,
+      "addressStreet": addressStreetTf.text,
+      "isInSchool": isInSchool.value.toString(),
+      "isInApartment": isInApartment.value.toString(),
+      "isTransitHignrisk": isTransitHignrisk.value.toString(),
+      "isStayHignrisk": isStayHignrisk.value.toString(),
+      "isContactHighriskPersonnel": isContactHighriskPersonnel.value.toString(),
+      "isGoAbroad": isGoAbroad.value.toString(),
+      "isContactOverseasPersonnel": isContactOverseasPersonnel.value.toString(),
+      "isNormalTemperature": isNormalTemperature.value.toString(),
+      "isSymptom10": isSymptom10.value.toString(),
+      "healthCodeColor": healthCodeColor.value,
+      "numberOfCohabitants": numberOfCohabitants.value,
+      "isQuarantine": isQuarantine.value.toString(),
+      // "supplementaryNotes": supplementaryNotes.text
+      "supplementaryNotes": 'supplementaryNotes.text'
+    };
+    EasyLoading.show(status: '正在提交');
+    print(dataForm);
+    request.post('/shisheng/health/teacher', data: dataForm).then((data) {
+      EasyLoading.dismiss();
+      EasyLoading.showToast('提交成功');
+      Get.back();
+    }).catchError((e) {
+      EasyLoading.showError(e);
+    });
   }
 }
