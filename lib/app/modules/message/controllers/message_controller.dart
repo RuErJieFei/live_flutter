@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
-import 'package:wit_niit/app/config/net_url.dart';
+import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
 import 'package:wit_niit/app/modules/message/widget/my_message_tile.dart';
 import 'package:wit_niit/main.dart';
@@ -18,15 +18,13 @@ class MessageController extends GetxController {
   /// 某个会话的聊天记录
   var recordList = <Widget>[].obs;
 
-  /// 正在私聊的对象的id
-  // 主要用在ChatController初始化时创建会话与获取聊天记录
-  final currentFriendId = ''.obs;
+  /// 当前正在进行的会话
+  late Conversation currentConv;
 
   /// 计数： 监听到的新消息数量
   final msgCount = 0.obs;
 
-  // 我的id
-  String myId = SpUtil.getString('userId') as String;
+  /// 我的信息
 
   @override
   void onInit() {
@@ -55,12 +53,13 @@ class MessageController extends GetxController {
         updateConversationList();
       } else {
         // 新消息的id 与当前增长聊天的id 不同，则出现 snackbar 提示
-        if (currentFriendId == message?.fromClientID) {
+        // if (currentFriendId == message?.fromClientID) {
+        if (currentConv.id == conversation?.id) {
           // LogUtil.v('id 相等${message.fromClientID}');
           // 添加到当前聊天记录列表
           var msg = getMsgWidget(message!);
-          // recordList.add(msg);
-          recordList.insert(0, msg);
+          // recordList.add(msg); // 尾部加
+          recordList.insert(0, msg); // 头部加
           msgCount.value++;
         } else {
           // LogUtil.v('id 不相等${message.fromClientID}');
@@ -78,17 +77,41 @@ class MessageController extends GetxController {
     super.onClose();
   }
 
-  /// 联系人列表
-  var contactList = <ContactModel>[].obs;
+  // Todo: 创建私聊会话
+  Future<Conversation> createConversation(String friendId, String friendName) async {
+    UserModel? myInfo = SpUtil.getObj("user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
+    Conversation conversation = await me.createConversation(
+      isUnique: true,
+      members: {friendId},
+      name: '${myInfo?.name} $friendName',
+    );
+    return conversation;
+  }
 
-  /// 获取 Authing 用户池列表
+  /// 联系人集合 map 类型
+  RxMap<String, ContactModel> contactsMap = <String, ContactModel>{}.obs;
+
+  // todo:获取 Authing 用户池列表
   void getContacts() async {
-    Map<String, dynamic> params = {"page": 1, "limit": 50};
-    List res = await request.get('${NetUrl.user_HostName}/users/userlist', params: params);
-    res.forEach((e) {
-      ContactModel contact = ContactModel.fromJson(e);
-      contactList.add(contact);
-    });
+    Map? map = SpUtil.getObject('contactList');
+    if (map != null) {
+      LogUtil.v('从本地读取联系人');
+      map.forEach((key, value) {
+        ContactModel contact = ContactModel.fromJson(value);
+        contactsMap[key] = contact;
+      });
+    } else {
+      Map<String, dynamic> params = {"page": 1, "limit": 50};
+      // List res = await request.get('/users/userlist', params: params);
+      List res = await request.get('http://124.221.232.15:8082/users/userlist', params: params);
+      res.forEach((e) {
+        ContactModel contact = ContactModel.fromJson(e);
+        contactsMap['${contact.id}'] = contact;
+        LogUtil.v('存入一个联系人 +1');
+      });
+      LogUtil.v('完成所有联系人存入');
+      SpUtil.putObject('contactList', contactsMap);
+    }
   }
 
   // Todo: 获取当前用户参与过的会话列表
@@ -123,7 +146,7 @@ class MessageController extends GetxController {
     }
     if (list.length == 2) {
       for (var v in list) {
-        if (v != myId) {
+        if (v != SpUtil.getString('userId')) {
           return v;
         }
       }
@@ -131,19 +154,8 @@ class MessageController extends GetxController {
     return list[0];
   }
 
-  // todo: 根据id 在通讯录里查对方的信息
-  ContactModel? getMemberInfo(String id) {
-    for (var i = 0; i < contactList.length; i++) {
-      if (contactList[i].id == id) {
-        return contactList[i];
-      }
-    }
-    return null;
-  }
-
   // todo: 时间处理
   String dealDate(DateTime? dateTime) {
-    LogUtil.v('${dateTime}');
     String today = DateUtil.formatDate(DateTime.now(), format: DateFormats.y_mo_d);
     String msgTime = DateUtil.formatDate(dateTime, format: DateFormats.y_mo_d);
     if (today == msgTime) {

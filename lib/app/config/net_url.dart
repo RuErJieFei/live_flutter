@@ -6,7 +6,7 @@ class NetUrl {
   // static const String kHttp_HostName = "http://121.40.208.79:8082";
 
   ///正式 (网关地址)
-  static const String kHttp_HostName = "http://121.40.208.79:10000/api";
+  static const String kHttp_HostName = "http://121.40.208.79:10000/api/v1";
 
   /// WebSocket
   static const String socket_HostName = "ws://121.40.208.79:8083/websocket/";

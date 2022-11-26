@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:leancloud_official_plugin/leancloud_plugin.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/message/controllers/chat_controller.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
@@ -16,8 +17,10 @@ import 'package:wit_niit/app/modules/message/widget/glowing_action_button.dart';
 import 'package:wit_niit/app/modules/message/widget/icon_background.dart';
 
 class ChatView extends GetView<ChatController> {
-  const ChatView({Key? key, required this.contactInfo}) : super(key: key);
+  const ChatView({Key? key, required this.conversation, required this.contactInfo})
+      : super(key: key);
   final ContactModel contactInfo;
+  final Conversation conversation;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +73,7 @@ class ChatView extends GetView<ChatController> {
       body: Column(
         children: [
           Expanded(child: _MessageList()),
-          _ActionBar('${contactInfo.id}'),
+          _ActionBar(conversation),
         ],
       ),
     );
@@ -141,9 +144,9 @@ class _AppBarTitle extends StatelessWidget {
 
 /// 底部操作栏
 class _ActionBar extends GetView<ChatController> {
-  final String contactId;
+  final Conversation conversation;
 
-  const _ActionBar(this.contactId, {Key? key}) : super(key: key);
+  const _ActionBar(this.conversation, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +219,7 @@ class _ActionBar extends GetView<ChatController> {
                           icon: Icons.send_rounded,
                           size: 40.w,
                           onPressed: () {
-                            controller.sendMsg(contactId);
+                            controller.sendMsg(conversation);
                           },
                         )
                       : IconButton(
@@ -251,7 +254,7 @@ class _ActionBar extends GetView<ChatController> {
         title: '图片',
         imageUrl: 'images/public/picture.png',
         onTap: () {
-          controller.sendImageMsg();
+          controller.sendImageMsg(conversation);
         },
       ),
       ChatMenuItem(

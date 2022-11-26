@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
@@ -30,36 +31,42 @@ class MessagesPage extends GetView<MessageController> {
     );
   }
 
-  /// 消息列表
+  /// 会话列表
   Widget _delegate(BuildContext context, int index) {
-    return _MessageTitle(
+    return _ConversationTitle(
       conversation: controller.conversationList[index],
     );
   }
 }
 
-class _MessageTitle extends GetView<MessageController> {
-  const _MessageTitle({Key? key, required this.conversation}) : super(key: key);
-  final Conversation conversation;
+class _ConversationTitle extends GetView<MessageController> {
+  const _ConversationTitle({Key? key, required this.conversation}) : super(key: key);
+  final Conversation conversation; // 会话
 
   @override
   Widget build(BuildContext context) {
     final contact = ContactModel().obs;
+    // 根据人数来渲染头像
     controller.getMemberId(conversation).then((id) {
-      if (controller.getMemberInfo(id) != null) {
-        var info = controller.getMemberInfo(id);
+      if (conversation.members!.length <= 2) {
+        // 私聊
+        contact(controller.contactsMap[id]);
+      } else {
+        // 群聊：显示头像（多人拼图）
         contact.update((e) {
-          e?.id = id;
-          e?.photo = '${info?.photo}';
-          e?.name = '${info?.name}';
+          e?.name = conversation.name;
+          e?.photo = 'http://img.w2gd.top/up/logo.png';
         });
       }
     });
     return InkWell(
       onTap: () {
-        controller.currentFriendId.value = contact.value.id!;
+        controller.currentConv = conversation;
         Get.to(
-          () => ChatView(contactInfo: contact.value),
+          () => ChatView(
+            contactInfo: contact.value,
+            conversation: conversation,
+          ),
           binding: ChatBinding(),
         )?.then((value) {
           controller.updateConversationList();
@@ -81,7 +88,9 @@ class _MessageTitle extends GetView<MessageController> {
           child: Row(
             children: [
               Container(
-                margin: EdgeInsets.all(10),
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                width: 70.r,
+                height: 70.r,
                 decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
                 clipBehavior: Clip.antiAlias,
                 child: Obx(() {
@@ -193,9 +202,9 @@ class _Stories extends GetView<MessageController> {
               child: Obx(() {
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: controller.contactList.length,
+                  itemCount: controller.contactsMap.length,
                   itemBuilder: (BuildContext context, int index) {
-                    ContactModel contact = controller.contactList[index];
+                    ContactModel contact = controller.contactsMap.values.elementAt(index);
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
@@ -203,14 +212,19 @@ class _Stories extends GetView<MessageController> {
                         child: InkWell(
                           /// 点击与他发起聊天
                           onTap: () {
-                            controller.currentFriendId.value = contact.id ?? '';
-                            Get.to(
-                              () => ChatView(contactInfo: contact),
-                              binding: ChatBinding(),
-                              // arguments: contact.id, // 联系人的id
-                            )?.then((value) {
-                              /// 更新会话列表
-                              controller.updateConversationList();
+                            controller
+                                .createConversation('${contact.id}', '${contact.name}')
+                                .then((conv) {
+                              controller.currentConv = conv;
+                              Get.to(
+                                () => ChatView(contactInfo: contact, conversation: conv),
+                                binding: ChatBinding(),
+                              )?.then((value) {
+                                /// 更新会话列表
+                                controller.updateConversationList();
+                              });
+                            }).catchError((_) {
+                              EasyLoading.showError('创建会话失败');
                             });
                           },
                           child: _StoryCard(

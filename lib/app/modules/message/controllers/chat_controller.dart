@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -38,24 +36,8 @@ class ChatController extends GetxController {
   //   });
   // }
 
-  // Todo: 创建私聊会话
-  late Conversation conversation;
-  void createSession() async {
-    try {
-      conversation = await msgCto.me.createConversation(
-        isUnique: true,
-        members: {'${msgCto.currentFriendId}'},
-        name: '${SpUtil.getString('userId')}&${msgCto.currentFriendId}',
-      );
-      msgCto.recordList.clear(); // 清空上一个会话的聊天记录
-      getChatRecord(); // 获取当前会话的聊天记录
-    } catch (e) {
-      EasyLoading.showError('创建会话失败:$e');
-    }
-  }
-
   // Todo: 获取聊天记录
-  void getChatRecord() async {
+  void getChatRecord(Conversation conversation) async {
     // limit 取值范围 1~100，如调用 queryMessage 时不带 limit 参数，默认获取 20 条消息记录
     try {
       List<Message> messages = await conversation.queryMessage(limit: 50);
@@ -82,16 +64,17 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    createSession(); // 创建私聊会话
+    msgCto.recordList.clear(); // 清空上一个会话的聊天记录
   }
 
   @override
   void onReady() {
     super.onReady();
+    getChatRecord(msgCto.currentConv);
     // 每次监听到变化都回调
     ever(msgCto.msgCount, (callback) {
       // scrollToBottom();
-      conversation.read();
+      msgCto.currentConv.read();
     });
   }
 
@@ -100,9 +83,8 @@ class ChatController extends GetxController {
     super.onClose();
   }
 
-  //TODO: 发送文字消息
-  void sendMsg(id) async {
-    LogUtil.v('联系人id: $id');
+  //TODO: 向会话发送文字消息
+  void sendMsg(Conversation conversation) async {
     if (msgTf.text.length != 0) {
       try {
         TextMessage textMessage = TextMessage();
@@ -123,8 +105,8 @@ class ChatController extends GetxController {
     }
   }
 
-  //TODO 发送图片消息
-  void sendImageMsg() async {
+  //TODO 向会话发送图片消息
+  void sendImageMsg(Conversation conversation) async {
     List<Media>? res = await ImagesPicker.pick(count: 1, pickType: PickType.image);
     if (res != null) {
       String path = res[0].path; // 本地图片地址
