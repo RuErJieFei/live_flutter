@@ -1,21 +1,16 @@
-import 'dart:convert';
 
-import 'package:date_format/date_format.dart';
-import 'package:dio/dio.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:wit_niit/app/config/net_url.dart';
+
 import 'package:wit_niit/app/modules/bench/controllers/schedule_controller.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_add_view.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_detail_view.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_search_view.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_will_do.dart';
-import '../../../../../main.dart';
 import '../../../../data/theme_data.dart';
 import '../../model/schedule_model_release.dart';
 
@@ -25,32 +20,11 @@ class SchedulePageView extends GetView<SchedulePageController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    var selectedDay = DateTime.now().obs;
+    /// 日程选择器聚焦日期
     var _focusedDay = DateTime.now().obs;
     Get.put(SchedulePageController());
     initializeDateFormatting();
 
-    Future<List> getScheduleByDate() async {
-      String? userId = SpUtil.getString("userId");
-      print(userId);
-      var day = formatDate(selectedDay.value, [
-        yyyy,
-        "/",
-        mm,
-        "/",
-        dd,
-      ]);
-      print(day);
-      Map<String, dynamic> params = {"date": day, "organizationId": userId};
-      // var res = await Dio().get("http://121.40.208.79:10000/api/schedule/searchScheduleByUserIdAndDate",queryParameters: params);
-      var res = await request.get(
-          "/schedule/searchScheduleByUserIdAndDate",
-          params: params);
-      print(res);
-      // var result = ScheduleModel.fromJson(json.decode(res.toString()));
-      // print(result.data);
-      return res;
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -65,13 +39,8 @@ class SchedulePageView extends GetView<SchedulePageController> {
               },
               icon: Icon(Icons.search)),
           IconButton(
-              onPressed: () async {
-                // getScheduleByDate();
-                controller.scheduleList.value = await getScheduleByDate();
-                controller.scheduleList.value = controller.scheduleList
-                    .map((element) => Data.fromJson(element))
-                    .toList();
-                print(controller.scheduleList[0].scheduleId);
+              onPressed: ()  {
+
               },
               icon: Icon(Icons.more_vert)),
           _popupMenu(context)
@@ -158,20 +127,13 @@ class SchedulePageView extends GetView<SchedulePageController> {
                             color: Colors.cyan, shape: BoxShape.circle),
                         canMarkersOverflow: true),
                     selectedDayPredicate: (day) {
-                      return isSameDay(selectedDay.value, day);
+                      return isSameDay(controller.selectedDay.value, day);
                     },
                     onDaySelected: (selectedDay1, focusedDay1) async {
-                      selectedDay.value = selectedDay1;
+                      controller.selectedDay.value = selectedDay1;
                       _focusedDay.value = focusedDay1;
-                      controller.scheduleList.value = await getScheduleByDate();
-                      if (controller.scheduleList.isEmpty) {
-                        print("数组为空");
-                        return;
-                      } else {
-                        controller.scheduleList.value = controller.scheduleList
-                            .map((element) => Data.fromJson(element))
-                            .toList();
-                      }
+                      controller.scheduleList.value = await controller.getScheduleByDate();
+                        controller.scheduleList.value = controller.scheduleList.map((element) => Data.fromJson(element)).toList();
                     },
                     onPageChanged: (focusedDay2) {
                       _focusedDay.value = focusedDay2;
@@ -186,7 +148,7 @@ class SchedulePageView extends GetView<SchedulePageController> {
               padding: EdgeInsets.all(12),
               child: Obx(() {
                 return Text(
-                  "今天 . ${selectedDay.value.month}月${selectedDay.value.day}日 星期${selectedDay.value.weekday}",
+                  "${controller.selectedDay.value.day == DateTime.now().day? "今天." : "" }  ${controller.selectedDay.value.month}月${controller.selectedDay.value.day}日 星期${controller.selectedDay.value.weekday}",
                   style: TextStyle(
                     fontSize: 18.sp,
                   ),
@@ -201,6 +163,7 @@ class SchedulePageView extends GetView<SchedulePageController> {
                     itemCount: controller.scheduleList.length,
                     itemExtent: size.width * 0.2.w,
                     itemBuilder: (BuildContext c, index) {
+                      var str  =  controller.scheduleList[index].startTime.toString().substring(11,16);
                       return GestureDetector(
                         onTap: () {
                           Get.to(() => ScheduleDetailView(index));
@@ -211,9 +174,9 @@ class SchedulePageView extends GetView<SchedulePageController> {
                             SizedBox(
                               width: 50.w,
                               child: Text(
-                                formatDate(
-                                    controller.scheduleList[index].startTime,
-                                    [hh, ":", nn]),
+
+                                   str,
+
                               ),
                             ),
                             Container(

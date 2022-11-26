@@ -1,63 +1,68 @@
 import 'package:date_format/date_format.dart';
+
 import 'package:flustars/flustars.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import '../../model/schedule_model_release.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/participants_add_view.dart';
+import 'package:wit_niit/app/modules/bench/views/schedule/schedule_add_view.dart';
 import '../../../../../main.dart';
 import '../../controllers/schedule_controller.dart';
+import '../../model/schedule_model_release.dart';
 
-class ScheduleAddView extends GetView<SchedulePageController> {
-  const ScheduleAddView({Key? key}) : super(key: key);
+class ScheduleEditView extends GetView<SchedulePageController> {
+  // const ScheduleEditView({Key? key}) : super(key: key);
+  final int index;
+
+  ScheduleEditView(this.index);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    var thisDate = formatDate(
-        controller.selectedStartDay.value, [yyyy, "-", mm, "-", dd, " ", hh,":",nn,":",ss]);
-    addScheduleInfo() async {
+    var scheduleId = controller.scheduleList[index].scheduleId;
+    var thisDate = formatDate(controller.selectedEditStartDay.value,
+        [yyyy, "-", mm, "-", dd, " ", hh, ":", nn, ":", ss]);
+    updateScheduleInfo() async {
       print(thisDate);
       var data = {
+        "scheduleId": scheduleId,
         "organizationId": SpUtil.getString("userId"),
-        "topic": controller.topicController.value.text,
+        "topic": controller.topicEditController.value.text,
         // "participant": [1,2,3,4,5,7],
         "startTime": thisDate,
         // "duration": 60,
         "isAllday": false,
-        "address": controller.addressController.value.text,
+        "address": controller.addressEditController.value.text,
         // "attachment": ["djasjd","ksjkdk"],
-        "description": controller.descriptionController.value.text,
+        "description": controller.descriptionEditController.value.text,
         "alertTime": 15,
         "isRepeat": false,
         "isActive": false,
         "calender": "选择日历"
       };
-      var resp = await request.post("/schedule/addSchedule", data: data);
+      var resp = await request.post("/schedule/updateScheduleById", data: data);
       // var resp = await Dio().post("http://121.40.208.79:10000/api/schedule/addSchedule",data: data);
-      if(resp == 1){
-        controller.topicController.value.clear();
-        controller.addressController.value.clear();
-        controller.descriptionController.value.clear();
+      if (resp == 1) {
+        controller.topicEditController.value.clear();
+        controller.addressEditController.value.clear();
+        controller.descriptionEditController.value.clear();
         controller.scheduleList.value = await controller.getScheduleByDate();
         controller.scheduleList.value = controller.scheduleList.map((element) => Data.fromJson(element)).toList();
-        EasyLoading.showToast("新增成功");
+        EasyLoading.showToast("修改成功");
         Get.back();
-      }else {
-        EasyLoading.showToast("新增失败");
+      } else {
+        EasyLoading.showToast("修改失败");
       }
-      print(resp);
+
     }
 
     return Scaffold(
       /// 输入框超出解决
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("新增日程"),
+        title: Text("修改日程信息"),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
@@ -83,11 +88,11 @@ class ScheduleAddView extends GetView<SchedulePageController> {
               Expanded(flex: 1, child: _Attachment(context)),
               SykDivider(context, 8),
               Expanded(flex: 1, child: _Description(context)),
-              // SykDivider(context, 8),
-              // Expanded(flex: 5, child: _MoreComponent(context)),
+              SykDivider(context, 8),
+              Expanded(flex: 5, child: _MoreComponent(context)),
               ElevatedButton(
                   onPressed: () {
-                    addScheduleInfo();
+                    updateScheduleInfo();
                   },
                   child: Text("保存"))
             ],
@@ -102,11 +107,13 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   SchedulePageController get controller => super.controller;
 
   Widget _Topic(BuildContext context) {
+    // controller.topicEditController.value.text =
+    //     controller.scheduleList[index].topic;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 50.h,
       child: TextFormField(
-        controller: controller.topicController.value,
+        controller: controller.topicEditController.value,
         maxLines: 1,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(left: 20),
@@ -121,6 +128,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   }
 
   Widget _Participants(BuildContext context) {
+    // controller.topicEditController.value.text = controller.scheduleList[index].topic;
     return Container(
       padding: EdgeInsets.only(
         left: 20,
@@ -161,14 +169,15 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 ),
                 Spacer(),
                 GestureDetector(
-                  child: controller.isAllDay.value
+                  child: controller.isAllDayEdit.value
                       ? Text("${formatDate(DateTime.now(), [
                               mm,
                               "月",
                               dd,
                               "日 ",
                             ])}")
-                      : Text("${formatDate(controller.selectedStartDay.value, [
+                      : Text(
+                          "${formatDate(controller.selectedEditStartDay.value, [
                               mm,
                               "月",
                               dd,
@@ -183,13 +192,12 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                         minTime: DateTime(2020, 1, 1),
                         currentTime: DateTime.now(),
                         locale: LocaleType.zh, onChanged: (date) {
-                      if (controller.isAllDay.value == true) {
-                        controller.selectedStartDay.value = DateTime.now();
+                      if (controller.isAllDayEdit.value == true) {
+                        controller.selectedEditStartDay.value = DateTime.now();
                       } else {
-                        controller.selectedStartDay.value = date;
+                        controller.selectedEditStartDay.value = date;
                       }
-
-                      print('change ${controller.selectedStartDay.value}');
+                      print('change ${controller.selectedEditStartDay.value}');
                     });
                   },
                 ),
@@ -204,14 +212,15 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 ),
                 Spacer(),
                 GestureDetector(
-                  child: controller.isAllDay.value
+                  child: controller.isAllDayEdit.value
                       ? Text("${formatDate(DateTime.now(), [
                               mm,
                               "月",
                               dd,
                               "日 ",
                             ])}")
-                      : Text("${formatDate(controller.selectedEndDay.value, [
+                      : Text(
+                          "${formatDate(controller.selectedEditEndDay.value, [
                               mm,
                               "月",
                               dd,
@@ -226,12 +235,12 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                         minTime: DateTime(2020, 1, 1),
                         currentTime: DateTime.now(),
                         locale: LocaleType.zh, onChanged: (date) {
-                      if (controller.isAllDay.value == true) {
-                        controller.selectedEndDay.value = DateTime.now();
+                      if (controller.isAllDayEdit.value == true) {
+                        controller.selectedEditEndDay.value = DateTime.now();
                       } else {
-                        controller.selectedEndDay.value = date;
+                        controller.selectedEditEndDay.value = date;
                       }
-                      print('change ${controller.selectedEndDay.value}');
+                      print('change ${controller.selectedEditEndDay.value}');
                     });
                   },
                 ),
@@ -246,10 +255,10 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 ),
                 Spacer(),
                 Switch(
-                  value: controller.isAllDay.value,
+                  value: controller.isAllDayEdit.value,
                   onChanged: (val) {
-                    controller.isAllDay.value = val;
-                    print(controller.isAllDay.value);
+                    controller.isAllDayEdit.value = val;
+                    print(controller.isAllDayEdit.value);
                   },
                 )
               ],
@@ -265,7 +274,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
       width: MediaQuery.of(context).size.width,
       height: 50.h,
       child: TextFormField(
-        controller: controller.addressController.value,
+        controller: controller.addressEditController.value,
         maxLines: 1,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(left: 20),
@@ -280,52 +289,33 @@ class ScheduleAddView extends GetView<SchedulePageController> {
   }
 
   Widget _Attachment(BuildContext context) {
-
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 50.h,
-      child: TextButton(
-        onPressed: (){
-          showDialog(context: context, builder:(_)=> CupertinoAlertDialog(
-            content: Container(
-              width: 0.8.sw,
-              height: 0.5.sw,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(onTap: () async{
-                    /// Pick an image
-                    final XFile? image1 =await controller.picker.pickVideo(source: ImageSource.gallery);
-                    // final XFile? image =await controller.picker.pickVideo(source: ImageSource.gallery);
-                    // final List<XFile>? images = await controller.picker.pickMultiImage();/
-                    Get.back();
-                    // print(image.toString());
-                  },child: Text("选择图片/视频",style: TextStyle(fontSize: 20),)),
-                  SykDivider(context, 2),
-                  GestureDetector(onTap: (){},child: Text("从收藏中选择",style: TextStyle(fontSize: 20),)),
-                  SykDivider(context, 2),
-                  GestureDetector(onTap: (){},child: Text("从文档中选择",style: TextStyle(fontSize: 20),)),
-                  SykDivider(context, 2),
-                  GestureDetector(onTap: (){},child: Text("从微盘中选择",style: TextStyle(fontSize: 20),)),
-
-                ],
-              ),
-            ),
-          ) );
-
-        },
-        child: Align(alignment: Alignment.centerLeft,child: Text("添加附件...",style: TextStyle(color: Colors.black,fontSize: 18),)),
-      )
-    );
-  }
-
-  Widget _Description(BuildContext context) {
+    TextEditingController addressController = TextEditingController();
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 50.h,
       child: TextFormField(
-        controller: controller.descriptionController.value,
+        controller: addressController,
+        maxLines: 1,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(left: 20),
+            hintText: "添加附件...",
+            hintStyle: TextStyle(
+              fontSize: 20.sp,
+              color: Colors.black,
+            ),
+            border: InputBorder.none),
+      ),
+    );
+  }
+
+  Widget _Description(BuildContext context) {
+    // controller.descriptionEditController.value.text =
+    //     controller.scheduleList[index].description;
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: 50.h,
+      child: TextFormField(
+        controller: controller.descriptionEditController.value,
         maxLines: 3,
         //校验用户
         validator: (value) {},
@@ -410,13 +400,4 @@ class ScheduleAddView extends GetView<SchedulePageController> {
       ),
     );
   }
-}
-
-Widget SykDivider(BuildContext context, double thick) {
-  return Divider(
-    thickness: thick.h,
-    color: Colors.grey.shade200,
-    indent: 0,
-    endIndent: 0,
-  );
 }
