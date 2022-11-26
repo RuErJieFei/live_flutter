@@ -11,15 +11,13 @@ import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/message/controllers/chat_controller.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/chatmenu_item.dart';
-import 'package:wit_niit/app/modules/message/model/contact_model.dart';
-import 'package:wit_niit/app/modules/message/widget/avatar.dart';
 import 'package:wit_niit/app/modules/message/widget/glowing_action_button.dart';
 import 'package:wit_niit/app/modules/message/widget/icon_background.dart';
 
 class ChatView extends GetView<ChatController> {
-  const ChatView({Key? key, required this.conversation, required this.contactInfo})
-      : super(key: key);
-  final ContactModel contactInfo;
+  const ChatView({Key? key, required this.conversation, required this.titleName}) : super(key: key);
+  // final ContactModel contactInfo;
+  final String titleName;
   final Conversation conversation;
 
   @override
@@ -39,23 +37,14 @@ class ChatView extends GetView<ChatController> {
             },
           ),
         ),
-        title: _AppBarTitle(contactInfo: contactInfo),
+        title: _AppBarTitle(name: titleName),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Center(
               child: IconBorder(
                 icon: CupertinoIcons.video_camera_solid,
-                onTap: () {
-                  // var c = Get.find<MessageController>();
-                  // c.recordList.insert(
-                  //   0,
-                  //   MessageOwnTile(
-                  //     messageDate: '1234',
-                  //     widget: TextMsg(message: 'qwer'),
-                  //   ),
-                  // );
-                },
+                onTap: () {},
               ),
             ),
           ),
@@ -111,26 +100,22 @@ class _MessageList extends GetView<ChatController> {
 class _AppBarTitle extends StatelessWidget {
   const _AppBarTitle({
     Key? key,
-    required this.contactInfo,
+    required this.name,
   }) : super(key: key);
 
-  final ContactModel contactInfo;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Avatar.medium(
-          url: '${contactInfo.photo}',
-        ),
-        const SizedBox(width: 16),
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${contactInfo.name}',
+                name,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 20.sp),
               ),

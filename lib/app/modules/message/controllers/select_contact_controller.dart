@@ -20,7 +20,6 @@ class SelectContactController extends GetxController {
       await msgCto.me.createConversation(isUnique: true, members: groupMembers, name: GroupName);
       // 返回到首页
       msgCto.updateConversationList();
-      // Get.offNamed('/index');
       Get.back();
       Get.back();
     } catch (e) {

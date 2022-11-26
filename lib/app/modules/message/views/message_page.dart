@@ -55,7 +55,7 @@ class _ConversationTitle extends GetView<MessageController> {
         // 群聊：显示头像（多人拼图）
         contact.update((e) {
           e?.name = conversation.name;
-          e?.photo = 'http://img.w2gd.top/up/logo.png';
+          e?.photo = 'http://img.w2gd.top/up/groupChat.png';
         });
       }
     });
@@ -64,8 +64,8 @@ class _ConversationTitle extends GetView<MessageController> {
         controller.currentConv = conversation;
         Get.to(
           () => ChatView(
-            contactInfo: contact.value,
             conversation: conversation,
+            titleName: '${contact.value.name}',
           ),
           binding: ChatBinding(),
         )?.then((value) {
@@ -217,7 +217,7 @@ class _Stories extends GetView<MessageController> {
                                 .then((conv) {
                               controller.currentConv = conv;
                               Get.to(
-                                () => ChatView(contactInfo: contact, conversation: conv),
+                                () => ChatView(titleName: '${contact.name}', conversation: conv),
                                 binding: ChatBinding(),
                               )?.then((value) {
                                 /// 更新会话列表

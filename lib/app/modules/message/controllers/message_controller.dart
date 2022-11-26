@@ -53,7 +53,6 @@ class MessageController extends GetxController {
         updateConversationList();
       } else {
         // 新消息的id 与当前增长聊天的id 不同，则出现 snackbar 提示
-        // if (currentFriendId == message?.fromClientID) {
         if (currentConv.id == conversation?.id) {
           // LogUtil.v('id 相等${message.fromClientID}');
           // 添加到当前聊天记录列表
@@ -173,22 +172,22 @@ class MessageController extends GetxController {
   Widget getMyMsgWidget(Message e, {String? path, int? imageType}) {
     if (e is TextMessage) {
       return MessageOwnTile(
-        messageDate: '${e.sentDate}',
+        messageDate: dealDate(e.sentDate),
         widget: TextMsg(message: '${e.text}'),
       );
     } else if (e is ImageMessage && imageType == 0) {
       return MessageOwnTile(
-        messageDate: '${e.sentDate}',
+        messageDate: dealDate(e.sentDate),
         widget: ImgFileMsg(filepath: path!),
       );
     } else if (e is ImageMessage) {
       return MessageOwnTile(
-        messageDate: '${e.sentDate}',
+        messageDate: dealDate(e.sentDate),
         widget: ImgNetMsg(imgUrl: e.url),
       );
     } else {
       return MessageOwnTile(
-        messageDate: '${e.sentDate}',
+        messageDate: dealDate(e.sentDate),
         widget: TextMsg(message: '错误消息类型，无法显示!'),
       );
     }
@@ -198,17 +197,20 @@ class MessageController extends GetxController {
   Widget getMsgWidget(Message e) {
     if (e is TextMessage) {
       return MessageTile(
-        messageDate: '${e.sentDate}',
+        senderId: e.fromClientID,
+        messageDate: dealDate(e.sentDate),
         widget: TextMsg(message: '${e.text}', type: 1),
       );
     } else if (e is ImageMessage) {
       return MessageTile(
-        messageDate: '${e.sentDate}',
+        senderId: e.fromClientID,
+        messageDate: dealDate(e.sentDate),
         widget: ImgNetMsg(imgUrl: e.url),
       );
     } else {
       return MessageTile(
-        messageDate: '${e.sentDate}',
+        senderId: e.fromClientID,
+        messageDate: dealDate(e.sentDate),
         widget: TextMsg(message: '错误消息类型，无法显示!'),
       );
     }
