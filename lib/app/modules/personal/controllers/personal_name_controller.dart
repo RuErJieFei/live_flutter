@@ -2,6 +2,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
@@ -40,7 +41,10 @@ class PersonalNameController extends GetxController {
       "name": "${nameTf.text}",
       "id": "${user?.id}"
     };
-    request.post('/users/edit', data: dataForm).then((data) {
+    getUserInfo(dataForm["id"]);
+    request
+        .post('${NetUrl.user_HostName}/users/edit', data: dataForm)
+        .then((data) {
       /// 获取用户信息
       getUserInfo(data["id"]);
 
@@ -58,7 +62,12 @@ class PersonalNameController extends GetxController {
 
   /// 获取当前登录用户信息
   void getUserInfo(id) async {
-    var data = await request.get("/users/getUser/$id");
+    var token = SpUtil.getString('token');
+    LogUtil.v(token);
+    var data = await request.get(
+      "${NetUrl.user_HostName}/users/getUser/$id",
+      headers: {"token": token},
+    );
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }

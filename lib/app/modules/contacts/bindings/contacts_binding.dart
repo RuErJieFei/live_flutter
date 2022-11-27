@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:get/get.dart';
 
 import '../controllers/contacts_controller.dart';
@@ -5,8 +6,6 @@ import '../controllers/contacts_controller.dart';
 class ContactsBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ContactsController>(
-      () => ContactsController(),
-    );
+    Get.lazyPut<ContactsController>(() => ContactsController());
   }
 }

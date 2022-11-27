@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/bench/controllers/schedule_controller.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/schedule_add_view.dart';
+import 'package:wit_niit/app/modules/bench/views/schedule/schedule_edit_view.dart';
+import 'package:wit_niit/main.dart';
 import '../../../../data/theme_data.dart';
+import '../../model/schedule_model_release.dart';
 
 class ScheduleDetailView extends GetView<SchedulePageController> {
   final int index;
@@ -18,6 +20,7 @@ class ScheduleDetailView extends GetView<SchedulePageController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Obx(() {
       return Scaffold(
         appBar: AppBar(
@@ -279,52 +282,72 @@ class ScheduleDetailView extends GetView<SchedulePageController> {
       );
     });
   }
+  Widget _popupMenu() {
+    var scheduleId = controller.scheduleList[index].scheduleId;
+    deleteById() async {
+      var res =await request.post("/schedule/deleteScheduleById",params: {"id":scheduleId});
+      if(res == 1){
+        Get.back();
+        EasyLoading.showToast("删除成功");
+        controller.scheduleList.value = await controller.getScheduleByDate();
+        controller.scheduleList.value = controller.scheduleList.map((element) => Data.fromJson(element)).toList();
+      }else{
+        EasyLoading.showToast("删除失败");
+      }
+      print(res);
+    }
+    return Padding(
+      padding: EdgeInsets.only(right: 15.0),
+      child: PopupMenuButton(
+        position: PopupMenuPosition.under,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(5),
+            bottomLeft: Radius.circular(5),
+            bottomRight: Radius.circular(20),
+          ),
+        ),
+        onSelected: (v) {
+          if (v == '编辑') {
+            controller.descriptionEditController.value.text = controller.scheduleList[index].description;
+            controller.addressEditController.value.text = controller.scheduleList[index].address;
+            controller.topicEditController.value.text = controller.scheduleList[index].topic;
+            Get.to(()=> ScheduleEditView(index));
+            EasyLoading.showToast('编辑');
+          } else if (v == '删除') {
+            deleteById();
+            print(controller.scheduleList[index].scheduleId);
+            // EasyLoading.showToast('删除');
+          }
+        },
+        itemBuilder: (context) {
+          return <PopupMenuEntry<String>>[
+            PopupMenuItem<String>(
+              value: '编辑',
+              child: Row(
+                children: [
+                  Text('编辑',
+                      style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
+                ],
+              ),
+            ),
+            PopupMenuItem<String>(
+              value: '删除',
+              child: Row(
+                children: [
+                  Text('删除',
+                      style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
+                ],
+              ),
+            ),
+          ];
+        },
+        child: Icon(Icons.more_vert),
+      ),
+    );
+  }
 }
 
-Widget _popupMenu() {
-  return Padding(
-    padding: EdgeInsets.only(right: 15.0),
-    child: PopupMenuButton(
-      position: PopupMenuPosition.under,
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(5),
-          bottomLeft: Radius.circular(5),
-          bottomRight: Radius.circular(20),
-        ),
-      ),
-      onSelected: (v) {
-        if (v == '编辑') {
-          EasyLoading.showToast('编辑');
-        } else if (v == '删除') {
-          EasyLoading.showToast('删除');
-        }
-      },
-      itemBuilder: (context) {
-        return <PopupMenuEntry<String>>[
-          PopupMenuItem<String>(
-            value: '编辑',
-            child: Row(
-              children: [
-                Text('编辑',
-                    style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
-              ],
-            ),
-          ),
-          PopupMenuItem<String>(
-            value: '删除',
-            child: Row(
-              children: [
-                Text('删除',
-                    style: TextStyle(color: Config.mainColor, fontSize: 20.sp)),
-              ],
-            ),
-          ),
-        ];
-      },
-      child: Icon(Icons.more_vert),
-    ),
-  );
-}
+

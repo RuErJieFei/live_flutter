@@ -1,12 +1,15 @@
 import 'package:get/get.dart';
+import 'package:wit_niit/app/config/net_url.dart';
+import 'package:wit_niit/app/modules/contacts/model/type_model.dart';
+import 'package:wit_niit/main.dart';
 
 class ContactsController extends GetxController {
   //TODO: Implement ContactsController
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    getTypeList();
   }
 
   @override
@@ -19,5 +22,18 @@ class ContactsController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  final _page = 0.obs;
+  final _size = 10.obs;
+  List<TypeModel> list = <TypeModel>[].obs;
+
+  ///获取通讯类型列表
+  void getTypeList() async {
+    Map<String, int> params = {"page": _page.value, "size": _size.value};
+    await request
+        .post("${NetUrl.message_HostName}/community/type/list", params: params)
+        .then((data) {
+      List result = data['data'];
+      list.addAll(result.map((e) => TypeModel.fromJson(e)).toList());
+    });
+  }
 }

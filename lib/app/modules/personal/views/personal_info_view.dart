@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:wit_niit/app/data/base_data.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
 import 'package:wit_niit/app/modules/personal/model/personal_info_model.dart';
+import 'package:wit_niit/app/routes/app_pages.dart';
 
 class PersonalInfoView extends GetView<PersonalInfoController> {
   const PersonalInfoView({Key? key}) : super(key: key);
@@ -15,6 +16,9 @@ class PersonalInfoView extends GetView<PersonalInfoController> {
         appBar: AppBar(
           title: const Text('个人信息'),
           centerTitle: true,
+          leading: BackButton(
+            onPressed: () => Get.offAllNamed(Routes.PERSONAL),
+          ),
         ),
         body: Obx(() {
           return ListView.separated(

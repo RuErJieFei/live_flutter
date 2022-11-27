@@ -168,14 +168,16 @@ class MicroDiskView extends GetView<MicroDiskController> {
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 100.h,
-                    margin: EdgeInsets.only(bottom: 10.h),
-                    child:controller.docList[index].leading,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                      ),
+                  Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 90.h,
+                      margin: EdgeInsets.only(bottom: 10.h),
+                      child:controller.docList[index].leading,
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                        ),
+                    ),
                   ),
                   Row(
                     children: [

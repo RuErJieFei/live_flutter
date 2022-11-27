@@ -7,7 +7,6 @@
     <!-- 基本模块（必须）START -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 基本模块 END -->
     <application
         android:label="wit_niit"
         android:name=".MyApplication"
@@ -19,6 +18,7 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
+            android:requestLegacyExternalStorage="true"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
@@ -46,5 +46,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="VnE4DzUENuiI4yYG51c76xXzAC7YO3cB" />
     </application>
 </manifest>
