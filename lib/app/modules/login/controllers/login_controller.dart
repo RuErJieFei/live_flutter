@@ -110,18 +110,17 @@ class LoginController extends GetxController {
 
       /// Authing 账户登录，可以是手机号 / 邮箱 / 用户名
       EasyLoading.show(status: '正在登录');
-      request.post('${NetUrl.user_HostName}/users/phone', data: dataForm).then((data) {
-        SpUtil.putString('userId', data["id"]);
-        SpUtil.putString('token', data["token"]); // 存储token
+      try {
+        result = await AuthClient.loginByAccount(accountTf.text, passwordTf.text);
+        User? user = result.user;
+        SpUtil.putString('userId', '${user?.id}');
+        SpUtil.putString('token', '${user?.token}'); // 存储token
         EasyLoading.dismiss();
         // 获取用户信息
         getUserInfo(user?.id);
         // 跳转到首页，取消之前所有路由
         Get.offAllNamed(Routes.INDEX);
-
-        /// 获取用户信息
-        getUserInfo(data["id"], data["token"]);
-      }).catchError((_) {
+      } catch (e) {
         EasyLoading.showError('用户名或密码错误');
       }
 
@@ -163,7 +162,7 @@ class LoginController extends GetxController {
       // User? user = result.user;
       var dataForm = {"phone": phoneTf.text, "code": vCodeTf.text};
       EasyLoading.show(status: '正在登录');
-      request.post('${NetUrl.user_HostName}/users/login', data: dataForm).then((data) {
+      request.post('/users/login', data: dataForm).then((data) {
         SpUtil.putString('userId', data["id"]);
         SpUtil.putString('token', data["token"]); // 存储token
         EasyLoading.dismiss();
@@ -171,7 +170,7 @@ class LoginController extends GetxController {
         Get.offAllNamed(Routes.INDEX);
 
         /// 获取用户信息
-        getUserInfo(data["id"], data["token"]);
+        getUserInfo(data["id"]);
       }).catchError((_) {
         EasyLoading.showError('验证码错误');
       });
@@ -187,15 +186,12 @@ class LoginController extends GetxController {
   }
 
   ///  Authing 获取当前登录用户信息
-  void getUserInfo(id, token) async {
+  void getUserInfo(id) async {
     // AuthResult result = await AuthClient.getCurrentUser();
     // AuthResult result = await AuthClient.get();
     // User? user = result.user; // user info
-
-    var data = await request.get(
-      "${NetUrl.user_HostName}/users/getUser/$id",
-      headers: {"token": token},
-    );
+    // var data = await request.get("/users/getUserNoToken/$id");
+    var data = await request.get("http://124.221.232.15:8082/users/getUserNoToken/$id");
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }
