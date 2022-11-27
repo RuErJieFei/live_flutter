@@ -13,6 +13,7 @@ import 'package:flutter_ume_kit_perf/flutter_ume_kit_perf.dart'; // 性能插件
 import 'package:flutter_ume_kit_show_code/flutter_ume_kit_show_code.dart'; // 代码查看插件包
 import 'package:flutter_ume_kit_ui/flutter_ume_kit_ui.dart'; // UI 插件包
 import 'package:get/get.dart';
+import 'package:leancloud_storage/leancloud.dart';
 import 'package:package_info/package_info.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wit_niit/app/config/net_url.dart';
@@ -46,8 +47,19 @@ void main() async {
   await SpUtil.getInstance(); // 等待sp初始化完成后再运行app
   LogUtil.v('App启动～～'); // debug 模式输出
   /// Authing 身份云初始化
-  // Authing.init('627351d938cd3d7ded36d7d1', '6368b2bfeeb7c9d7d5222c8a');
   Authing.init('6368b106c55c8b3934a8e0fe', '6369fe8ffcc7a6cc9f2027ac');
+
+  /// LeanCloud 初始化
+  LeanCloud.initialize(
+    'DtL8wv4T5fXStZXc3Vu8b1Ov-gzGzoHsz',
+    'AcSQcHf3pkFPCDKQP27CSWwu',
+    server: 'https://niit.w2gd.top',
+    queryCache: new LCQueryCache(),
+  );
+  // LeanCloud调试日志，在 LeanCloud.initialize 初始化之后执行
+  // 在应用发布之前，请关闭调试日志，以免暴露敏感数据。
+  LCLogger.setLevel(LCLogger.DebugLevel);
+
   if (kDebugMode) {
     PluginManager.instance // 注册插件
       ..register(WidgetInfoInspector())
@@ -68,6 +80,9 @@ void main() async {
     runApp(MyApp());
   }
   configLoading();
+  // LCObject object = LCObject('TestObject');
+  // object['words'] = 'Hello world!';
+  // await object.save();
 }
 
 /// 吐司配置 https://github.com/nslogx/flutter_easyloading/blob/master/README-zh_CN.md

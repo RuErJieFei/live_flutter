@@ -6,18 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:leancloud_official_plugin/leancloud_plugin.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/message/controllers/chat_controller.dart';
+import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/chatmenu_item.dart';
-import 'package:wit_niit/app/modules/message/model/message_model.dart';
-import 'package:wit_niit/app/modules/message/widget/avatar.dart';
 import 'package:wit_niit/app/modules/message/widget/glowing_action_button.dart';
 import 'package:wit_niit/app/modules/message/widget/icon_background.dart';
 
 class ChatView extends GetView<ChatController> {
-  const ChatView({Key? key, required this.messageData}) : super(key: key);
-
-  final MessageData messageData;
+  const ChatView({Key? key, required this.conversation, required this.titleName}) : super(key: key);
+  // final ContactModel contactInfo;
+  final String titleName;
+  final Conversation conversation;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class ChatView extends GetView<ChatController> {
             },
           ),
         ),
-        title: _AppBarTitle(messageData: messageData),
+        title: _AppBarTitle(name: titleName),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -61,7 +62,7 @@ class ChatView extends GetView<ChatController> {
       body: Column(
         children: [
           Expanded(child: _MessageList()),
-          _ActionBar(messageData.id),
+          _ActionBar(conversation),
         ],
       ),
     );
@@ -74,6 +75,7 @@ class _MessageList extends GetView<ChatController> {
 
   @override
   Widget build(BuildContext context) {
+    var msgCto = Get.find<MessageController>();
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
@@ -84,8 +86,9 @@ class _MessageList extends GetView<ChatController> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Obx(() {
           return ListView(
+            reverse: true,
             controller: controller.scroll,
-            children: controller.msgList,
+            children: msgCto.recordList,
           );
         }),
       ),
@@ -97,38 +100,25 @@ class _MessageList extends GetView<ChatController> {
 class _AppBarTitle extends StatelessWidget {
   const _AppBarTitle({
     Key? key,
-    required this.messageData,
+    required this.name,
   }) : super(key: key);
 
-  final MessageData messageData;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Avatar.medium(
-          url: messageData.profilePicture,
-        ),
-        const SizedBox(width: 16),
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                messageData.senderName,
+                name,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 20.sp),
               ),
-              // const SizedBox(height: 2),
-              // const Text(
-              //   'Online now',
-              //   style: TextStyle(
-              //     fontSize: 10,
-              //     fontWeight: FontWeight.bold,
-              //     color: Colors.green,
-              //   ),
-              // ),
             ],
           ),
         )
@@ -139,9 +129,9 @@ class _AppBarTitle extends StatelessWidget {
 
 /// 底部操作栏
 class _ActionBar extends GetView<ChatController> {
-  final String contactId;
+  final Conversation conversation;
 
-  const _ActionBar(this.contactId, {Key? key}) : super(key: key);
+  const _ActionBar(this.conversation, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +173,7 @@ class _ActionBar extends GetView<ChatController> {
                     onTap: () {
                       controller.hiddenMenu.value = true; // 隐藏菜单
                       controller.hiddenEmoji.value = true; // 隐藏emoji
-                      controller.scrollToBottom(); // 滚动到底部
+                      // controller.scrollToBottom(); // 滚动到底部
                     },
                     style: TextStyle(fontSize: 14),
                     decoration: InputDecoration(
@@ -199,7 +189,7 @@ class _ActionBar extends GetView<ChatController> {
                     FocusScope.of(context).requestFocus(FocusNode()); // 关闭键盘
                     controller.hiddenEmoji.value = false; // 显示emoji
                     controller.hiddenMenu.value = true; // 隐藏菜单
-                    controller.scrollToBottom();
+                    // controller.scrollToBottom();
                   },
                   child: Image.asset('images/public/emoji.png', width: 40.w),
                 ),
@@ -214,7 +204,7 @@ class _ActionBar extends GetView<ChatController> {
                           icon: Icons.send_rounded,
                           size: 40.w,
                           onPressed: () {
-                            controller.sendMsg(contactId);
+                            controller.sendMsg(conversation);
                           },
                         )
                       : IconButton(
@@ -222,7 +212,7 @@ class _ActionBar extends GetView<ChatController> {
                             controller.hiddenMenu.value = false; // 显示菜单
                             controller.hiddenEmoji.value = true; // 隐藏emoji
                             FocusScope.of(context).requestFocus(FocusNode()); //收起键盘
-                            controller.scrollToBottom(); // 滚动到底部
+                            // controller.scrollToBottom(); // 滚动到底部
                           },
                           icon: Icon(Icons.add_circle_outline, size: 35.w),
                         );
@@ -249,7 +239,7 @@ class _ActionBar extends GetView<ChatController> {
         title: '图片',
         imageUrl: 'images/public/picture.png',
         onTap: () {
-          controller.sendImageMsg();
+          controller.sendImageMsg(conversation);
         },
       ),
       ChatMenuItem(

@@ -29,17 +29,10 @@ android {
     compileSdkVersion 33
     buildToolsVersion "30.0.3"
     ndkVersion flutter.ndkVersion
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
     }
 
     defaultConfig {
@@ -47,6 +40,7 @@ android {
         applicationId "top.w2gd.wit_niit"
         minSdkVersion 21
         targetSdkVersion 33
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -65,5 +59,7 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'cn.leancloud:storage-android:8.2.12'
+    implementation 'cn.leancloud:realtime-android:8.2.12'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 }
