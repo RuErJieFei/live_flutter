@@ -148,7 +148,7 @@ class LoginController extends GetxController {
       // User? user = result.user;
       var dataForm = {"phone": phoneTf.text, "code": vCodeTf.text};
       EasyLoading.show(status: '正在登录');
-      request.post('${NetUrl.user_HostName}/users/login', data: dataForm).then((data) {
+      request.post('/users/login', data: dataForm).then((data) {
         SpUtil.putString('userId', data["id"]);
         SpUtil.putString('token', data["token"]); // 存储token
         EasyLoading.dismiss();
@@ -177,7 +177,7 @@ class LoginController extends GetxController {
     // User? user = result.user; // user info
 
     var data = await request.get(
-      "${NetUrl.user_HostName}/users/getUser/$id",
+      "/users/getUser/$id",
       headers: {"token": token},
     );
     UserModel user = UserModel.fromJson(data);

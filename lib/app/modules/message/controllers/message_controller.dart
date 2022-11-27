@@ -60,7 +60,7 @@ class MessageController extends GetxController {
   void getContacts() async {
     Map<String, dynamic> params = {"page": 1, "limit": 50};
     // List res = await request.get('/users/userlist', params: params);
-    List res = await request.get('${NetUrl.user_HostName}/users/userlist', params: params);
+    List res = await request.get('/users/userlist', params: params);
     res.forEach((e) {
       ContactModel contact = ContactModel.fromJson(e);
       contactList.add(contact);

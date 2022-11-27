@@ -11,7 +11,7 @@ import '../../../../main.dart';
 import '../../../config/net_url.dart';
 import '../../../data/helpers.dart';
 import '../model/schedule_model_release.dart';
-import 'package:image_picker/image_picker.dart';
+
 
 
 class SchedulePageController extends GetxController {
@@ -64,7 +64,7 @@ class SchedulePageController extends GetxController {
   /// 编辑描述
   var descriptionEditController = TextEditingController().obs;
 
-  final ImagePicker picker = ImagePicker();
+  // final ImagePicker picker = ImagePicker();
 
   /// 添加一条记录到日程列表
   void addSchedule() {

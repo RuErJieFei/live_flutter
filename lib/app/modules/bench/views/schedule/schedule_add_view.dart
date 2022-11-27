@@ -6,7 +6,9 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:wit_niit/app/modules/micro_disk/views/micro_disk_view.dart';
+import '../../../micro_disk/bindings/micro_disk_binding.dart';
+import '../../../micro_disk/controllers/micro_disk_controller.dart';
 import '../../model/schedule_model_release.dart';
 import 'package:wit_niit/app/modules/bench/views/schedule/participants_add_view.dart';
 import '../../../../../main.dart';
@@ -17,6 +19,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(MicroDiskController());
     final size = MediaQuery.of(context).size;
     var thisDate = formatDate(
         controller.selectedStartDay.value, [yyyy, "-", mm, "-", dd, " ", hh,":",nn,":",ss]);
@@ -294,20 +297,52 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(onTap: () async{
-                    /// Pick an image
-                    final XFile? image1 =await controller.picker.pickVideo(source: ImageSource.gallery);
-                    // final XFile? image =await controller.picker.pickVideo(source: ImageSource.gallery);
-                    // final List<XFile>? images = await controller.picker.pickMultiImage();/
-                    Get.back();
-                    // print(image.toString());
+                  GestureDetector(onTap: () {
+                    showDialog(context: context, builder:(_)=> CupertinoAlertDialog(
+                      content: Container(
+                        width: 0.8.sw,
+                        height: 0.5.sw,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(onTap: () async {
+                              /// Pick an image
+                              // final XFile? image1 =await controller.picker.pickImage(source: ImageSource.gallery);
+                              Get.back();
+                              Get.back();
+                            },child: Text("选择图片",style: TextStyle(fontSize: 20),)),
+                            SykDivider(context, 2),
+                            GestureDetector(onTap: () async{
+                              // final XFile? image =await controller.picker.pickVideo(source: ImageSource.gallery);
+                              Get.back();
+                              Get.back();
+                            },child: Text("选择视频",style: TextStyle(fontSize: 20),)),
+                            SykDivider(context, 2),
+                            GestureDetector(onTap: () async{
+                              // final XFile? image =await controller.picker.pickImage(source: ImageSource.camera);
+                              Get.back();
+                              Get.back();
+                            },child: Text("拍照",style: TextStyle(fontSize: 20),)),
+                            SykDivider(context, 2),
+                            GestureDetector(onTap: () async{
+                              // final XFile? image =await controller.picker.pickVideo(source: ImageSource.camera);
+                              Get.back();
+                              Get.back();
+                            },child: Text("拍视频",style: TextStyle(fontSize: 20),)),
+                          ],
+                        ),
+                      ),
+                    ) );
                   },child: Text("选择图片/视频",style: TextStyle(fontSize: 20),)),
                   SykDivider(context, 2),
                   GestureDetector(onTap: (){},child: Text("从收藏中选择",style: TextStyle(fontSize: 20),)),
                   SykDivider(context, 2),
                   GestureDetector(onTap: (){},child: Text("从文档中选择",style: TextStyle(fontSize: 20),)),
                   SykDivider(context, 2),
-                  GestureDetector(onTap: (){},child: Text("从微盘中选择",style: TextStyle(fontSize: 20),)),
+                  GestureDetector(onTap: (){
+                    Get.to(()=>MicroDiskView(),binding: MicroDiskBinding());
+                  },child: Text("从微盘中选择",style: TextStyle(fontSize: 20),)),
 
                 ],
               ),

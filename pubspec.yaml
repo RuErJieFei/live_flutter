@@ -65,8 +65,6 @@ dependencies:
   flutter_baidu_mapapi_search: ^3.0.0
   # 权限请求
   permission_handler: ^10.2.0
-  # 调用手机相机相册
-  image_picker: ^0.8.6
 
 
 

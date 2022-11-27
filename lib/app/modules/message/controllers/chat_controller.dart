@@ -84,7 +84,7 @@ class ChatController extends GetxController {
         "userId": id,
         "fromId": SpUtil.getString('userId'),
       };
-      request.post('${NetUrl.msg_HostName}/ws/sendsingle', data: dataForm).then((value) {
+      request.post('/ws/sendsingle', data: dataForm).then((value) {
         LogUtil.v('发送消息返回 $value');
       });
 
@@ -124,7 +124,7 @@ class ChatController extends GetxController {
   /// type: 1是文字，2是文件
   void getSingleHistory(toId) async {
     String? myId = SpUtil.getString('userId');
-    List chatList = await request.get('${NetUrl.msg_HostName}/ws/singlehistory/$myId&$toId');
+    List chatList = await request.get('/ws/singlehistory/$myId&$toId');
     // 聊天记录渲染
     chatList.forEach((e) {
       PrivateChatRecord record = PrivateChatRecord.fromJson(e);
