@@ -4,7 +4,6 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_info_view.dart';
@@ -87,7 +86,7 @@ class PersonalEmailBindController extends GetxController {
       EasyLoading.showToast('请输入验证码');
       return;
     }
-    request.post('${NetUrl.user_HostName}/users/changeEmail',
+    request.post('/users/changeEmail',
         data: {"email": emailTf.text, "code": vCodeTf.text}).then((data) {
       /// 获取用户信息
       getUserInfo(SpUtil.getString('userId'));
@@ -104,11 +103,8 @@ class PersonalEmailBindController extends GetxController {
 
   /// 获取当前登录用户信息
   void getUserInfo(id) async {
-    var token = SpUtil.getString('token');
-    var data = await request.get(
-      "${NetUrl.user_HostName}/users/getUser/$id",
-      headers: {"token": token},
-    );
+    var data = await request
+        .get("http://124.221.232.15:8082/users/getUserNoToken/$id");
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }

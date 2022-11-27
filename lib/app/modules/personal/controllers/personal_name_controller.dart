@@ -2,8 +2,8 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
+import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_controller.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
 import 'package:wit_niit/main.dart';
@@ -42,11 +42,17 @@ class PersonalNameController extends GetxController {
       "id": "${user?.id}"
     };
     getUserInfo(dataForm["id"]);
-    request
-        .post('${NetUrl.user_HostName}/users/edit', data: dataForm)
-        .then((data) {
-      /// 获取用户信息
-      getUserInfo(data["id"]);
+    request.post('/users/edit', data: dataForm).then((data) {
+      // 更新缓存的用户信息
+      user?.name = nameTf.text;
+      SpUtil.putObject("user", user!);
+      // 通讯录当前用户信息更新
+      var msgCto = Get.find<MessageController>();
+      // 通讯里里我的信息
+      var curUser = msgCto.contactsMap['${user?.id}'];
+      curUser?.name = nameTf.text;
+      SpUtil.putObject('contactList', msgCto.contactsMap);
+      // LogUtil.v('通讯录信息 ${msgCto.contactsMap['${user?.id}']?.name}');
 
       var personalInfo = Get.find<PersonalInfoController>();
       personalInfo.changeName(nameTf.text);
@@ -62,12 +68,8 @@ class PersonalNameController extends GetxController {
 
   /// 获取当前登录用户信息
   void getUserInfo(id) async {
-    var token = SpUtil.getString('token');
-    LogUtil.v(token);
-    var data = await request.get(
-      "${NetUrl.user_HostName}/users/getUser/$id",
-      headers: {"token": token},
-    );
+    var data = await request
+        .get("http://124.221.232.15:8082/users/getUserNoToken/$id");
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }

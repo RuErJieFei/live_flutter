@@ -73,7 +73,7 @@ void main() async {
       ..register(DeviceInfoPanel())
       ..register(Console())
       ..register(DioInspector(dio: Request.dio)); // 传入你的 Dio 实例
-    runApp(UMEWidget(child: MyApp(), enable: false)); // 初始化
+    runApp(UMEWidget(child: MyApp(), enable: true)); // 初始化
   } else {
     runApp(MyApp());
   }
