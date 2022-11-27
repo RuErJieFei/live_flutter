@@ -29,7 +29,7 @@ class PersonalNameView extends GetView<PersonalNameController> {
           controller: controller.nameTf,
           autofocus: true,
           // enabled: controller.nameTf.text == '',
-          decoration: InputDecoration(hintText: '邮箱', border: InputBorder.none),
+          decoration: InputDecoration(hintText: '姓名', border: InputBorder.none),
         ),
       ),
     );
