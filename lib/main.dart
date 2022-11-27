@@ -14,7 +14,6 @@ import 'package:flutter_ume_kit_show_code/flutter_ume_kit_show_code.dart'; // �
 import 'package:flutter_ume_kit_ui/flutter_ume_kit_ui.dart'; // UI 插件包
 import 'package:get/get.dart';
 import 'package:package_info/package_info.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wit_niit/app/config/net_url.dart';
 
 import 'app/data/theme_data.dart';
@@ -22,7 +21,6 @@ import 'app/routes/app_pages.dart';
 import 'app/utils/request.dart';
 
 Request request = Request();
-
 
 void main() async {
   // 请求单例初始化
@@ -63,7 +61,7 @@ void main() async {
       ..register(DeviceInfoPanel())
       ..register(Console())
       ..register(DioInspector(dio: Request.dio)); // 传入你的 Dio 实例
-    runApp(UMEWidget(child: MyApp(), enable: true)); // 初始化
+    runApp(UMEWidget(child: MyApp(), enable: false)); // 初始化
   } else {
     runApp(MyApp());
   }

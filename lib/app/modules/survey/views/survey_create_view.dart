@@ -133,7 +133,9 @@ class ItemView extends GetView<SurveyCreateController> {
             ],
           ),
         ),
-        onTap: () => Get.to(() => SurveyEditView(),
-            binding: SurveyEditBinding(), arguments: itemEntity));
+        onTap: () {
+          controller.setTemplate(itemEntity);
+          Get.to(() => SurveyEditView(), binding: SurveyEditBinding());
+        });
   }
 }
