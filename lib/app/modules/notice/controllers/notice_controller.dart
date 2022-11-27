@@ -31,7 +31,7 @@ class NoticeController extends GetxController {
 
   void getNoticeList() async {
     var data =
-        await request.get('${NetUrl.kHttp_HostName}/shisheng/notice/all');
+        await request.get('/shisheng/notice/all');
     // 聊天记录渲染
     data.forEach((e) {
       Notice record = Notice.fromJson(e);

@@ -65,6 +65,9 @@ dependencies:
   flutter_baidu_mapapi_search: ^3.0.0
   # 权限请求
   permission_handler: ^10.2.0
+  # reactive_forms表单组件及附属插件
+  reactive_forms: ^14.1.0
+  reactive_date_time_picker: ^0.5.0
 
 
 
