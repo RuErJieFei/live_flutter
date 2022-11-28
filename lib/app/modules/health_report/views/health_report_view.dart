@@ -443,6 +443,37 @@ class HealthReportView extends GetView<HealthReportController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
+                                  height: 20.0,
+                                ),
+                                title('本人及家属是否确诊患新型冠状病毒肺炎'),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Row(
+                                  children: [
+                                    Obx(() => radioTag(
+                                        'green',
+                                        '是',
+                                        controller.isConfirmedCovid19.value,
+                                        0,
+                                        20)),
+                                    SizedBox(
+                                      width: 20.w,
+                                    ),
+                                    Obx(() => radioTag(
+                                        'red',
+                                        '否',
+                                        controller.isConfirmedCovid19.value,
+                                        1,
+                                        20)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
                                   height: 20.h,
                                 ),
                                 title('本人及家属是否经诊断为无症状感染者'),
@@ -1370,7 +1401,9 @@ class HealthReportView extends GetView<HealthReportController> {
                   SchoolPushButton(
                     title: '提交',
                     onTap: () {
-                      controller.pushContent();
+                      user?.roleList![0] == 'student'
+                          ? controller.pushStudentContent()
+                          : controller.pushContent();
                     },
                   ),
                 ],
@@ -1506,6 +1539,30 @@ class HealthReportView extends GetView<HealthReportController> {
                 break;
               case 12:
                 controller.isQuarantine.value = e!;
+                break;
+              case 13:
+                controller.isTest48.value = e!;
+                break;
+              case 14:
+                controller.isAccinated.value = e!;
+                break;
+              case 15:
+                controller.isSuspectedCovid19.value = e!;
+                break;
+              case 16:
+                controller.isAsymptomaticInfection.value = e!;
+                break;
+              case 17:
+                controller.isContactSickPeople.value = e!;
+                break;
+              case 18:
+                controller.isInformedByTeacher.value = e!;
+                break;
+              case 19:
+                controller.isResponsibleForAuthenticity.value = e!;
+                break;
+              case 20:
+                controller.isConfirmedCovid19.value = e!;
                 break;
             }
           },
