@@ -5,13 +5,15 @@ import 'package:get/get.dart';
 import 'package:wit_niit/app/component/bg_gradinent.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/survey/controllers/survey_edit_controller.dart';
-import 'package:wit_niit/app/modules/survey/model/template_model.dart';
 
 class SurveyEditView extends GetView<SurveyEditController> {
   const SurveyEditView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    TemplateModel data = Get.arguments ?? TemplateModel();
+    // TemplateModel data = Get.arguments ?? TemplateModel();
+    // var data = TemplateModel().obs;
+    // data.value = Get.arguments ?? TemplateModel();
     return Scaffold(
       appBar: AppBar(
         title: const Text('编辑'),
@@ -29,56 +31,60 @@ class SurveyEditView extends GetView<SurveyEditController> {
           alignment: Alignment.topCenter,
           children: [
             SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                margin: EdgeInsets.only(bottom: 80.h),
-                child: Column(
-                  children: <Widget>[
-                    // 问卷标题
-                    Container(
-                      width: Get.width,
-                      alignment: Alignment.centerLeft,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            style: TextStyle(fontSize: 36.sp),
-                            maxLines: 2,
-                            minLines: 1,
-                            initialValue: '${formatDate(
-                              DateTime.now(),
-                              [mm, '月', dd, '日'],
-                              locale: SimplifiedChineseDateLocale(),
-                            )}${data.content?.title ?? ''}',
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '请添加标题',
+              child: Obx(() {
+                return Container(
+                  padding: const EdgeInsets.all(10.0),
+                  margin: EdgeInsets.only(bottom: 80.h),
+                  child: Column(
+                    children: <Widget>[
+                      // 问卷标题
+                      Container(
+                        width: Get.width,
+                        alignment: Alignment.centerLeft,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              style: TextStyle(fontSize: 36.sp),
+                              maxLines: 2,
+                              minLines: 1,
+                              initialValue: '${formatDate(
+                                DateTime.now(),
+                                [mm, '月', dd, '日'],
+                                locale: SimplifiedChineseDateLocale(),
+                              )}${controller.data.value.content?.title ?? ''}',
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '请添加标题',
+                              ),
                             ),
-                          ),
-                          TextFormField(
-                            initialValue: data.content?.description ?? '',
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '请添加问卷描述文字',
+                            TextFormField(
+                              initialValue:
+                                  controller.data.value.content?.description ??
+                                      '',
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '请添加问卷描述文字',
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    // 问卷题目
-                    ListView.separated(
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      // 问卷题目
+                      ReorderableListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return Column(
+                            key: Key('$index'),
                             children: [
                               Container(
                                 width: Get.width,
@@ -92,8 +98,12 @@ class SurveyEditView extends GetView<SurveyEditController> {
                                 child: Column(
                                   children: [
                                     TextFormField(
-                                      initialValue: data.content
-                                              ?.queContentList?[index].title ??
+                                      initialValue: controller
+                                              .data
+                                              .value
+                                              .content
+                                              ?.queContentList?[index]
+                                              .title ??
                                           '',
                                       style: TextStyle(fontSize: 20.sp),
                                       decoration: InputDecoration(
@@ -101,7 +111,9 @@ class SurveyEditView extends GetView<SurveyEditController> {
                                           children: [
                                             // 是否必填
                                             Text(
-                                              data
+                                              controller
+                                                          .data
+                                                          .value
                                                           .content
                                                           ?.queContentList?[
                                                               index]
@@ -113,17 +125,9 @@ class SurveyEditView extends GetView<SurveyEditController> {
                                                   TextStyle(color: Colors.red),
                                             ),
                                             // 序号
-                                            Text((data
-                                                        .content
-                                                        ?.queContentList?[index]
-                                                        .queOrder)! <
-                                                    10
-                                                ? '0${(data.content?.queContentList?[index].queOrder).toString()}'
-                                                : (data
-                                                        .content
-                                                        ?.queContentList?[index]
-                                                        .queOrder)
-                                                    .toString()),
+                                            Text((index + 1) < 10
+                                                ? '0${(index + 1)}'
+                                                : '${index + 1}'),
                                             SizedBox(
                                               width: 5.w,
                                             ),
@@ -134,14 +138,19 @@ class SurveyEditView extends GetView<SurveyEditController> {
                                       ),
                                     ),
                                     TextFormField(
-                                      initialValue: data.content
-                                          ?.queContentList?[index].description,
+                                      initialValue: controller
+                                          .data
+                                          .value
+                                          .content
+                                          ?.queContentList?[index]
+                                          .description,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: '添加问题描述文字',
                                       ),
                                     ),
-                                    data.content?.queContentList?[index].type ==
+                                    controller.data.value.content
+                                                ?.queContentList?[index].type ==
                                             2
                                         ? TextFormField(
                                             style: TextStyle(fontSize: 20.sp),
@@ -158,7 +167,7 @@ class SurveyEditView extends GetView<SurveyEditController> {
                                         //               value: 0,
                                         //               groupValue: 1,
                                         //               title: Text(
-                                        //                   '${data.content?.queContentList?[index].queOptions}'),
+                                        //                   '${data.value.content?.queContentList?[index].queOptions}'),
                                         //               onChanged: (v) {}),
                                         //           RadioListTile(
                                         //               value: 1,
@@ -166,13 +175,15 @@ class SurveyEditView extends GetView<SurveyEditController> {
                                         //               onChanged: (v) {}),
                                         //         ],
                                         //       )
-                                        ListView.builder(
+                                        ReorderableListView.builder(
                                             shrinkWrap: true,
-                                            itemCount: data
+                                            itemCount: (controller
+                                                .data
+                                                .value
                                                 .content
                                                 ?.queContentList?[index]
                                                 .queOptions
-                                                ?.length,
+                                                ?.length)!,
                                             physics:
                                                 NeverScrollableScrollPhysics(),
                                             itemBuilder: (context, i) {
@@ -181,12 +192,13 @@ class SurveyEditView extends GetView<SurveyEditController> {
                                                   //   value: 0,
                                                   //   groupValue: 1,
                                                   //   title: Text(
-                                                  //       '${data.content?.queContentList?[index].queOptions?[i].answer}'),
+                                                  //       '${data.value.content?.queContentList?[index].queOptions?[i].answer}'),
                                                   //   onChanged: (v) {});
                                                   ListTile(
+                                                key: Key('$i'),
                                                 title: TextFormField(
                                                   initialValue:
-                                                      '${data.content?.queContentList?[index].queOptions?[i].answer}',
+                                                      '${controller.data.value.content?.queContentList?[index].queOptions?[i].answer}',
                                                   style: TextStyle(
                                                       fontSize: 20.sp),
                                                   decoration: InputDecoration(
@@ -199,49 +211,70 @@ class SurveyEditView extends GetView<SurveyEditController> {
                                                 trailing: Icon(
                                                     Icons.more_vert_outlined),
                                               );
-                                            })
+                                            },
+                                            onReorder:
+                                                (int oldIndex, int newIndex) {
+                                              if (oldIndex < newIndex) {
+                                                newIndex -= 1;
+                                              }
+                                              controller.renderOptionList(
+                                                  index, oldIndex, newIndex);
+                                            },
+                                          ),
                                   ],
                                 ),
+                              ),
+                              SizedBox(
+                                height: 10.h,
                               ),
                             ],
                           );
                         },
-                        separatorBuilder: (context, index) {
-                          return SizedBox(
-                            height: 10.h,
-                          );
+                        // separatorBuilder: (context, index) {
+                        //   return SizedBox(
+                        //     height: 10.h,
+                        //   );
+                        // },
+                        itemCount: (controller
+                            .data.value.content?.queContentList?.length)!,
+                        onReorder: (int oldIndex, int newIndex) {
+                          if (oldIndex < newIndex) {
+                            newIndex -= 1;
+                          }
+                          controller.renderList(oldIndex, newIndex);
                         },
-                        itemCount: (data.content?.queContentList?.length)!),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    // 添加题目
-                    Container(
-                      width: Get.width,
-                      alignment: Alignment.centerLeft,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
                       ),
-                      child: Wrap(
-                        spacing: 5.w,
-                        children: [
-                          Icon(
-                            Icons.add_circle_outline,
-                            color: Config.mainColor,
-                          ),
-                          Text(
-                            '插入问题',
-                            style: TextStyle(color: Config.mainColor),
-                          ),
-                        ],
+                      SizedBox(
+                        height: 10.h,
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                      // 添加题目
+                      Container(
+                        width: Get.width,
+                        alignment: Alignment.centerLeft,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Wrap(
+                          spacing: 5.w,
+                          children: [
+                            Icon(
+                              Icons.add_circle_outline,
+                              color: Config.mainColor,
+                            ),
+                            Text(
+                              '插入问题',
+                              style: TextStyle(color: Config.mainColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ),
             Positioned(
               bottom: 5.h,

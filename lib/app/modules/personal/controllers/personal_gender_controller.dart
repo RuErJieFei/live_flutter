@@ -1,7 +1,6 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
 import 'package:wit_niit/app/modules/personal/model/personal_gender_model.dart';
@@ -54,11 +53,10 @@ class PersonalGenderController extends GetxController {
             "id": "${user?.id}"
           };
 
-          request
-              .post('${NetUrl.user_HostName}/users/edit', data: dataForm)
-              .then((data) {
-            /// 获取用户信息
-            getUserInfo(data["id"]);
+          request.post('/users/edit', data: dataForm).then((data) {
+            // 更新缓存的用户信息
+            user?.gender = personalGender.genderValue;
+            SpUtil.putObject("user", user!);
 
             var personal = Get.find<PersonalInfoController>();
             personal.changeGender(personalGender.genderName);
@@ -77,11 +75,8 @@ class PersonalGenderController extends GetxController {
 
   /// 获取当前登录用户信息
   void getUserInfo(id) async {
-    var token = SpUtil.getString('token');
-    var data = await request.get(
-      "${NetUrl.user_HostName}/users/getUser/$id",
-      headers: {"token": token},
-    );
+    var data = await request
+        .get("http://124.221.232.15:8082/users/getUserNoToken/$id");
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }
