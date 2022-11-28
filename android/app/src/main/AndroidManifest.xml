@@ -7,7 +7,9 @@
     <!-- 基本模块（必须）START -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
+        android:usesCleartextTraffic="true"
         android:label="wit_niit"
         android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher">

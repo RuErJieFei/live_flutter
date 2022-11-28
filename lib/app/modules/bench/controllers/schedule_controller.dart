@@ -1,10 +1,13 @@
 
+import 'dart:io';
+
 import 'package:date_format/date_format.dart';
 import 'package:faker/faker.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:video_player/video_player.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wit_niit/app/modules/bench/model/schedule_model.dart';
 import '../../../../main.dart';
@@ -13,7 +16,7 @@ import '../../../data/helpers.dart';
 import '../model/schedule_model_release.dart';
 
 
-
+const String VIDEO_URL = 'https://www.runoob.com/try/demo_source/mov_bbb.mp4';
 class SchedulePageController extends GetxController {
   //TODO: Implement BenchController
   var id = SpUtil.getString('userId');
@@ -24,6 +27,11 @@ class SchedulePageController extends GetxController {
 //         Uri.parse('${NetUrl.socket_HostName}$id')
 //     );
 //   }
+  var  videoContro = VideoPlayerController.network(VIDEO_URL).obs;
+  late Future initializeVideoPlayerFuture;
+
+  var  dura = 0.0.obs; //视频播放比
+
   var attachmentList = [].obs;
   final count = 0.obs;
   final unClickColor = Colors.black.obs;
@@ -105,17 +113,24 @@ class SchedulePageController extends GetxController {
   void onInit() async{
     super.onInit();
     scheduleList.value =await getScheduleByDate();
-   scheduleList.value = scheduleList.map((element) => Data.fromJson(element)).toList();
+    scheduleList.value = scheduleList.map((element) => Data.fromJson(element)).toList();
    // addConnection();
     // for (int i = 1; i <= 8; i++) {
     //   addSchedule();
     // }
+
+    // videoContro = VideoPlayerController.file(new File(attachmentList[0].path));
+    // videoContro.setLooping(true);
+    initializeVideoPlayerFuture = videoContro.value.initialize();
+    update();
+
   }
 
   @override
   void onReady() {
     super.onReady();
-  }
+
+    }
 
   @override
   void onClose() {
@@ -123,6 +138,7 @@ class SchedulePageController extends GetxController {
     super.onClose();
     selectedDay.value = DateTime.now();
     // channel.sink.close();
+    videoContro.value.dispose();
   }
 
   void increment() => count.value++;
