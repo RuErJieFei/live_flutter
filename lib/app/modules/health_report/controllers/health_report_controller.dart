@@ -36,6 +36,7 @@ class HealthReportController extends GetxController {
   final isContactSickPeople = 0.obs;
   final isInformedByTeacher = 0.obs;
   final isResponsibleForAuthenticity = 0.obs;
+  final isConfirmedCovid19 = 0.obs;
 
   String getTime() {
     DateTime today = new DateTime.now();
@@ -80,8 +81,7 @@ class HealthReportController extends GetxController {
       "userId": user?.id,
       "isHealthy": "0",
       "reportTime": getTime(),
-      "position": 'locationName.value',
-      // "position": locationName.value,
+      "position": locationName.value,
       "address": address.value,
       "addressStreet": addressStreetTf.text,
       "isInSchool": isInSchool.value.toString(),
@@ -96,12 +96,48 @@ class HealthReportController extends GetxController {
       "healthCodeColor": healthCodeColor.value,
       "numberOfCohabitants": numberOfCohabitants.value,
       "isQuarantine": isQuarantine.value.toString(),
-      // "supplementaryNotes": supplementaryNotes.text
-      "supplementaryNotes": 'supplementaryNotes.text'
+      "supplementaryNotes": supplementaryNotes.text
     };
     EasyLoading.show(status: '正在提交');
     print(dataForm);
     request.post('/shisheng/health/teacher', data: dataForm).then((data) {
+      EasyLoading.dismiss();
+      EasyLoading.showToast('提交成功');
+      Get.back();
+    }).catchError((e) {
+      EasyLoading.showError(e);
+    });
+  }
+
+  void pushStudentContent() {
+    var dataForm = {
+      "userId": user?.id,
+      "isHealthy": '1',
+      "reportTime": getTime(),
+      "position": locationName.value,
+      "address": address.value,
+      "isInSchool": isInSchool.value.toString(),
+      "isTest48": isTest48.value.toString(),
+      "isAccinated": isAccinated.value.toString(),
+      "isSymptom10": isSymptom10.value.toString(),
+      "isSuspectedCovid19": isSuspectedCovid19.value.toString(),
+      "isConfirmedCovid19": isConfirmedCovid19.value.toString(),
+      "isAsymptomaticInfection": isAsymptomaticInfection.value.toString(),
+      "isQuarantine": isQuarantine.value.toString(),
+      "isTransitHignrisk": isTransitHignrisk.value.toString(),
+      "isStayHignrisk": isStayHignrisk.value.toString(),
+      "isContactHighriskPersonnel": isContactHighriskPersonnel.value.toString(),
+      "isGoAbroad": isGoAbroad.value.toString(),
+      "isContactOverseasPersonnel": isContactOverseasPersonnel.value.toString(),
+      "isContactSickPeople": isContactSickPeople.value.toString(),
+      "isInformedByTeacher": isInformedByTeacher.value.toString(),
+      "isResponsibleForAuthenticity":
+          isResponsibleForAuthenticity.value.toString(),
+      "supplementaryNotes": supplementaryNotes.text,
+    };
+    EasyLoading.show(status: '正在提交');
+    print(dataForm);
+    request.post('/shisheng/health', data: dataForm).then((data) {
       EasyLoading.dismiss();
       EasyLoading.showToast('提交成功');
       Get.back();
