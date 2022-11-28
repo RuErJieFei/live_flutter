@@ -1,6 +1,7 @@
 import 'package:flustars/flustars.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
+import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_avatar_binding.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_email_binding.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_gender_binding.dart';
@@ -20,11 +21,11 @@ import 'package:wit_niit/app/modules/personal/views/personal_status_view.dart';
 class PersonalInfoController extends GetxController {
   /// 个人信息列表数据
   var personalInfoList = <PersonalInfo>[].obs;
+  UserModel? user = SpUtil.getObj(
+      "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
 
   /// 添加个人列表信息数据
   void addInfo() {
-    UserModel? user = SpUtil.getObj(
-        "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
     // 性别列表
     Map<String, String> genderList = {"M": "男", "F": "女"};
     // 用户性别
@@ -127,12 +128,24 @@ class PersonalInfoController extends GetxController {
 
   // 改变手机号
   void changePhone(String phone) {
+    // 更新缓存的用户信息
+    user?.phone = phone;
+    SpUtil.putObject("user", user!);
     personalInfoList[4].content = phone;
     personalInfoList.refresh();
+    // 通讯录当前用户信息更新
+    var msgCto = Get.find<MessageController>();
+    // 通讯里里我的信息
+    var curUser = msgCto.contactsMap['${user?.id}'];
+    curUser?.phone = phone;
+    SpUtil.putObject('contactList', msgCto.contactsMap);
   }
 
   // 改变邮箱
   void changeEmail(String email) {
+    // 更新缓存的用户信息
+    user?.email = email;
+    SpUtil.putObject("user", user!);
     personalInfoList[5].content = email;
     personalInfoList.refresh();
   }

@@ -2,7 +2,6 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/modules/personal/controllers/personal_info_controller.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_info_view.dart';
@@ -66,8 +65,7 @@ class PersonalPhoneBindController extends GetxController {
       LogUtil.v('获取验证码~~');
       startTimer();
       // AuthClient.sendSms(phoneTf.text, "+86");
-      request.post('${NetUrl.user_HostName}/users/sendSms',
-          data: {"phone": phoneTf.text});
+      request.post('/users/sendSms', data: {"phone": phoneTf.text});
     }
   }
 
@@ -81,11 +79,8 @@ class PersonalPhoneBindController extends GetxController {
       EasyLoading.showToast('请输入验证码');
       return;
     }
-    request.post('${NetUrl.user_HostName}/users/changPhone',
+    request.post('/users/changPhone',
         data: {"phone": phoneTf.text, "code": vCodeTf.text}).then((data) {
-      /// 获取用户信息
-      getUserInfo(data["id"]);
-
       var personal = Get.find<PersonalInfoController>();
       personal.changePhone(phoneTf.text);
 
@@ -98,11 +93,8 @@ class PersonalPhoneBindController extends GetxController {
 
   /// 获取当前登录用户信息
   void getUserInfo(id) async {
-    var token = SpUtil.getString('token');
-    var data = await request.get(
-      "${NetUrl.user_HostName}/users/getUser/$id",
-      headers: {"token": token},
-    );
+    var data = await request
+        .get("http://124.221.232.15:8082/users/getUserNoToken/$id");
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }
