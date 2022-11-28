@@ -72,7 +72,8 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
               title: Text(
-            '${user?.roleList?[0]}', // 角色
+            '${user?.roleList}', // 角色
+            // 'aaa', // 角色
             style: TextStyle(fontSize: 20.sp),
           )),
           ListTile(leading: new Icon(Icons.help), title: new Text("帮助")),

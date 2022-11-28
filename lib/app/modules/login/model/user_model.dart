@@ -9,6 +9,9 @@ class UserModel {
   String? sno;
   String? classes;
   String? college;
+  String? address;
+  String? teacherPhone;
+  String? teacherName;
 
   UserModel(
       {this.gender,
@@ -20,7 +23,10 @@ class UserModel {
       this.roleList,
       this.sno,
       this.classes,
-      this.college});
+      this.college,
+      this.address,
+      this.teacherPhone,
+      this.teacherName});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     gender = json['gender'];
@@ -33,6 +39,9 @@ class UserModel {
     sno = json['sno'];
     classes = json['classes'];
     college = json['college'];
+    address = json['address'];
+    teacherPhone = json['teacherPhone'];
+    teacherName = json['teacherName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +56,9 @@ class UserModel {
     data['sno'] = this.sno;
     data['classes'] = this.classes;
     data['college'] = this.college;
+    data['address'] = this.address;
+    data['teacherPhone'] = this.teacherPhone;
+    data['teacherName'] = this.teacherName;
     return data;
   }
 }

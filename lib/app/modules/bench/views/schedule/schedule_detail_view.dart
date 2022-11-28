@@ -11,7 +11,6 @@ import '../../model/schedule_model_release.dart';
 
 class ScheduleDetailView extends GetView<SchedulePageController> {
   final int index;
-
   const ScheduleDetailView(
     this.index, {
     Key? key,
@@ -20,7 +19,6 @@ class ScheduleDetailView extends GetView<SchedulePageController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return Obx(() {
       return Scaffold(
         appBar: AppBar(

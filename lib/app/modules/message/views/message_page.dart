@@ -1,16 +1,13 @@
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
-import 'package:wit_niit/app/data/helpers.dart';
+import 'package:leancloud_official_plugin/leancloud_plugin.dart';
+import 'package:wit_niit/app/component/bg_position_image.dart';
 import 'package:wit_niit/app/modules/message/bindings/chat_binding.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
-import 'package:wit_niit/app/modules/message/model/message_model.dart';
 import 'package:wit_niit/app/modules/message/model/story_data.dart';
-import 'package:wit_niit/app/modules/message/widget/avatar.dart';
-
 import 'chat_view.dart';
 
 class MessagesPage extends GetView<MessageController> {
@@ -25,7 +22,7 @@ class MessagesPage extends GetView<MessageController> {
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               _delegate,
-              childCount: controller.messageList.length,
+              childCount: controller.conversationList.length,
             ),
           );
         })
@@ -33,28 +30,49 @@ class MessagesPage extends GetView<MessageController> {
     );
   }
 
-  /// 消息列表
+  /// 会话列表
   Widget _delegate(BuildContext context, int index) {
-    return _MessageTitle(
-      messageData: controller.messageList[index],
+    return _ConversationTitle(
+      conversation: controller.conversationList[index],
     );
   }
 }
 
-class _MessageTitle extends GetView<MessageController> {
-  const _MessageTitle({Key? key, required this.messageData}) : super(key: key);
-
-  final MessageData messageData;
+class _ConversationTitle extends GetView<MessageController> {
+  const _ConversationTitle({Key? key, required this.conversation}) : super(key: key);
+  final Conversation conversation; // 会话
 
   @override
   Widget build(BuildContext context) {
+    final contact = ContactModel().obs;
+    // 根据人数来渲染头像
+    controller.getMemberId(conversation).then((id) {
+      if (conversation.members!.length <= 2) {
+        // 私聊
+        contact(controller.contactsMap[id]);
+      } else {
+        // 群聊：显示头像（多人拼图）
+        contact.update((e) {
+          e?.name = conversation.name;
+          e?.photo = 'http://img.w2gd.top/up/groupChat.png';
+        });
+      }
+    });
     return InkWell(
       onTap: () {
-        controller.currentFriendId.value = messageData.id;
-        Get.to(() => ChatView(messageData: messageData), binding: ChatBinding());
+        controller.currentConv = conversation;
+        Get.to(
+          () => ChatView(
+            conversation: conversation,
+            titleName: '${contact.value.name}',
+          ),
+          binding: ChatBinding(),
+        )?.then((value) {
+          controller.updateConversationList();
+        });
       },
       child: Container(
-        height: 100.h,
+        height: 80.h,
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(
           border: Border(
@@ -68,9 +86,15 @@ class _MessageTitle extends GetView<MessageController> {
           padding: const EdgeInsets.all(4.0),
           child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Avatar.medium(url: messageData.profilePicture),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                width: 70.r,
+                height: 70.r,
+                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+                clipBehavior: Clip.antiAlias,
+                child: Obx(() {
+                  return BGPositionImage.positionImage('${contact.value.photo}');
+                }),
               ),
               Expanded(
                 child: Column(
@@ -79,23 +103,26 @@ class _MessageTitle extends GetView<MessageController> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        messageData.senderName,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          letterSpacing: 0.2,
-                          wordSpacing: 1.5,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
+                      child: Obx(() {
+                        return Text(
+                          '${contact.value.name}',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            letterSpacing: 0.2,
+                            wordSpacing: 1.5,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        );
+                      }),
                     ),
                     SizedBox(
                       height: 20,
                       child: Text(
-                        messageData.message,
+                        '${controller.getLastMessageInfo(conversation.lastMessage)}',
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style: TextStyle(
+                          fontSize: 14.sp,
                         ),
                       ),
                     ),
@@ -110,25 +137,28 @@ class _MessageTitle extends GetView<MessageController> {
                   children: [
                     const SizedBox(height: 4),
                     Text(
-                      messageData.dateMessage.toUpperCase(),
+                      controller.dealDate(conversation.lastMessageDate),
                       style: TextStyle(
-                        fontSize: 11.sp,
+                        fontSize: 12.sp,
                         letterSpacing: -0.2,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Container(
-                      width: 18,
-                      height: 18,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '1',
-                          style: TextStyle(fontSize: 10, color: Colors.white),
+                    Opacity(
+                      opacity: conversation.unreadMessageCount == 0 ? 0 : 1, // 未读0 不显示
+                      child: Container(
+                        width: 21.r,
+                        height: 21.r,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${conversation.unreadMessageCount}',
+                            style: TextStyle(fontSize: 12.sp, color: Colors.white),
+                          ),
                         ),
                       ),
                     )
@@ -171,9 +201,9 @@ class _Stories extends GetView<MessageController> {
               child: Obx(() {
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: controller.contactList.length,
+                  itemCount: controller.contactsMap.length,
                   itemBuilder: (BuildContext context, int index) {
-                    ContactModel contact = controller.contactList[index];
+                    ContactModel contact = controller.contactsMap.values.elementAt(index);
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
@@ -181,30 +211,19 @@ class _Stories extends GetView<MessageController> {
                         child: InkWell(
                           /// 点击与他发起聊天
                           onTap: () {
-                            final Faker faker = Faker(); // 假数据
-                            final date = Helpers.randomDate();
-                            MessageData data = MessageData(
-                              id: contact.id,
-                              senderName: contact.name ?? 'null',
-                              message: faker.lorem.sentence(),
-                              messageDate: date,
-                              dateMessage: Jiffy(date).fromNow(),
-                              profilePicture: contact.photo!,
-                            );
-                            controller.currentFriendId.value = contact.id;
-                            Get.to(
-                              () => ChatView(messageData: data),
-                              binding: ChatBinding(),
-                              arguments: contact.id, // 联系人的id
-                            )?.then((value) {
-                              /// 更新最新消息
-                              /// 判断消息列表中是否存在与这个用户的消息，若不存在，则添加
-                              bool flag = controller.messageList.any((ele) {
-                                return ele.id == contact.id;
+                            controller
+                                .createConversation('${contact.id}', '${contact.name}')
+                                .then((conv) {
+                              controller.currentConv = conv;
+                              Get.to(
+                                () => ChatView(titleName: '${contact.name}', conversation: conv),
+                                binding: ChatBinding(),
+                              )?.then((value) {
+                                /// 更新会话列表
+                                controller.updateConversationList();
                               });
-                              if (!flag) {
-                                controller.addMessage(data);
-                              }
+                            }).catchError((_) {
+                              EasyLoading.showError('创建会话失败');
                             });
                           },
                           child: _StoryCard(
@@ -238,7 +257,13 @@ class _StoryCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Avatar.medium(url: storyData.url),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(25.r)),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: BGPositionImage.positionImage(storyData.url),
+        ),
         Expanded(
           child: Padding(
             padding: EdgeInsets.only(top: 10.h),

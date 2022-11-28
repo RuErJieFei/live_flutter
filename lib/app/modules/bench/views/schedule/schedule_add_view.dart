@@ -6,6 +6,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:wit_niit/app/modules/micro_disk/views/micro_disk_view.dart';
 import '../../../micro_disk/bindings/micro_disk_binding.dart';
 import '../../../micro_disk/controllers/micro_disk_controller.dart';
@@ -41,7 +42,6 @@ class ScheduleAddView extends GetView<SchedulePageController> {
         "calender": "选择日历"
       };
       var resp = await request.post("/schedule/addSchedule", data: data);
-      // var resp = await Dio().post("http://121.40.208.79:10000/api/schedule/addSchedule",data: data);
       if(resp == 1){
         controller.topicController.value.clear();
         controller.addressController.value.clear();
@@ -79,7 +79,7 @@ class ScheduleAddView extends GetView<SchedulePageController> {
               SykDivider(context, 8),
               Expanded(flex: 1, child: _Participants(context)),
               SykDivider(context, 8),
-              Expanded(flex: 3, child: _TimeComponent(context)),
+              Expanded(flex: 2, child: _TimeComponent(context)),
               SykDivider(context, 8),
               Expanded(flex: 1, child: _Address(context)),
               SykDivider(context, 8),
@@ -287,70 +287,99 @@ class ScheduleAddView extends GetView<SchedulePageController> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 50.h,
-      child: TextButton(
-        onPressed: (){
-          showDialog(context: context, builder:(_)=> CupertinoAlertDialog(
-            content: Container(
-              width: 0.8.sw,
-              height: 0.5.sw,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(onTap: () {
-                    showDialog(context: context, builder:(_)=> CupertinoAlertDialog(
-                      content: Container(
-                        width: 0.8.sw,
-                        height: 0.5.sw,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(onTap: () async {
-                              /// Pick an image
-                              // final XFile? image1 =await controller.picker.pickImage(source: ImageSource.gallery);
-                              Get.back();
-                              Get.back();
-                            },child: Text("选择图片",style: TextStyle(fontSize: 20),)),
-                            SykDivider(context, 2),
-                            GestureDetector(onTap: () async{
-                              // final XFile? image =await controller.picker.pickVideo(source: ImageSource.gallery);
-                              Get.back();
-                              Get.back();
-                            },child: Text("选择视频",style: TextStyle(fontSize: 20),)),
-                            SykDivider(context, 2),
-                            GestureDetector(onTap: () async{
-                              // final XFile? image =await controller.picker.pickImage(source: ImageSource.camera);
-                              Get.back();
-                              Get.back();
-                            },child: Text("拍照",style: TextStyle(fontSize: 20),)),
-                            SykDivider(context, 2),
-                            GestureDetector(onTap: () async{
-                              // final XFile? image =await controller.picker.pickVideo(source: ImageSource.camera);
-                              Get.back();
-                              Get.back();
-                            },child: Text("拍视频",style: TextStyle(fontSize: 20),)),
-                          ],
-                        ),
-                      ),
-                    ) );
-                  },child: Text("选择图片/视频",style: TextStyle(fontSize: 20),)),
-                  SykDivider(context, 2),
-                  GestureDetector(onTap: (){},child: Text("从收藏中选择",style: TextStyle(fontSize: 20),)),
-                  SykDivider(context, 2),
-                  GestureDetector(onTap: (){},child: Text("从文档中选择",style: TextStyle(fontSize: 20),)),
-                  SykDivider(context, 2),
-                  GestureDetector(onTap: (){
-                    Get.to(()=>MicroDiskView(),binding: MicroDiskBinding());
-                  },child: Text("从微盘中选择",style: TextStyle(fontSize: 20),)),
+      child: Column(
+        children: [
+          controller.attachmentList.length !=0 ? Image.file(controller.attachmentList[0].path) :Container(),
+          TextButton(
+            onPressed: (){
+              showDialog(context: context, builder:(_)=> CupertinoAlertDialog(
+                content: Container(
+                  width: 0.8.sw,
+                  height: 0.5.sw,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(onTap: () {
+                        showDialog(context: context, builder:(_)=> CupertinoAlertDialog(
+                          content: Container(
+                            width: 0.8.sw,
+                            height: 0.5.sw,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GestureDetector(onTap: ()  {
+                                  /// Pick an image
+                                  Future getImage() async {
+                                    List<Media>? res = await ImagesPicker.pick(
+                                      count: 3,
+                                      pickType: PickType.image,
+                                    );
+                                   controller.attachmentList.value = res!;
+                                  }
+                                  getImage();
+                                  Get.back();
+                                  Get.back();
+                                },child: Text("选择图片",style: TextStyle(fontSize: 20),)),
+                                SykDivider(context, 2),
+                                GestureDetector(onTap: () async{
+                                  Future getImage() async {
+                                    List<Media>? res = await ImagesPicker.pick(
+                                      count: 3,
+                                      pickType: PickType.video,
+                                    );
+                                  }
+                                  getImage();
+                                  ImagesPicker.openCamera(
+                                    pickType: PickType.video,
+                                    maxTime: 15, // record video max time
+                                  );
+                                  Get.back();
+                                  Get.back();
+                                },child: Text("选择视频",style: TextStyle(fontSize: 20),)),
+                                SykDivider(context, 2),
+                                GestureDetector(onTap: ()  {
+                                  ImagesPicker.openCamera(
+                                    pickType: PickType.image,
+                                    maxTime: 15, // record video max time
+                                  );
+                                  Get.back();
+                                  Get.back();
+                                },child: Text("拍照",style: TextStyle(fontSize: 20),)),
+                                SykDivider(context, 2),
+                                GestureDetector(onTap: () async{
+                                  ImagesPicker.openCamera(
+                                    pickType: PickType.video,
+                                    maxTime: 15, // record video max time
+                                  );
+                                  Get.back();
+                                  Get.back();
+                                },child: Text("录像",style: TextStyle(fontSize: 20),)),
+                                SykDivider(context, 2),
+                              ],
+                            ),
+                          ),
+                        ) );
+                      },child: Text("选择图片/视频",style: TextStyle(fontSize: 20),)),
+                      SykDivider(context, 2),
+                      GestureDetector(onTap: (){},child: Text("从收藏中选择",style: TextStyle(fontSize: 20),)),
+                      SykDivider(context, 2),
+                      GestureDetector(onTap: (){},child: Text("从文档中选择",style: TextStyle(fontSize: 20),)),
+                      SykDivider(context, 2),
+                      GestureDetector(onTap: (){
+                        Get.to(()=>MicroDiskView(),binding: MicroDiskBinding());
+                      },child: Text("从微盘中选择",style: TextStyle(fontSize: 20),)),
 
-                ],
-              ),
-            ),
-          ) );
+                    ],
+                  ),
+                ),
+              ) );
 
-        },
-        child: Align(alignment: Alignment.centerLeft,child: Text("添加附件...",style: TextStyle(color: Colors.black,fontSize: 18),)),
+            },
+            child: Align(alignment: Alignment.centerLeft,child: Text("添加附件...",style: TextStyle(color: Colors.black,fontSize: 18),)),
+          ),
+        ],
       )
     );
   }

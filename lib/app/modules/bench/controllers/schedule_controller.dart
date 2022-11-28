@@ -24,7 +24,7 @@ class SchedulePageController extends GetxController {
 //         Uri.parse('${NetUrl.socket_HostName}$id')
 //     );
 //   }
-
+  var attachmentList = [].obs;
   final count = 0.obs;
   final unClickColor = Colors.black.obs;
   /// 日程新增页面的开始时间

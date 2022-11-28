@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:authing_sdk/client.dart';
 import 'package:authing_sdk/result.dart';
+import 'package:authing_sdk/user.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:wit_niit/app/config/base_extend.dart';
-import 'package:wit_niit/app/config/net_url.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/routes/app_pages.dart';
 import 'package:wit_niit/main.dart';
@@ -41,8 +41,8 @@ class LoginController extends GetxController {
     } else if (Platform.isIOS) {
       value = SystemUiOverlayStyle.dark;
     }
-    accountTf.text = '13851826167';
-    passwordTf.text = 'hlh320123678';
+    accountTf.text = '';
+    passwordTf.text = '';
   }
 
   @override
@@ -97,7 +97,7 @@ class LoginController extends GetxController {
 
   /// 请求登录
   void requestLogin() async {
-    // AuthResult result;
+    AuthResult result;
     if (loginType == 0) {
       if (!BaseExtend.isValue(accountTf.text)) {
         EasyLoading.showToast('请输入账号');
@@ -109,22 +109,36 @@ class LoginController extends GetxController {
       }
 
       /// Authing 账户登录，可以是手机号 / 邮箱 / 用户名
-      // result = await AuthClient.loginByAccount(accountTf.text, passwordTf.text);
-      /// 手机号&密码 登录
-      var dataForm = {"phone": accountTf.text, "password": passwordTf.text};
       EasyLoading.show(status: '正在登录');
-      request.post('${NetUrl.user_HostName}/users/phone', data: dataForm).then((data) {
-        SpUtil.putString('userId', data["id"]);
-        SpUtil.putString('token', data["token"]); // 存储token
+      try {
+        result = await AuthClient.loginByAccount(accountTf.text, passwordTf.text);
+        User? user = result.user;
+        SpUtil.putString('userId', '${user?.id}');
+        SpUtil.putString('token', '${user?.token}'); // 存储token
         EasyLoading.dismiss();
-        //  跳转到首页，取消之前所有路由
+        // 获取用户信息
+        getUserInfo(user?.id);
+        // 跳转到首页，取消之前所有路由
         Get.offAllNamed(Routes.INDEX);
-
-        /// 获取用户信息
-        getUserInfo(data["id"], data["token"]);
-      }).catchError((_) {
+      } catch (e) {
         EasyLoading.showError('用户名或密码错误');
-      });
+      }
+
+      /// 手机号&密码 登录
+      // var dataForm = {"phone": accountTf.text, "password": passwordTf.text};
+      // EasyLoading.show(status: '正在登录');
+      // request.post('/users/phone', data: dataForm).then((data) {
+      //   SpUtil.putString('userId', data["id"]);
+      //   SpUtil.putString('token', data["token"]); // 存储token
+      //   EasyLoading.dismiss();
+      //   //  跳转到首页，取消之前所有路由
+      //   Get.offAllNamed(Routes.INDEX);
+      //
+      //   /// 获取用户信息
+      //   getUserInfo(data["id"]);
+      // }).catchError((_) {
+      //   EasyLoading.showError('用户名或密码错误');
+      // });
     } else {
       if (!BaseExtend.isValue(phoneTf.text)) {
         EasyLoading.showToast('请输入手机号');
@@ -156,7 +170,7 @@ class LoginController extends GetxController {
         Get.offAllNamed(Routes.INDEX);
 
         /// 获取用户信息
-        getUserInfo(data["id"], data["token"]);
+        getUserInfo(data["id"]);
       }).catchError((_) {
         EasyLoading.showError('验证码错误');
       });
@@ -172,14 +186,12 @@ class LoginController extends GetxController {
   }
 
   ///  Authing 获取当前登录用户信息
-  void getUserInfo(id, token) async {
+  void getUserInfo(id) async {
     // AuthResult result = await AuthClient.getCurrentUser();
+    // AuthResult result = await AuthClient.get();
     // User? user = result.user; // user info
-
-    var data = await request.get(
-      "/users/getUser/$id",
-      headers: {"token": token},
-    );
+    // var data = await request.get("/users/getUserNoToken/$id");
+    var data = await request.get("http://124.221.232.15:8082/users/getUserNoToken/$id");
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }

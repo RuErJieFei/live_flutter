@@ -1,11 +1,11 @@
 /// 联系人
 class ContactModel {
-  late final String id;
+  String? id;
   String? phone;
   String? photo;
   String? name;
 
-  ContactModel({required this.id, this.phone, this.photo, this.name});
+  ContactModel({this.id, this.phone, this.photo, this.name});
 
   ContactModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
