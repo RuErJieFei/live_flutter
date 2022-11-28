@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
+import 'package:wit_niit/app/modules/message/widget/date_bar.dart';
 import 'package:wit_niit/app/modules/message/widget/my_message_tile.dart';
 import 'package:wit_niit/main.dart';
 
@@ -68,6 +69,36 @@ class MessageController extends GetxController {
         }
       }
     };
+    // 加入成员通知
+    me.onMembersJoined = ({
+      Client? client,
+      Conversation? conversation,
+      List? members,
+      String? byClientID,
+      DateTime? atDate,
+    }) {
+      if (currentConv.id == conversation?.id) {
+        members?.forEach((id) {
+          ContactModel? contact = contactsMap[id];
+          recordList.insert(0, DateBar(lable: '${contact?.name} 加入了群聊'));
+        });
+      }
+    };
+    // 有成员被从某个对话中移除
+    me.onMembersLeft = ({
+      Client? client,
+      Conversation? conversation,
+      List? members,
+      String? byClientID,
+      DateTime? atDate,
+    }) {
+      if (currentConv.id == conversation?.id) {
+        members?.forEach((id) {
+          ContactModel? contact = contactsMap[id];
+          recordList.insert(0, DateBar(lable: '成员 ${contact?.name} 被移出群聊'));
+        });
+      }
+    };
   }
 
   @override
@@ -101,8 +132,7 @@ class MessageController extends GetxController {
       });
     } else {
       Map<String, dynamic> params = {"page": 1, "limit": 50};
-      // List res = await request.get('/users/userlist', params: params);
-      List res = await request.get('http://124.221.232.15:8082/users/userlist', params: params);
+      List res = await request.get('/users/userlist', params: params);
       res.forEach((e) {
         ContactModel contact = ContactModel.fromJson(e);
         contactsMap['${contact.id}'] = contact;

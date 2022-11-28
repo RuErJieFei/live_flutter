@@ -11,12 +11,12 @@ import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/message/controllers/chat_controller.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/chatmenu_item.dart';
+import 'package:wit_niit/app/modules/message/views/conversation_info_view.dart';
 import 'package:wit_niit/app/modules/message/widget/glowing_action_button.dart';
 import 'package:wit_niit/app/modules/message/widget/icon_background.dart';
 
 class ChatView extends GetView<ChatController> {
   const ChatView({Key? key, required this.conversation, required this.titleName}) : super(key: key);
-  // final ContactModel contactInfo;
   final String titleName;
   final Conversation conversation;
 
@@ -39,23 +39,17 @@ class ChatView extends GetView<ChatController> {
         ),
         title: _AppBarTitle(name: titleName),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Center(
-              child: IconBorder(
-                icon: CupertinoIcons.video_camera_solid,
-                onTap: () {},
-              ),
-            ),
+          IconButton(
+            onPressed: () {
+              EasyLoading.showToast('该功能还未实现');
+            },
+            icon: Icon(Icons.video_camera_front, color: Colors.white),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Center(
-              child: IconBorder(
-                icon: CupertinoIcons.phone_solid,
-                onTap: () {},
-              ),
-            ),
+          IconButton(
+            onPressed: () {
+              Get.to(() => ConversationInfoView(conversation));
+            },
+            icon: Icon(Icons.more_vert, color: Colors.white),
           ),
         ],
       ),

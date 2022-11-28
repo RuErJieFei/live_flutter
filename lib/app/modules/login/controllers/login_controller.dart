@@ -190,8 +190,7 @@ class LoginController extends GetxController {
     // AuthResult result = await AuthClient.getCurrentUser();
     // AuthResult result = await AuthClient.get();
     // User? user = result.user; // user info
-    // var data = await request.get("/users/getUserNoToken/$id");
-    var data = await request.get("http://124.221.232.15:8082/users/getUserNoToken/$id");
+    var data = await request.get("/users/getUserNoToken/$id");
     UserModel user = UserModel.fromJson(data);
     SpUtil.putObject("user", user);
   }

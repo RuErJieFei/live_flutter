@@ -8,6 +8,7 @@ import 'package:wit_niit/app/modules/message/bindings/chat_binding.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
 import 'package:wit_niit/app/modules/message/model/story_data.dart';
+
 import 'chat_view.dart';
 
 class MessagesPage extends GetView<MessageController> {
@@ -193,7 +194,6 @@ class _Stories extends GetView<MessageController> {
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 15.sp,
-                  // color: AppColors.textFaded,
                 ),
               ),
             ),
@@ -223,7 +223,9 @@ class _Stories extends GetView<MessageController> {
                                 controller.updateConversationList();
                               });
                             }).catchError((_) {
+                              // 若下线会导致失败
                               EasyLoading.showError('创建会话失败');
+                              controller.onReady(); // 重新登录LC
                             });
                           },
                           child: _StoryCard(
@@ -261,6 +263,7 @@ class _StoryCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(25.r)),
           ),
+          height: 50.r,
           clipBehavior: Clip.antiAlias,
           child: BGPositionImage.positionImage(storyData.url),
         ),

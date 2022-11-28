@@ -44,20 +44,21 @@ class ChatController extends GetxController {
       String? myId = SpUtil.getString('userId');
       List<Widget> list = messages
           .map((e) {
-        if (myId == e.fromClientID) {
-          /// 文字消息
-          return msgCto.getMyMsgWidget(e);
-        } else {
-          return msgCto.getMsgWidget(e);
-        }
-      })
+            if (myId == e.fromClientID) {
+              /// 文字消息
+              return msgCto.getMyMsgWidget(e);
+            } else {
+              return msgCto.getMsgWidget(e);
+            }
+          })
           .cast<Widget>()
           .toList();
       msgCto.recordList.assignAll(list.reversed);
       // scrollToBottom(); // 滚动到底部
       conversation.read(); // 清空未读消息数
     } catch (e) {
-      LogUtil.v(e);
+      EasyLoading.showToast('获取聊天记录失败');
+      msgCto.onReady();
     }
   }
 
@@ -129,5 +130,28 @@ class ChatController extends GetxController {
         EasyLoading.showError('图片发送失败');
       }
     }
+  }
+
+  // Todo: 添加他人加入会话
+  void addMembers(String convId, Set<String> friendsSet) async {
+    List<Conversation> conversations;
+    try {
+      // 首先根据 ID 获取 Conversation 实例
+      ConversationQuery query = msgCto.me.conversationQuery();
+      query.whereEqualTo('objectId', convId);
+      conversations = await query.find();
+      Conversation conversation = conversations.first;
+      // 邀请他人加入对话
+      MemberResult addResult = await conversation.addMembers(
+        members: friendsSet,
+      );
+    } catch (e) {
+      LogUtil.v('添加失败');
+    }
+  }
+
+  // Todo: 将他人踢出会话
+  void removeMember(Conversation conv, String id) {
+    conv.removeMembers(members: {id});
   }
 }

@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (5.6.4)
   - BaiduMapKit/Base (6.5.3)
   - BaiduMapKit/Map (6.5.3):
     - BaiduMapKit/Base
@@ -33,6 +34,8 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - image_picker_ios (0.0.1):
+    - Flutter
   - images_picker (0.0.1):
     - Flutter
     - ZLPhotoBrowser (= 4.2.5)
@@ -80,6 +83,7 @@ DEPENDENCIES:
   - flutter_baidu_mapapi_search (from `.symlinks/plugins/flutter_baidu_mapapi_search/ios`)
   - flutter_bmflocation (from `.symlinks/plugins/flutter_bmflocation/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - images_picker (from `.symlinks/plugins/images_picker/ios`)
   - leancloud_official_plugin (from `.symlinks/plugins/leancloud_official_plugin/ios`)
   - notification_permissions (from `.symlinks/plugins/notification_permissions/ios`)
@@ -94,6 +98,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - BaiduMapKit
     - BMKLocationKit
     - FMDB
@@ -121,6 +126,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_bmflocation/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
   images_picker:
     :path: ".symlinks/plugins/images_picker/ios"
   leancloud_official_plugin:
@@ -145,6 +152,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
+  Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   BaiduMapKit: 54623026cd183511b1525a448094211d4fd5d646
   BMKLocationKit: c0a4266f84ad2a3296df8c24f14f0ed20dbbf0ee
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
@@ -157,6 +165,7 @@ SPEC CHECKSUMS:
   flutter_bmflocation: 1bd73181196567fe1529f765aa4f8e2615a8a3cf
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   images_picker: fa9364e3a7d3083c49f865fcfb2b9e7cdc574d3a
   LeanCloud: e6de4b8129ab68be7f70a9b77c4304f71c5a1a2c
   leancloud_official_plugin: 6f30dc57a7f181193f511355c17519a61dce033d
