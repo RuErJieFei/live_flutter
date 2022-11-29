@@ -217,17 +217,7 @@ class AskLeaveStudentView extends GetView<AskLeaveStudentController> {
                           keyboardType: TextInputType.number,
                           readOnly: true,
                         ),
-                        ReactiveFormConsumer(
-                          builder: (context, form, child) {
-                            if (form.control("applicationTime").value != null &&
-                                form.control("deadline").value != null) {
-                              controller.calculateDiffer(form);
-                            } else {
-                              form.control("days").value = null;
-                            }
-                            return Container();
-                          },
-                        ),
+
                         ReactiveDropdownField(
                           formControlName: 'overnight',
                           decoration: InputDecoration(
@@ -244,11 +234,107 @@ class AskLeaveStudentView extends GetView<AskLeaveStudentController> {
                             DropdownMenuItem(value: false, child: Text('否')),
                           ],
                         ),
+                        ReactiveTextField<String>(
+                          formControlName: "reason",
+                          decoration: InputDecoration(
+                            label: Row(
+                              children: [
+                                Icon(Icons.star, color: Colors.red, size: 8.sp),
+                                Text("请假事由", style: TextStyle(fontSize: 16.sp))
+                              ],
+                            ),
+                          ),
+                          minLines: 5,
+                          maxLines: 6,
+                          maxLength: 1000,
+                          textInputAction: TextInputAction.next,
+                        ),
+                        ReactiveTextField<String>(
+                          formControlName: "number",
+                          decoration: InputDecoration(
+                            label: Row(
+                              children: [
+                                Icon(Icons.star, color: Colors.red, size: 8.sp),
+                                Text("手机号", style: TextStyle(fontSize: 16.sp))
+                              ],
+                            ),
+                          ),
+                          readOnly: true,
+                        ),
+                        ReactiveDropdownField(
+                          formControlName: 'occupy',
+                          decoration: InputDecoration(
+                            label: Row(
+                              children: [
+                                Icon(Icons.star, color: Colors.red, size: 8.sp),
+                                Text("是否占用上课时间",
+                                    style: TextStyle(fontSize: 16.sp))
+                              ],
+                            ),
+                          ),
+                          items: [
+                            DropdownMenuItem(value: true, child: Text('是')),
+                            DropdownMenuItem(value: false, child: Text('否')),
+                          ],
+                        ),
+                        ReactiveDropdownField(
+                          formControlName: 'out',
+                          decoration: InputDecoration(
+                            label: Row(
+                              children: [
+                                Icon(Icons.star, color: Colors.red, size: 8.sp),
+                                Text("是否出校", style: TextStyle(fontSize: 16.sp))
+                              ],
+                            ),
+                          ),
+                          items: [
+                            DropdownMenuItem(value: true, child: Text('是')),
+                            DropdownMenuItem(value: false, child: Text('否')),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.w, 16.h, 8.w, 16.h),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                "申请时间     ",
+                                style: TextStyle(fontSize: 16.sp),
+                              ),
+                              Text(
+                                controller.pageTime.value,
+                                style: TextStyle(fontSize: 16.sp),
+                              )
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.black,
+                        ),
+                        ReactiveFormConsumer(
+                          builder: (context, form, child) {
+                            if (form.control("applicationTime").value != null &&
+                                form.control("deadline").value != null) {
+                              controller.calculateDiffer(form);
+                            } else {
+                              form.control("days").value = null;
+                            }
+                            if (controller.phone.value != 0) {
+                              form.control("number").value =
+                                  controller.phone.value;
+                            }
+                            return ElevatedButton(
+                              onPressed: () {
+                                if (form.valid) {
+                                  print(form.value);
+                                } else {
+                                  form.markAllAsTouched();
+                                }
+                              },
+                              child: const Text('Sign Up'),
+                            );
+                          },
+                        ),
 
-
-                        ElevatedButton(
-                            onPressed: () => controller.onSubmit(form.value),
-                            child: Text("提交"))
                         // ReactiveDatePicker<DateTime>(
                         //   formControlName: 'applicationTime',
                         //   firstDate: DateTime(1985),

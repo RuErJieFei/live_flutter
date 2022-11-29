@@ -18,6 +18,8 @@ class AskLeaveStudentController extends GetxController {
   var values = [].obs;
   var type = "".obs;
   var dateDiffer = 0.obs;
+  var phone = "".obs;
+  var pageTime = "".obs;
 
   FormGroup buildForm() => FormGroup(
         {
@@ -31,8 +33,14 @@ class AskLeaveStudentController extends GetxController {
               FormControl<int>(value: null, validators: [Validators.required]),
           'overnight':
               FormControl<bool>(value: null, validators: [Validators.required]),
-          'reason':
-              FormControl<String>(value: null, validators: [Validators.required]),
+          'reason': FormControl<String>(
+              value: null, validators: [Validators.required]),
+          'number': FormControl<String>(
+              value: null, validators: [Validators.required]),
+          'occupy':
+              FormControl<bool>(value: null, validators: [Validators.required]),
+          'out':
+              FormControl<bool>(value: null, validators: [Validators.required]),
         },
       );
 
@@ -70,6 +78,10 @@ class AskLeaveStudentController extends GetxController {
       "",
       "仙林校区筠竹苑1栋316室5号床"
     ];
+
+    this.phone.value = "17606186124";
+    this.pageTime.value = DateUtil.getNowDateStr();
+
   }
 
   @override
@@ -108,7 +120,7 @@ class AskLeaveStudentController extends GetxController {
   }
 
   void onSubmit(form) {
-    LogUtil.v(form);
+    LogUtil.v(JsonUtil.encodeObj(form));
   }
 
   String calculateDiffer(FormGroup form) {
