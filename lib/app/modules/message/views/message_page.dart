@@ -194,7 +194,6 @@ class _Stories extends GetView<MessageController> {
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 15.sp,
-                  // color: AppColors.textFaded,
                 ),
               ),
             ),
@@ -224,7 +223,9 @@ class _Stories extends GetView<MessageController> {
                                 controller.updateConversationList();
                               });
                             }).catchError((_) {
+                              // 若下线会导致失败
                               EasyLoading.showError('创建会话失败');
+                              controller.onReady(); // 重新登录LC
                             });
                           },
                           child: _StoryCard(
@@ -262,6 +263,7 @@ class _StoryCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(25.r)),
           ),
+          height: 50.r,
           clipBehavior: Clip.antiAlias,
           child: BGPositionImage.positionImage(storyData.url),
         ),

@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 
 /// 扫一扫
 class ScanView extends StatefulWidget {
@@ -90,16 +92,29 @@ class _QRViewState extends State<ScanView> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
+    this.controller = controller;
+    controller.resumeCamera();
+    final msgCto = Get.find<MessageController>();
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        // 更新数据
-        result = scanData;
-        EasyLoading.showToast('${scanData.code}');
-      });
+      // 更新数据
+      // result = scanData;
+      Map map = json.decode('${scanData.code}');
+      // EasyLoading.showToast('${map.keys.first}');
+      String type = map.keys.first;
+
+      /// 加入群聊
+      if (type == 'ConversationId') {
+        msgCto.joinConversation(map[type]);
+        this.controller!.pauseCamera();
+        Get.back();
+        return;
+      }
+
+      /// 添加好友
+      ///
+      setState(() {});
     });
+    this.controller!.pauseCamera();
   }
 
   /// 权限提醒

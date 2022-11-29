@@ -16,7 +16,7 @@ class DateBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,

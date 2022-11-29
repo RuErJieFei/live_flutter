@@ -75,6 +75,8 @@ dependencies:
   # 表单校验插件
   flutter_form_builder: ^7.7.0
   form_builder_validators: ^8.1.1
+  # 视频播放
+  video_player: ^2.4.8
 
 
 
