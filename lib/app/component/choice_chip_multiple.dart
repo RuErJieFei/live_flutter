@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wit_niit/app/data/school_theme_data.dart';
 
 /// FileName choice_chip_multiple
@@ -17,16 +18,16 @@ class ChoiceChipSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5.w),
       child: ChoiceChip(
         label: Text(choice),
         selectedColor: SchoolConfig.primaryColor,
         //被禁用得时候背景
         disabledColor: Colors.grey[250],
         labelStyle: TextStyle(
-            fontWeight: FontWeight.w200, fontSize: 15.0, color: Colors.white),
-        labelPadding: EdgeInsets.only(left: 8.0, right: 8.0),
+            fontWeight: FontWeight.w200, fontSize: 15.sp, color: Colors.white),
+        labelPadding: EdgeInsets.only(left: 8.w, right: 8.w),
         materialTapTargetSize: MaterialTapTargetSize.padded,
         onSelected: fun,
         selected: selected == index,

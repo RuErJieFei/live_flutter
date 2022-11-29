@@ -111,7 +111,6 @@ class HealthReportController extends GetxController {
       "supplementaryNotes": supplementaryNotes.value
     };
     EasyLoading.show(status: '正在提交');
-    print(dataForm);
     request.post('/shisheng/health/teacher', data: dataForm).then((data) {
       EasyLoading.dismiss();
       EasyLoading.showToast('提交成功');
@@ -151,7 +150,6 @@ class HealthReportController extends GetxController {
       "supplementaryNotes": supplementaryNotes.value,
     };
     EasyLoading.show(status: '正在提交');
-    print(dataForm);
     request.post('/shisheng/health', data: dataForm).then((data) {
       EasyLoading.dismiss();
       EasyLoading.showToast('提交成功');
