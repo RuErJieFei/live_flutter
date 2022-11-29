@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -58,7 +59,7 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [schoolTitle('入校日期'), addPhoto()],
+                children: [schoolTitle('苏康码'), addPhoto(0)],
               ),
               SizedBox(
                 height: 10.h,
@@ -114,7 +115,7 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [schoolTitle('行程码'), addPhoto()],
+                children: [schoolTitle('行程码'), addPhoto(1)],
               ),
               SizedBox(
                 height: 10.h,
@@ -130,15 +131,18 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
               SizedBox(
                 height: 10.h,
               ),
-              cardBox('同住人双码是否全绿', 1, 0),
+              Obx(() =>
+                  cardBox('同住人双码是否全绿', controller.peerHealthy.value, 1, 0)),
               SizedBox(
                 height: 10.h,
               ),
-              cardBox('同住人有无中高风险地区行程史', 2, 1),
+              Obx(() =>
+                  cardBox('同住人有无中高风险地区行程史', controller.riskRegion.value, 2, 1)),
               SizedBox(
                 height: 10.h,
               ),
-              cardBox('本人是否有发热、干咳、乏力、鼻塞流涕、咽痛、嗅觉/味觉减退、结膜炎、肌痛、腹泻等症状', 3, 1),
+              Obx(() => cardBox('本人是否有发热、干咳、乏力、鼻塞流涕、咽痛、嗅觉/味觉减退、结膜炎、肌痛、腹泻等症状',
+                  controller.sicken.value, 3, 1)),
               SizedBox(
                 height: 20.h,
               ),
@@ -166,7 +170,14 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
               ),
               SchoolPushButton(
                 title: '提交',
-                onTap: () {},
+                onTap: () {
+                  if (controller.healthyImageUrl == '' ||
+                      controller.peerHealthy == '') {
+                    EasyLoading.showToast('请上传苏康码及行程码');
+                  } else {
+                    controller.pushSchool();
+                  }
+                },
               ),
               SizedBox(
                 height: 20.h,
@@ -265,7 +276,7 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
     }));
   }
 
-  Widget addPhoto() {
+  Widget addPhoto(int type) {
     return PopupMenuButton(
       offset: Offset(0, 60.h),
       itemBuilder: (context) {
@@ -290,7 +301,7 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
               ),
             ),
             onTap: () {
-              controller.getImage();
+              controller.getImage(type);
             },
           ),
           PopupMenuDivider(),
@@ -314,7 +325,7 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
               ),
             ),
             onTap: () {
-              controller.getPhoto();
+              controller.getPhoto(type);
             },
           ),
           PopupMenuDivider(),
@@ -505,7 +516,7 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
     );
   }
 
-  Widget cardBox(String title, int index, int type) {
+  Widget cardBox(String title, int groupValue, int index, int type) {
     return Card(
       child: Container(
         padding: EdgeInsets.all(10.r),
@@ -522,31 +533,47 @@ class EnterSchoolFromView extends GetView<EnterSchoolFromController> {
             Divider(),
             Row(
               children: [
-                Obx(() {
-                  return Radio(
-                    value: 0,
-                    activeColor: SchoolConfig.primaryColor,
-                    groupValue: controller.isGreen.value,
-                    onChanged: (value) {
-                      controller.setGreen(value);
-                    },
-                  );
-                }),
+                Radio(
+                  value: 0,
+                  activeColor: SchoolConfig.primaryColor,
+                  groupValue: groupValue,
+                  onChanged: (e) {
+                    switch (index) {
+                      case 1:
+                        controller.peerHealthy.value = e!;
+                        break;
+                      case 2:
+                        controller.riskRegion.value = e!;
+                        break;
+                      case 3:
+                        controller.sicken.value = e!;
+                        break;
+                    }
+                  },
+                ),
                 Text(type == 0 ? "全绿码" : "无"),
               ],
             ),
             Row(
               children: [
-                Obx(() {
-                  return Radio(
-                    value: 1,
-                    activeColor: SchoolConfig.primaryColor,
-                    groupValue: controller.isGreen.value,
-                    onChanged: (value) {
-                      controller.setGreen(value);
-                    },
-                  );
-                }),
+                Radio(
+                  value: 1,
+                  activeColor: SchoolConfig.primaryColor,
+                  groupValue: groupValue,
+                  onChanged: (e) {
+                    switch (index) {
+                      case 1:
+                        controller.peerHealthy.value = e!;
+                        break;
+                      case 2:
+                        controller.riskRegion.value = e!;
+                        break;
+                      case 3:
+                        controller.sicken.value = e!;
+                        break;
+                    }
+                  },
+                ),
                 Text(type == 0 ? "非全绿码" : "有")
               ],
             )

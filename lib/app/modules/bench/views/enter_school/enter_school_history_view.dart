@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:wit_niit/app/modules/bench/bindings/enter_school/enter_school_de
 import '../../../../component/choice_chip_multiple.dart';
 import '../../../../data/base_style.dart';
 import '../../../../data/school_theme_data.dart';
+import '../../../login/model/user_model.dart';
 import '../../controllers/enter_school/enter_school_history_controller.dart';
 import 'enter_school_detail_view.dart';
 
@@ -14,6 +16,8 @@ class EnterSchoolHistoryView extends GetView<EnterSchoolHistoryController> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? user = SpUtil.getObj(
+        "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
     return Scaffold(
       appBar: AppBar(
         iconTheme: SchoolConfig.iconTheme,
@@ -63,7 +67,7 @@ class EnterSchoolHistoryView extends GetView<EnterSchoolHistoryController> {
                         width: 10.w,
                       ),
                       Text(
-                        '教职工入校申请',
+                        user?.roleList![0] == 'student' ? '学生入校申请' : '教职工入校申请',
                         style: BaseStyle.fs16bold,
                       ),
                     ],
@@ -130,58 +134,60 @@ class EnterSchoolHistoryView extends GetView<EnterSchoolHistoryController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      child: Obx(
-                        () => Wrap(
-                          // 使用迭代器的方法生成list
-                          children: controller.authorities
-                              .map(
-                                (item) => ChoiceChipSelect(
-                                  index: item == '全部'
-                                      ? 0
-                                      : item == '无风险'
-                                          ? 1
-                                          : item == '有风险'
-                                              ? 2
-                                              : 3,
-                                  choice: item,
-                                  selected: controller.selected.value,
-                                  fun: (bool value) {
-                                    controller.selected.value = item == '全部'
-                                        ? 0
-                                        : item == '无风险'
-                                            ? 1
-                                            : item == '有风险'
-                                                ? 2
-                                                : 3;
-                                  },
-                                ),
-                              )
-                              .toList(),
-                        ),
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        // 使用迭代器的方法生成list
+                        children: controller.authorities
+                            .map(
+                              (item) => ChoiceChipSelect(
+                                index: item['value'] as int,
+                                choice: item['name'].toString(),
+                                selected: controller.selected.value,
+                                fun: (bool value) {
+                                  if (value == true) {
+                                    controller.selected.value =
+                                        item['value'] as int;
+                                  }
+                                },
+                              ),
+                            )
+                            .toList(),
                       ),
                     ),
                     RichText(
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: '共计',
+                            text: '共计 ',
                             style: BaseStyle.contentStyle,
                           ),
                           TextSpan(
-                            text: '3',
+                            text: controller.schoolList.length.toString(),
                             style: BaseStyle.schoolContentStyle,
                           ),
                           TextSpan(
-                            text: '条',
+                            text: ' 条',
                             style: BaseStyle.contentStyle,
                           ),
                         ],
                       ),
                     ),
-                    Card('陈蓉琪', '2000100193', '2022-10-25', 0),
-                    Divider(),
-                    Card('陈蓉琪', '2000100193', '2022-10-25', 0),
+                    Obx(
+                      () => Column(
+                        children: controller.schoolList
+                            .map(
+                              (item) => Card(
+                                  item.id.toString() ?? '',
+                                  item.admissionTime
+                                          .toString()
+                                          .substring(0, 10) ??
+                                      '',
+                                  0),
+                            )
+                            .toList(),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -189,97 +195,102 @@ class EnterSchoolHistoryView extends GetView<EnterSchoolHistoryController> {
             .toList(),
       );
 
-  Widget Card(String name, String id, String date, int status) {
-    return ListTile(
-      contentPadding: EdgeInsets.all(4.0),
-      isThreeLine: true,
-      leading: Container(
-        width: 55.w,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(
-              'https://tva1.sinaimg.cn/large/008vxvgGgy1h85rjouowrj302k03a0si.jpg',
+  Widget Card(String id, String date, int status) {
+    return Column(
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.all(4.0),
+          isThreeLine: true,
+          leading: Container(
+            width: 55.w,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(
+                  'https://tva1.sinaimg.cn/large/008vxvgGgy1h85rjouowrj302k03a0si.jpg',
+                ),
+                fit: BoxFit.fill,
+              ),
+              borderRadius: BorderRadius.circular(5.0),
             ),
-            fit: BoxFit.fill,
           ),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-      ),
-      title: Row(
-        children: <Widget>[
-          Text(
-            name,
-            style: BaseStyle.smallBBoldStyle,
-          ),
-          SizedBox(
-            width: 5.0,
-          ),
-          Text(
-            'ID: $id',
-            style: BaseStyle.graySmallStyle,
-          ),
-        ],
-      ),
-      subtitle: Column(
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.gavel,
-                color: Colors.grey.shade700,
-                size: 16.0,
+          title: Row(
+            children: <Widget>[
+              Text(
+                controller.user?.name ?? '',
+                style: BaseStyle.smallBBoldStyle,
               ),
               SizedBox(
-                width: 10.w,
+                width: 5.0,
               ),
               Text(
-                status == 0 ? '【无风险】' : '【有风险】',
-                style: BaseStyle.schoolSmallStyle,
-              ),
-              Text(
-                date,
+                'ID: $id',
                 style: BaseStyle.graySmallStyle,
               ),
             ],
           ),
-          SizedBox(
-            height: 5.0,
-          ),
-          Row(
+          subtitle: Column(
             children: [
-              Icon(
-                Icons.assured_workload,
-                color: Colors.grey.shade700,
-                size: 16.0,
+              Row(
+                children: [
+                  Icon(
+                    Icons.gavel,
+                    color: Colors.grey.shade700,
+                    size: 16.0,
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  Text(
+                    status == 0 ? '【无风险】' : '【有风险】',
+                    style: BaseStyle.schoolSmallStyle,
+                  ),
+                  Text(
+                    date,
+                    style: BaseStyle.graySmallStyle,
+                  ),
+                ],
               ),
               SizedBox(
-                width: 10.w,
+                height: 5.0,
               ),
-              Text(
-                '申请【$date】入校',
-                style: BaseStyle.graySmallStyle,
+              Row(
+                children: [
+                  Icon(
+                    Icons.assured_workload,
+                    color: Colors.grey.shade700,
+                    size: 16.0,
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  Text(
+                    '申请【$date】入校',
+                    style: BaseStyle.graySmallStyle,
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-      trailing: Container(
-        width: 40.w,
-        height: 40.h,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(
-              'https://tva1.sinaimg.cn/large/008vxvgGgy1h85rdt7lobj303y03yweb.jpg',
+          trailing: Container(
+            width: 40.w,
+            height: 40.h,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(
+                  'https://tva1.sinaimg.cn/large/008vxvgGgy1h85rdt7lobj303y03yweb.jpg',
+                ),
+                fit: BoxFit.fill,
+              ),
+              borderRadius: BorderRadius.circular(5.0),
             ),
-            fit: BoxFit.fill,
           ),
-          borderRadius: BorderRadius.circular(5.0),
+          onTap: () {
+            Get.to(() => EnterSchoolDetailView(),
+                binding: EnterSchoolDetailBinding());
+          },
         ),
-      ),
-      onTap: () {
-        Get.to(() => EnterSchoolDetailView(),
-            binding: EnterSchoolDetailBinding());
-      },
+        Divider()
+      ],
     );
   }
 }

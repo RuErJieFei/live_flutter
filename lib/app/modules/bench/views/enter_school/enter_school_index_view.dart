@@ -1,3 +1,5 @@
+import 'package:flustars/flustars.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -5,6 +7,7 @@ import 'package:wit_niit/app/data/iconfont.dart';
 
 import '../../../../data/base_style.dart';
 import '../../../../data/school_theme_data.dart';
+import '../../../login/model/user_model.dart';
 import '../../bindings/enter_school/enter_school_from_binding.dart';
 import '../../bindings/enter_school/enter_school_history_binding.dart';
 import '../../controllers/enter_school/enter_school_index_controller.dart';
@@ -16,6 +19,9 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? user = SpUtil.getObj(
+        "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
+    DateTime dateTime = DateTime.now();
     return Scaffold(
       appBar: AppBar(
         iconTheme: SchoolConfig.iconTheme,
@@ -83,7 +89,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
                         width: 10.w,
                       ),
                       Text(
-                        '教职工入校申请',
+                        user?.roleList![0] == 'student' ? '学生入校申请' : '教职工入校申请',
                         style: BaseStyle.fs16bold,
                       ),
                     ],
@@ -109,7 +115,7 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '2022-11-02 星期三',
+                        '${dateTime.year}-${dateTime.month}-${dateTime.day} 星期${convert(dateTime.weekday)}',
                         style: BaseStyle.fs16bold,
                       ),
                       Icon(
@@ -129,6 +135,11 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
                       TextSpan(
                         text: '未申请',
                         style: BaseStyle.schoolSmallStyle,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Get.to(() => EnterSchoolFromView(),
+                                binding: EnterSchoolFromBinding());
+                          },
                       ),
                       TextSpan(
                         text: '，可查看历史记录',
@@ -215,5 +226,25 @@ class EnterSchoolIndexView extends GetView<EnterSchoolIndexController> {
         ),
       ],
     );
+  }
+
+  String convert(int num) {
+    switch (num) {
+      case 1:
+        return '一';
+      case 2:
+        return '二';
+      case 3:
+        return '三';
+      case 4:
+        return '四';
+      case 5:
+        return '五';
+      case 6:
+        return '六';
+      case 7:
+        return '天';
+    }
+    return '';
   }
 }

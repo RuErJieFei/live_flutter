@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../../data/base_style.dart';
 import '../../../../data/iconfont.dart';
 import '../../../../data/school_theme_data.dart';
+import '../../../login/model/user_model.dart';
 import '../../bindings/enter_school/enter_school_index_binding.dart';
 import '../../controllers/enter_school/enter_school_controller.dart';
 import 'enter_school_index_view.dart';
@@ -14,6 +16,8 @@ class EnterSchoolView extends GetView<EnterSchoolController> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? user = SpUtil.getObj(
+        "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
     return Scaffold(
       appBar: AppBar(
         iconTheme: SchoolConfig.iconTheme,
@@ -48,11 +52,11 @@ class EnterSchoolView extends GetView<EnterSchoolController> {
                       text: '',
                       children: [
                         TextSpan(
-                          text: '您当前的岗位是：',
+                          text: '您当前的身份是：',
                           style: BaseStyle.grayContentStyle,
                         ),
                         TextSpan(
-                          text: '教职工',
+                          text: user?.roleList![0] == 'student' ? '学生' : '教职工',
                           style: BaseStyle.contentStyle,
                         ),
                       ],
