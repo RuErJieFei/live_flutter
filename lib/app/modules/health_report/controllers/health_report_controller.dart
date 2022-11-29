@@ -2,6 +2,7 @@ import 'package:city_pickers/city_pickers.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
 import '../../../../main.dart';
@@ -13,30 +14,33 @@ class HealthReportController extends GetxController {
   final longitude = '0'.obs;
   final latitude = '0'.obs;
   final addressStreet = ''.obs; //常住街道
-  TextEditingController addressStreetTf = TextEditingController();
-  final isLocation = 0.obs; //定位功能是否正常
-  final isInSchool = 0.obs;
-  final isInApartment = 0.obs;
-  final isStayHignrisk = 0.obs;
-  final isTransitHignrisk = 0.obs;
-  final isContactHighriskPersonnel = 0.obs;
-  final isGoAbroad = 0.obs;
-  final isContactOverseasPersonnel = 0.obs;
-  final isNormalTemperature = 0.obs;
-  final isSymptom10 = 0.obs;
-  final healthCodeColor = 0.obs;
-  final numberOfCohabitants = 0.obs;
-  final isQuarantine = 0.obs;
+  final addressStreetTf = ''.obs;
+  final isLocation = '正常'.obs; //定位功能是否正常
+  final isInSchool = '是'.obs;
+  final isInApartment = '否'.obs;
+  final isStayHignrisk = '否'.obs;
+  final isTransitHignrisk = '否'.obs;
+  final isContactHighriskPersonnel = '否'.obs;
+  final isGoAbroad = '否'.obs;
+  final isContactOverseasPersonnel = '否'.obs;
+  final isNormalTemperature = '否'.obs;
+  final isSymptom10 = '否'.obs;
+  final healthCodeColor = '绿色'.obs;
+  final numberOfCohabitants = ''.obs;
+  final isQuarantine = '否'.obs;
   final isSave = true.obs;
-  TextEditingController supplementaryNotes = TextEditingController();
-  final isTest48 = 0.obs;
-  final isAccinated = 0.obs;
-  final isSuspectedCovid19 = 0.obs;
-  final isAsymptomaticInfection = 0.obs;
-  final isContactSickPeople = 0.obs;
-  final isInformedByTeacher = 0.obs;
-  final isResponsibleForAuthenticity = 0.obs;
-  final isConfirmedCovid19 = 0.obs;
+  final supplementaryNotes = ''.obs;
+  final isTest48 = '是'.obs;
+  final isAccinated = '是,已完成'.obs;
+  final isSuspectedCovid19 = '否'.obs;
+  final isAsymptomaticInfection = '否'.obs;
+  final isContactSickPeople = '否'.obs;
+  final isInformedByTeacher = '是,已联系告知'.obs;
+  final isResponsibleForAuthenticity = '是'.obs;
+  final isConfirmedCovid19 = '否'.obs;
+
+  final formKey = GlobalKey<FormBuilderState>();
+  final formTeacherKey = GlobalKey<FormBuilderState>();
 
   String getTime() {
     DateTime today = new DateTime.now();
@@ -83,20 +87,28 @@ class HealthReportController extends GetxController {
       "reportTime": getTime(),
       "position": locationName.value,
       "address": address.value,
-      "addressStreet": addressStreetTf.text,
-      "isInSchool": isInSchool.value.toString(),
-      "isInApartment": isInApartment.value.toString(),
-      "isTransitHignrisk": isTransitHignrisk.value.toString(),
-      "isStayHignrisk": isStayHignrisk.value.toString(),
-      "isContactHighriskPersonnel": isContactHighriskPersonnel.value.toString(),
-      "isGoAbroad": isGoAbroad.value.toString(),
-      "isContactOverseasPersonnel": isContactOverseasPersonnel.value.toString(),
-      "isNormalTemperature": isNormalTemperature.value.toString(),
-      "isSymptom10": isSymptom10.value.toString(),
-      "healthCodeColor": healthCodeColor.value,
-      "numberOfCohabitants": numberOfCohabitants.value,
-      "isQuarantine": isQuarantine.value.toString(),
-      "supplementaryNotes": supplementaryNotes.text
+      "addressStreet": addressStreetTf.value,
+      "isInSchool": isInSchool.value == '是' ? '1' : '0',
+      "isInApartment": isInApartment.value == '是' ? '1' : '0',
+      "isTransitHignrisk": isTransitHignrisk.value == '是' ? '1' : '0',
+      "isStayHignrisk": isStayHignrisk.value == '是' ? '1' : '0',
+      "isContactHighriskPersonnel":
+          isContactHighriskPersonnel.value == '是' ? '1' : '0',
+      "isGoAbroad": isGoAbroad.value == '是' ? '1' : '0',
+      "isContactOverseasPersonnel":
+          isContactOverseasPersonnel.value == '是' ? '1' : '0',
+      "isNormalTemperature": isNormalTemperature.value == '是' ? '1' : '0',
+      "isSymptom10": isSymptom10.value == '是' ? '1' : '0',
+      "healthCodeColor": healthCodeColor.value == '绿色'
+          ? 0
+          : healthCodeColor.value == '黄色'
+              ? 1
+              : 2,
+      "numberOfCohabitants": numberOfCohabitants.value == '5人以上'
+          ? 6
+          : int.parse(numberOfCohabitants.value),
+      "isQuarantine": isQuarantine.value == '是' ? '1' : '0',
+      "supplementaryNotes": supplementaryNotes.value
     };
     EasyLoading.show(status: '正在提交');
     print(dataForm);
@@ -116,24 +128,27 @@ class HealthReportController extends GetxController {
       "reportTime": getTime(),
       "position": locationName.value,
       "address": address.value,
-      "isInSchool": isInSchool.value.toString(),
-      "isTest48": isTest48.value.toString(),
-      "isAccinated": isAccinated.value.toString(),
-      "isSymptom10": isSymptom10.value.toString(),
-      "isSuspectedCovid19": isSuspectedCovid19.value.toString(),
-      "isConfirmedCovid19": isConfirmedCovid19.value.toString(),
-      "isAsymptomaticInfection": isAsymptomaticInfection.value.toString(),
-      "isQuarantine": isQuarantine.value.toString(),
-      "isTransitHignrisk": isTransitHignrisk.value.toString(),
-      "isStayHignrisk": isStayHignrisk.value.toString(),
-      "isContactHighriskPersonnel": isContactHighriskPersonnel.value.toString(),
-      "isGoAbroad": isGoAbroad.value.toString(),
-      "isContactOverseasPersonnel": isContactOverseasPersonnel.value.toString(),
-      "isContactSickPeople": isContactSickPeople.value.toString(),
-      "isInformedByTeacher": isInformedByTeacher.value.toString(),
+      "isInSchool": isInSchool.value == '是' ? '1' : '0',
+      "isTest48": isTest48.value == '是' ? '1' : '0',
+      "isAccinated": isAccinated.value == '是,已完成' ? '1' : '0',
+      "isSymptom10": isSymptom10.value == '是' ? '1' : '0',
+      "isSuspectedCovid19": isSuspectedCovid19.value == '是' ? '1' : '0',
+      "isConfirmedCovid19": isConfirmedCovid19.value == '是' ? '1' : '0',
+      "isAsymptomaticInfection":
+          isAsymptomaticInfection.value == '是' ? '1' : '0',
+      "isQuarantine": isQuarantine.value == '是' ? '1' : '0',
+      "isTransitHignrisk": isTransitHignrisk.value == '是' ? '1' : '0',
+      "isStayHignrisk": isStayHignrisk.value == '是' ? '1' : '0',
+      "isContactHighriskPersonnel":
+          isContactHighriskPersonnel.value == '是' ? '1' : '0',
+      "isGoAbroad": isGoAbroad.value == '是' ? '1' : '0',
+      "isContactOverseasPersonnel":
+          isContactOverseasPersonnel.value == '是' ? '1' : '0',
+      "isContactSickPeople": isContactSickPeople.value == '是' ? '1' : '0',
+      "isInformedByTeacher": isInformedByTeacher.value == '是,已联系告知' ? '1' : '0',
       "isResponsibleForAuthenticity":
-          isResponsibleForAuthenticity.value.toString(),
-      "supplementaryNotes": supplementaryNotes.text,
+          isResponsibleForAuthenticity.value == '是' ? '1' : '0',
+      "supplementaryNotes": supplementaryNotes.value,
     };
     EasyLoading.show(status: '正在提交');
     print(dataForm);
