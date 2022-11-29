@@ -2,7 +2,7 @@ name: wit_niit
 version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
-environment: 
+environment:
   sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
@@ -73,19 +73,21 @@ dependencies:
   # reactive_forms表单组件及附属插件
   reactive_forms: ^14.1.0
   reactive_date_time_picker: ^0.5.0
-
+  # 表单校验插件
+  flutter_form_builder: ^7.7.0
+  form_builder_validators: ^8.1.1
   # 视频播放
   video_player: ^2.4.8
 
 
 
-dev_dependencies: 
+dev_dependencies:
   flutter_lints: ^2.0.0
   # 启动画面
   flutter_native_splash: ^2.2.10
   # 启动图标
-#  flutter_launcher_icons: ^0.11.0
-  flutter_test: 
+  #  flutter_launcher_icons: ^0.11.0
+  flutter_test:
     sdk: flutter
   flutter_ume: ^1.0.1
   flutter_ume_kit_ui: ^1.0.0
@@ -95,7 +97,7 @@ dev_dependencies:
   flutter_ume_kit_console: ^1.0.0
   flutter_ume_kit_dio: ^1.0.0
 
-flutter: 
+flutter:
   uses-material-design: true
 
   assets:

@@ -97,7 +97,7 @@ class ConversationInfoView extends GetView<ChatController> {
       elevation: 1,
       child: Container(
         padding: EdgeInsets.all(10.w),
-        height: membersCount < 19 ? 93.w * (membersCount / 5).ceil() : 369.w,
+        height: membersCount < 19 ? 93.w * ((membersCount + 1) / 5).ceil() : 369.w,
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 5,
