@@ -77,6 +77,7 @@ class MessageController extends GetxController {
       String? byClientID,
       DateTime? atDate,
     }) {
+      updateConversationList();
       if (currentConv.id == conversation?.id) {
         members?.forEach((id) {
           ContactModel? contact = contactsMap[id];
@@ -97,6 +98,31 @@ class MessageController extends GetxController {
           ContactModel? contact = contactsMap[id];
           recordList.insert(0, DateBar(lable: '成员 ${contact?.name} 被移出群聊'));
         });
+      }
+    };
+    // 用户被踢出某个对话
+    me.onKicked = ({
+      Client? client,
+      Conversation? conversation,
+      String? byClientID,
+      DateTime? atDate,
+    }) {
+      if (currentConv.id == conversation?.id) {
+        recordList.insert(0, DateBar(lable: '你已被移出群聊'));
+      }
+    };
+    // 对话属性同步：比如通知修改了群名称
+    me.onInfoUpdated = ({
+      Client? client,
+      Conversation? conversation,
+      Map? updatingAttributes,
+      Map? updatedAttributes,
+      String? byClientID,
+      DateTime? atDate,
+    }) {
+      updateConversationList();
+      if (currentConv.id == conversation?.id) {
+        recordList.insert(0, DateBar(lable: '群名被修改为：${conversation?.name}'));
       }
     };
   }
@@ -243,6 +269,21 @@ class MessageController extends GetxController {
         messageDate: dealDate(e.sentDate),
         widget: TextMsg(message: '错误消息类型，无法显示!'),
       );
+    }
+  }
+
+  // todo: 用户主动加入对话
+  void joinConversation(String ConvId) async {
+    List<Conversation> conversations;
+    try {
+      ConversationQuery query = me.conversationQuery();
+      query.whereEqualTo('objectId', ConvId);
+      conversations = await query.find();
+      Conversation conversation = conversations.first;
+      MemberResult joinResult = await conversation.join();
+      LogUtil.v('${joinResult}');
+    } catch (e) {
+      LogUtil.v(e);
     }
   }
 }

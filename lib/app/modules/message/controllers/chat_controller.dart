@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:images_picker/images_picker.dart';
@@ -25,6 +26,8 @@ class ChatController extends GetxController {
   // 消息列表
   var msgList = <Widget>[].obs;
   var msgCto = Get.find<MessageController>();
+  // 会话名称
+  var ConvName = ''.obs;
 
   // Todo: 滚动到底部
   // void scrollToBottom() {
@@ -111,11 +114,12 @@ class ChatController extends GetxController {
     List<Media>? res = await ImagesPicker.pick(count: 1, pickType: PickType.image);
     if (res != null) {
       String path = res[0].path; // 本地图片地址
-      LogUtil.v(path);
       // 显示在聊天框
-      ByteData imageData = await rootBundle.load(path);
+      // 安卓机在这一步出错 Unable to load asset: /storage/emulated/0/Android/data/top.w2gd
+      // ByteData imageData = await rootBundle.load(path);
       ImageMessage imageMessage = ImageMessage.from(
-        binaryData: imageData.buffer.asUint8List(),
+        // binaryData: imageData.buffer.asUint8List(),
+        binaryData: await File(path).readAsBytes(),
         format: path.split('.').last,
         name: 'niit',
       );
@@ -153,5 +157,27 @@ class ChatController extends GetxController {
   // Todo: 将他人踢出会话
   void removeMember(Conversation conv, String id) {
     conv.removeMembers(members: {id});
+  }
+
+  // todo : 退出群聊
+  void quitGroup(Conversation conv) {
+    conv.quit();
+  }
+
+  // todo: 修改群聊名称
+  Future<bool> updateGroupName(Conversation conv, String name) async {
+    if (name.trim().isEmpty) {
+      EasyLoading.showToast('群名称不能为空');
+      return false;
+    }
+    try {
+      await conv.updateInfo(attributes: {
+        'name': name,
+      });
+      return true;
+    } catch (e) {
+      EasyLoading.showError('网络异常，修改失败');
+      return false;
+    }
   }
 }

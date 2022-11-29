@@ -22,6 +22,7 @@ class ChatView extends GetView<ChatController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.ConvName.value = titleName;
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
@@ -37,7 +38,9 @@ class ChatView extends GetView<ChatController> {
             },
           ),
         ),
-        title: _AppBarTitle(name: titleName),
+        title: Obx(() {
+          return _AppBarTitle(name: controller.ConvName.value);
+        }),
         actions: [
           IconButton(
             onPressed: () {

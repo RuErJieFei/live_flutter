@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/message/bindings/message_binding.dart';
 import 'package:wit_niit/app/modules/message/controllers/chat_controller.dart';
@@ -45,7 +46,7 @@ class ConversationInfoView extends GetView<ChatController> {
                 /// 群信息
                 Offstage(
                   offstage: membersCount > 2 ? false : true,
-                  child: _groupInfo(),
+                  child: _groupInfo(context),
                 ),
 
                 /// 设置
@@ -175,7 +176,7 @@ class ConversationInfoView extends GetView<ChatController> {
   }
 
   /// 群信息
-  Widget _groupInfo() {
+  Widget _groupInfo(BuildContext context) {
     ContactModel? creator = Get.find<MessageController>().contactsMap[conversation.creator];
     return Card(
       margin: EdgeInsets.only(top: 10),
@@ -183,16 +184,18 @@ class ConversationInfoView extends GetView<ChatController> {
       child: Column(
         children: [
           ListTile(
-            onTap: () {
-              EasyLoading.showToast('开发中～');
-            },
             title: Text('群聊名称'),
             trailing: Wrap(
               children: [
-                Text('${conversation.name}'),
+                Obx(() {
+                  return Text(controller.ConvName.value);
+                }),
                 Icon(Icons.arrow_right),
               ],
             ),
+            onTap: () {
+              showDialog(context: context, builder: (_) => changeGroupName());
+            },
           ),
           ListTile(
             title: Text('管理员'),
@@ -200,7 +203,7 @@ class ConversationInfoView extends GetView<ChatController> {
           ),
           ListTile(
             onTap: () {
-              EasyLoading.showToast('开发中～');
+              Get.dialog(groupQrCode());
             },
             title: Text('群二维码'),
             trailing: Wrap(
@@ -353,12 +356,56 @@ class ConversationInfoView extends GetView<ChatController> {
             // Divider(indent: 6, endIndent: 6),
             TextButton(
               onPressed: () {
-                EasyLoading.showToast('不许润');
+                conversation.quit();
+                Get.back();
+                Get.back();
               },
               child: Text('退出群聊', style: ts),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// 群二维码
+  Widget groupQrCode() {
+    return CupertinoAlertDialog(
+      content: Container(
+        padding: EdgeInsets.all(10),
+        height: 250.h,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('${conversation.name}', style: TextStyle(fontSize: 20.sp)),
+            Expanded(child: QrImage(data: '{"ConversationId":"${conversation.id}"}')),
+            Text('扫码加入群聊', style: TextStyle(fontSize: 20.sp)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 修改群名称
+  Widget changeGroupName() {
+    TextEditingController textTf = TextEditingController();
+    return CupertinoAlertDialog(
+      title: Text('修改群聊名称'),
+      actions: [
+        CupertinoDialogAction(child: Text('取消'), onPressed: () => Get.back()),
+        CupertinoDialogAction(
+          child: Text('确定'),
+          onPressed: () {
+            controller.updateGroupName(conversation, textTf.text).then((value) {
+              controller.ConvName.value = textTf.text;
+            });
+            Get.back();
+          },
+        ),
+      ],
+      content: Column(
+        children: [CupertinoTextField(controller: textTf)],
       ),
     );
   }

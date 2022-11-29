@@ -34,8 +34,6 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - image_picker_ios (0.0.1):
-    - Flutter
   - images_picker (0.0.1):
     - Flutter
     - ZLPhotoBrowser (= 4.2.5)
@@ -69,6 +67,8 @@ PODS:
   - SwiftProtobuf (1.20.3)
   - url_launcher_ios (0.0.1):
     - Flutter
+  - video_player_avfoundation (0.0.1):
+    - Flutter
   - ZLPhotoBrowser (4.2.5):
     - ZLPhotoBrowser/Core (= 4.2.5)
   - ZLPhotoBrowser/Core (4.2.5)
@@ -83,7 +83,6 @@ DEPENDENCIES:
   - flutter_baidu_mapapi_search (from `.symlinks/plugins/flutter_baidu_mapapi_search/ios`)
   - flutter_bmflocation (from `.symlinks/plugins/flutter_bmflocation/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
-  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - images_picker (from `.symlinks/plugins/images_picker/ios`)
   - leancloud_official_plugin (from `.symlinks/plugins/leancloud_official_plugin/ios`)
   - notification_permissions (from `.symlinks/plugins/notification_permissions/ios`)
@@ -95,6 +94,7 @@ DEPENDENCIES:
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
 
 SPEC REPOS:
   trunk:
@@ -126,8 +126,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_bmflocation/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
-  image_picker_ios:
-    :path: ".symlinks/plugins/image_picker_ios/ios"
   images_picker:
     :path: ".symlinks/plugins/images_picker/ios"
   leancloud_official_plugin:
@@ -150,6 +148,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  video_player_avfoundation:
+    :path: ".symlinks/plugins/video_player_avfoundation/ios"
 
 SPEC CHECKSUMS:
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
@@ -165,7 +165,6 @@ SPEC CHECKSUMS:
   flutter_bmflocation: 1bd73181196567fe1529f765aa4f8e2615a8a3cf
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   images_picker: fa9364e3a7d3083c49f865fcfb2b9e7cdc574d3a
   LeanCloud: e6de4b8129ab68be7f70a9b77c4304f71c5a1a2c
   leancloud_official_plugin: 6f30dc57a7f181193f511355c17519a61dce033d
@@ -180,6 +179,7 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+  video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
   ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
