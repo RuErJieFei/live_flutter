@@ -115,10 +115,7 @@ class ChatController extends GetxController {
     if (res != null) {
       String path = res[0].path; // 本地图片地址
       // 显示在聊天框
-      // 安卓机在这一步出错 Unable to load asset: /storage/emulated/0/Android/data/top.w2gd
-      // ByteData imageData = await rootBundle.load(path);
       ImageMessage imageMessage = ImageMessage.from(
-        // binaryData: imageData.buffer.asUint8List(),
         binaryData: await File(path).readAsBytes(),
         format: path.split('.').last,
         name: 'niit',

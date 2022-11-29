@@ -8,6 +8,7 @@ import 'package:wit_niit/app/modules/message/bindings/chat_binding.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
 import 'package:wit_niit/app/modules/message/model/story_data.dart';
+import 'package:wit_niit/app/modules/message/widget/group_avatar.dart';
 
 import 'chat_view.dart';
 
@@ -88,15 +89,20 @@ class _ConversationTitle extends GetView<MessageController> {
           child: Row(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                width: 70.r,
-                height: 70.r,
-                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
-                clipBehavior: Clip.antiAlias,
-                child: Obx(() {
-                  return BGPositionImage.positionImage('${contact.value.photo}');
-                }),
-              ),
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  width: 70.r,
+                  height: 70.r,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+                  clipBehavior: Clip.antiAlias,
+                  child: Obx(() {
+                    if (conversation.members!.length <= 2) {
+                      return BGPositionImage.positionImage('${contact.value.photo}');
+                    } else {
+                      // 群头
+                      // return Container(color: Colors.pink);
+                      return GroupAvatar(list: conversation.members);
+                    }
+                  })),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
