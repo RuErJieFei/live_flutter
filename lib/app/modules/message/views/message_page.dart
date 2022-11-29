@@ -20,6 +20,10 @@ class MessagesPage extends GetView<MessageController> {
     return CustomScrollView(
       slivers: [
         const SliverToBoxAdapter(child: _Stories()),
+        SliverToBoxAdapter(
+            child: ListTile(
+          title: Text('1234'),
+        )),
         Obx(() {
           return SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -56,7 +60,7 @@ class _ConversationTitle extends GetView<MessageController> {
         // 群聊：显示头像（多人拼图）
         contact.update((e) {
           e?.name = conversation.name;
-          e?.photo = 'http://img.w2gd.top/up/groupChat.png';
+          // e?.photo = 'http://img.w2gd.top/up/groupChat.png';
         });
       }
     });
@@ -89,20 +93,17 @@ class _ConversationTitle extends GetView<MessageController> {
           child: Row(
             children: [
               Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  width: 70.r,
-                  height: 70.r,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
-                  clipBehavior: Clip.antiAlias,
-                  child: Obx(() {
-                    if (conversation.members!.length <= 2) {
-                      return BGPositionImage.positionImage('${contact.value.photo}');
-                    } else {
-                      // 群头
-                      // return Container(color: Colors.pink);
-                      return GroupAvatar(list: conversation.members);
-                    }
-                  })),
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                width: 70.r,
+                height: 70.r,
+                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+                clipBehavior: Clip.antiAlias,
+                child: conversation.members!.length <= 2
+                    ? Obx(() {
+                        return BGPositionImage.positionImage('${contact.value.photo}');
+                      })
+                    : GroupAvatar(list: conversation.members),
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
