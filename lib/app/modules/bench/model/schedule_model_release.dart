@@ -36,7 +36,7 @@ class Data {
   });
   late final int scheduleId;
   late final String organizationId;
-  late final String topic;
+  late final String? topic;
   late final List<String>? participantId;
   late final String startTime;
   late final int? duration;
