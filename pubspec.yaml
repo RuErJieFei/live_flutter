@@ -73,8 +73,9 @@ dependencies:
   # reactive_forms表单组件及附属插件
   reactive_forms: ^14.1.0
   reactive_date_time_picker: ^0.5.0
-  # 调用手机相机相册
-  image_picker: ^0.8.6
+
+  # 视频播放
+  video_player: ^2.4.8
 
 
 

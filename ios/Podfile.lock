@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (5.6.4)
   - BaiduMapKit/Base (6.5.3)
   - BaiduMapKit/Map (6.5.3):
     - BaiduMapKit/Base
@@ -66,6 +67,8 @@ PODS:
   - SwiftProtobuf (1.20.3)
   - url_launcher_ios (0.0.1):
     - Flutter
+  - video_player_avfoundation (0.0.1):
+    - Flutter
   - ZLPhotoBrowser (4.2.5):
     - ZLPhotoBrowser/Core (= 4.2.5)
   - ZLPhotoBrowser/Core (4.2.5)
@@ -91,9 +94,11 @@ DEPENDENCIES:
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - BaiduMapKit
     - BMKLocationKit
     - FMDB
@@ -143,8 +148,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  video_player_avfoundation:
+    :path: ".symlinks/plugins/video_player_avfoundation/ios"
 
 SPEC CHECKSUMS:
+  Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   BaiduMapKit: 54623026cd183511b1525a448094211d4fd5d646
   BMKLocationKit: c0a4266f84ad2a3296df8c24f14f0ed20dbbf0ee
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
@@ -171,6 +179,7 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+  video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
   ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3

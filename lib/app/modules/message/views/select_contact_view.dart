@@ -10,7 +10,10 @@ import 'package:wit_niit/app/modules/message/controllers/select_contact_controll
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
 
 class SelectContactView extends StatelessWidget {
-  const SelectContactView({Key? key}) : super(key: key);
+  const SelectContactView({Key? key, this.type = 1}) : super(key: key);
+
+  /// 1： 发起群聊；2： 邀请他人加入群聊
+  final int type;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +57,13 @@ class SelectContactView extends StatelessWidget {
           child: FloatingActionButton(
             backgroundColor: Config.mainColor,
             onPressed: () {
-              showDialog(context: context, builder: (_) => _customDialog());
+              if (type == 1) {
+                // 发起群聊
+                showDialog(context: context, builder: (_) => _customDialog());
+              } else if (type == 2) {
+                // 返回一组成员 id 集合给上一路由
+                Get.back(result: scCto.groupMembers);
+              }
             },
             child: Icon(Icons.group_add),
           ),

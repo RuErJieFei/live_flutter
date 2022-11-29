@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -175,7 +176,7 @@ class AskLeaveStudentView extends GetView<AskLeaveStudentController> {
                           ],
                         ),
                         ReactiveDateTimePicker(
-                          formControlName: 'beginDate',
+                          formControlName: "applicationTime",
                           type: ReactiveDatePickerFieldType.dateTime,
                           dateFormat: DateFormat("yyyy-MM-dd HH:mm"),
                           decoration: InputDecoration(
@@ -194,7 +195,7 @@ class AskLeaveStudentView extends GetView<AskLeaveStudentController> {
                           height: 8.h,
                         ),
                         ReactiveDateTimePicker(
-                          formControlName: 'endDate',
+                          formControlName: 'deadline',
                           type: ReactiveDatePickerFieldType.dateTime,
                           dateFormat: DateFormat("yyyy-MM-dd HH:mm"),
                           decoration: InputDecoration(
@@ -209,8 +210,47 @@ class AskLeaveStudentView extends GetView<AskLeaveStudentController> {
                             suffixIcon: Icon(Icons.calendar_today),
                           ),
                         ),
+                        // 请假天数
+                        ReactiveTextField(
+                          formControlName: 'days',
+                          decoration: InputDecoration(labelText: "请假天数"),
+                          keyboardType: TextInputType.number,
+                          readOnly: true,
+                        ),
+                        ReactiveFormConsumer(
+                          builder: (context, form, child) {
+                            if (form.control("applicationTime").value != null &&
+                                form.control("deadline").value != null) {
+                              controller.calculateDiffer(form);
+                            } else {
+                              form.control("days").value = null;
+                            }
+                            return Container();
+                          },
+                        ),
+                        ReactiveDropdownField(
+                          formControlName: 'overnight',
+                          decoration: InputDecoration(
+                            label: Row(
+                              children: [
+                                Icon(Icons.star, color: Colors.red, size: 8.sp),
+                                Text("是否校内住宿",
+                                    style: TextStyle(fontSize: 16.sp))
+                              ],
+                            ),
+                          ),
+                          items: [
+                            DropdownMenuItem(value: true, child: Text('是')),
+                            DropdownMenuItem(value: false, child: Text('否')),
+                          ],
+                        ),
+
+
+                        ElevatedButton(
+                            onPressed: () => controller.onSubmit(form.value),
+                            child: Text("提交"))
                         // ReactiveDatePicker<DateTime>(
-                        //   formControlName: 'beginDate',
+                        //   formControlName: 'applicationTime',
                         //   firstDate: DateTime(1985),
                         //   lastDate: DateTime(2030),
                         //   builder: (context, picker, child) {
@@ -251,7 +291,7 @@ class AskLeaveStudentView extends GetView<AskLeaveStudentController> {
                         //         dateTimeFormat: DateFormat('yyyy-MM-dd HH:mm'),
                         //       ),
                         //       focusNode: controller.focusNode,
-                        //       formControlName: 'beginDate',
+                        //       formControlName: 'applicationTime',
                         //       readOnly: true,
                         //       decoration: InputDecoration(
                         //         label: Row(

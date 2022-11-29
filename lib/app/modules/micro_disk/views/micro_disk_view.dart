@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import '../controllers/micro_disk_controller.dart';
 import 'micro_disk_file_view.dart';
@@ -14,6 +16,7 @@ class MicroDiskView extends GetView<MicroDiskController> {
     var flag2 = false.obs;
     var flag3 = false.obs;
     var flag4 = true.obs;
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(onPressed: () {Get.back();}, icon: Icon(Icons.arrow_back)),
@@ -126,7 +129,7 @@ class MicroDiskView extends GetView<MicroDiskController> {
                   child: flag4.value ?  MicroDiskLatestContainer() :MicroDiskLatestContainer2(context) ),
             ): flag2.value ? Padding(
               padding: const EdgeInsets.only(top: 50.0),
-              child: Container(child: Text('微盘空间'),),
+              child: MicroDiskContainer(),
             ) : flag3.value ? Padding(
               padding: const EdgeInsets.only(top: 50.0),
               child: Container(child: Text('我分享的'),),
@@ -202,6 +205,35 @@ class MicroDiskView extends GetView<MicroDiskController> {
               ),
             );
           }),
+    );
+  }
+
+
+  Widget MicroDiskContainer() {
+
+    folderExists(String filename) async {
+      Directory appDocDirectory = await getApplicationDocumentsDirectory();
+      print(appDocDirectory.path);
+      var file = Directory(appDocDirectory.path + '/'+filename);
+      try {
+        bool exists = await file.exists();
+        if (!exists) {
+          await file.create();
+          print('chuangjian');
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+
+      return Container(
+      child: Column(
+        children: [
+          ElevatedButton(onPressed: () {
+            folderExists("syk");
+          }, child: Text("创建文件夹"))
+        ],
+      ),
     );
   }
 }

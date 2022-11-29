@@ -16,33 +16,35 @@ class AskLeaveStudentController extends GetxController {
   var infoMap = <String, dynamic>{}.obs;
   var keys = [].obs;
   var values = [].obs;
-  late FocusNode focusNode;
-  // 表单构造器
-  FormGroup buildForm() => fb.group(
-        <String, Object>{
-          'type': fb.control<String>('', [Validators.required]),
-          'beginDate': FormControl<DateTime>(value: null,validators: [Validators.required]),
-          'endDate': FormControl<DateTime>(value: null,validators: [Validators.required]),
-          'password': ['', Validators.required, Validators.minLength(8)],
-          'passwordConfirmation': '',
-          'rememberMe': false,
-          'progress': fb.control<double>(50.0, [
-            Validators.min(50.0),
-            Validators.max(90.0),
-          ]),
-          'dateTime': DateTime.now(),
-          'time': TimeOfDay.now(),
-          'booleanObject':
-              FormControl<BooleanObject>(value: BooleanObject('Yes')),
+  var type = "".obs;
+  var dateDiffer = 0.obs;
+
+  FormGroup buildForm() => FormGroup(
+        {
+          'type': FormControl<String>(
+              value: this.type.value, validators: [Validators.required]),
+          'applicationTime': FormControl<DateTime>(
+              value: null, validators: [Validators.required]),
+          'deadline': FormControl<DateTime>(
+              value: null, validators: [Validators.required]),
+          'days':
+              FormControl<int>(value: null, validators: [Validators.required]),
+          'overnight':
+              FormControl<bool>(value: null, validators: [Validators.required]),
+          'reason':
+              FormControl<String>(value: null, validators: [Validators.required]),
         },
-        [Validators.mustMatch('password', 'passwordConfirmation')],
       );
+
+  // 表单构造器
+  // FormGroup buildForm() => FormGroup(
+  //
+  //     );
 
   @override
   void onInit() {
     super.onInit();
 
-    focusNode = FocusNode();
     // getUserInfo(id, token);
     keys.value = [
       "学号",
@@ -77,7 +79,6 @@ class AskLeaveStudentController extends GetxController {
 
   @override
   void onClose() {
-    focusNode.dispose();
     super.onClose();
   }
 
@@ -104,5 +105,19 @@ class AskLeaveStudentController extends GetxController {
   void _genLists(key, value) {
     keys.add(key);
     values.add(value);
+  }
+
+  void onSubmit(form) {
+    LogUtil.v(form);
+  }
+
+  String calculateDiffer(FormGroup form) {
+    this.dateDiffer.value = form.control("days").value =
+        (DateUtil.getDateTime(form.control("deadline").value.toString())!
+                .difference(DateUtil.getDateTime(
+                    form.control("applicationTime").value.toString())!)
+                .inDays +
+            1);
+    return this.dateDiffer.value.toString();
   }
 }

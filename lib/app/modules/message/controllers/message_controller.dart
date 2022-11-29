@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
+import 'package:wit_niit/app/modules/message/widget/date_bar.dart';
 import 'package:wit_niit/app/modules/message/widget/my_message_tile.dart';
 import 'package:wit_niit/main.dart';
 
@@ -68,6 +69,62 @@ class MessageController extends GetxController {
         }
       }
     };
+    // 加入成员通知
+    me.onMembersJoined = ({
+      Client? client,
+      Conversation? conversation,
+      List? members,
+      String? byClientID,
+      DateTime? atDate,
+    }) {
+      updateConversationList();
+      if (currentConv.id == conversation?.id) {
+        members?.forEach((id) {
+          ContactModel? contact = contactsMap[id];
+          recordList.insert(0, DateBar(lable: '${contact?.name} 加入了群聊'));
+        });
+      }
+    };
+    // 有成员被从某个对话中移除
+    me.onMembersLeft = ({
+      Client? client,
+      Conversation? conversation,
+      List? members,
+      String? byClientID,
+      DateTime? atDate,
+    }) {
+      if (currentConv.id == conversation?.id) {
+        members?.forEach((id) {
+          ContactModel? contact = contactsMap[id];
+          recordList.insert(0, DateBar(lable: '成员 ${contact?.name} 被移出群聊'));
+        });
+      }
+    };
+    // 用户被踢出某个对话
+    me.onKicked = ({
+      Client? client,
+      Conversation? conversation,
+      String? byClientID,
+      DateTime? atDate,
+    }) {
+      if (currentConv.id == conversation?.id) {
+        recordList.insert(0, DateBar(lable: '你已被移出群聊'));
+      }
+    };
+    // 对话属性同步：比如通知修改了群名称
+    me.onInfoUpdated = ({
+      Client? client,
+      Conversation? conversation,
+      Map? updatingAttributes,
+      Map? updatedAttributes,
+      String? byClientID,
+      DateTime? atDate,
+    }) {
+      updateConversationList();
+      if (currentConv.id == conversation?.id) {
+        recordList.insert(0, DateBar(lable: '群名被修改为：${conversation?.name}'));
+      }
+    };
   }
 
   @override
@@ -101,8 +158,7 @@ class MessageController extends GetxController {
       });
     } else {
       Map<String, dynamic> params = {"page": 1, "limit": 50};
-      // List res = await request.get('/users/userlist', params: params);
-      List res = await request.get('http://124.221.232.15:8082/users/userlist', params: params);
+      List res = await request.get('/users/userlist', params: params);
       res.forEach((e) {
         ContactModel contact = ContactModel.fromJson(e);
         contactsMap['${contact.id}'] = contact;
@@ -213,6 +269,21 @@ class MessageController extends GetxController {
         messageDate: dealDate(e.sentDate),
         widget: TextMsg(message: '错误消息类型，无法显示!'),
       );
+    }
+  }
+
+  // todo: 用户主动加入对话
+  void joinConversation(String ConvId) async {
+    List<Conversation> conversations;
+    try {
+      ConversationQuery query = me.conversationQuery();
+      query.whereEqualTo('objectId', ConvId);
+      conversations = await query.find();
+      Conversation conversation = conversations.first;
+      MemberResult joinResult = await conversation.join();
+      LogUtil.v('${joinResult}');
+    } catch (e) {
+      LogUtil.v(e);
     }
   }
 }
