@@ -43,6 +43,7 @@ class ChatController extends GetxController {
 
   // Todo: 获取聊天记录
   void getChatRecord(Conversation conversation) async {
+    LogUtil.v('获取 【${conversation.name}】 的聊天记录');
     // limit 取值范围 1~100，如调用 queryMessage 时不带 limit 参数，默认获取 20 条消息记录
     try {
       messages = await conversation.queryMessage(limit: 15);
@@ -74,7 +75,7 @@ class ChatController extends GetxController {
 
   @override
   void onClose() {
-    scrollCto.dispose();
+    // scrollCto.dispose();
     super.onClose();
   }
 
@@ -99,17 +100,6 @@ class ChatController extends GetxController {
       }
     });
 
-    // /// 开始录制停止录制监听
-    // msgCto.recordPlugin.response.listen((event) {
-    //   if (event.msg == "onStop") {
-    //     //结束录制时会返回录制文件的地址方便上传服务器
-    //     LogUtil.v("结束录制 onStop: ${event.path} ");
-    //     sendAudioMessage(msgCto.currentConv, '${event.path}');
-    //   } else if (event.msg == "onStart") {
-    //     LogUtil.v("onStart ---");
-    //   }
-    // });
-    //
     /// 播放声音完成的监听监听
     msgCto.recordPlugin.responsePlayStateController.listen((data) {
       print("播放路径   " + data.playPath);
