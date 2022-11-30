@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
+import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/personal/bindings/personal_binding.dart';
 import 'package:wit_niit/app/modules/personal/bindings/setting_binding.dart';
 import 'package:wit_niit/app/modules/personal/views/personal_view.dart';
@@ -22,8 +23,7 @@ class LeftDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = SpUtil.getObj(
-        "user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
+    UserModel? user = SpUtil.getObj("user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
     return Drawer(
       elevation: 0,
       child: Column(
@@ -52,8 +52,7 @@ class LeftDrawer extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => const _BottomSheet(),
-                      transition: Transition.downToUp);
+                  Get.to(() => const _BottomSheet(), transition: Transition.downToUp);
                 },
                 child: Image.asset('images/public/qrcode.png'),
               ),
@@ -90,6 +89,7 @@ class LeftDrawer extends StatelessWidget {
             onPressed: () {
               SpUtil.clear();
               AuthClient.logout();
+              Get.find<MessageController>().me.close(); // 退出LC
               Get.offAllNamed(Routes.LOGIN);
             },
             child: Text('退出登录'),
@@ -159,8 +159,7 @@ class _BottomSheet extends StatelessWidget {
                           child: QrImage(
                             data: '${user?.id}',
                             version: QrVersions.auto,
-                            embeddedImage:
-                                AssetImage('images/public/emoji.png'),
+                            embeddedImage: AssetImage('images/public/emoji.png'),
                             foregroundColor: Config.mainColor,
                           ),
                           padding: EdgeInsets.all(20),

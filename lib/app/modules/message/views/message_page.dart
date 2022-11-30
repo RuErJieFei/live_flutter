@@ -1,3 +1,4 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,10 +21,6 @@ class MessagesPage extends GetView<MessageController> {
     return CustomScrollView(
       slivers: [
         const SliverToBoxAdapter(child: _Stories()),
-        SliverToBoxAdapter(
-            child: ListTile(
-          title: Text('1234'),
-        )),
         Obx(() {
           return SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -229,10 +226,10 @@ class _Stories extends GetView<MessageController> {
                                 /// 更新会话列表
                                 controller.updateConversationList();
                               });
-                            }).catchError((_) {
+                            }).catchError((e) {
                               // 若下线会导致失败
-                              EasyLoading.showError('创建会话失败');
-                              controller.onReady(); // 重新登录LC
+                              LogUtil.v(e);
+                              EasyLoading.showError('状态异常，请重启App');
                             });
                           },
                           child: _StoryCard(
