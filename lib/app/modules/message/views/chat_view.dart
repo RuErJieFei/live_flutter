@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as emoji;
+import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_plugin_record/index.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
@@ -132,6 +134,7 @@ class _ActionBar extends GetView<ChatController> {
 
   @override
   Widget build(BuildContext context) {
+    final tapFlag = true.obs; // 用于切换按住说话
     return SafeArea(
       bottom: true,
       top: false,
@@ -148,36 +151,52 @@ class _ActionBar extends GetView<ChatController> {
                     ),
                   ),
                 ),
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: ImageIcon(AssetImage('images/public/voice.png'), size: 30),
+                  child: InkWell(
+                    onTap: () {
+                      tapFlag.value = !tapFlag.value;
+                    },
+                    child: Obx(() {
+                      if (tapFlag.value == false) {
+                        return Icon(Icons.keyboard, size: 30);
+                      }
+                      return ImageIcon(AssetImage('images/public/voice.png'), size: 30);
+                    }),
+                  ),
                 ),
               ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(left: 16.0),
-                  child: TextField(
-                    minLines: 1,
-                    maxLines: 4,
-                    controller: controller.msgTf,
-                    onChanged: (v) {
-                      if (v.length > 0) {
-                        controller.hasContent.value = true;
-                      } else {
-                        controller.hasContent.value = false;
-                      }
-                    },
-                    onTap: () {
-                      controller.hiddenMenu.value = true; // 隐藏菜单
-                      controller.hiddenEmoji.value = true; // 隐藏emoji
-                      // controller.scrollToBottom(); // 滚动到底部
-                    },
-                    style: TextStyle(fontSize: 14),
-                    decoration: InputDecoration(
-                      hintText: 'Type something...',
-                      border: InputBorder.none,
-                    ),
-                  ),
+                  child: Obx(() {
+                    if (tapFlag.value == false) {
+                      return _recordVoice();
+                    }
+
+                    return TextField(
+                      minLines: 1,
+                      maxLines: 4,
+                      controller: controller.msgTf,
+                      onChanged: (v) {
+                        if (v.length > 0) {
+                          controller.hasContent.value = true;
+                        } else {
+                          controller.hasContent.value = false;
+                        }
+                      },
+                      onTap: () {
+                        controller.hiddenMenu.value = true; // 隐藏菜单
+                        controller.hiddenEmoji.value = true; // 隐藏emoji
+                        // controller.scrollToBottom(); // 滚动到底部
+                      },
+                      style: TextStyle(fontSize: 14),
+                      decoration: InputDecoration(
+                        hintText: 'Type something...',
+                        border: InputBorder.none,
+                      ),
+                    );
+                  }),
                 ),
               ),
               Container(
@@ -225,6 +244,23 @@ class _ActionBar extends GetView<ChatController> {
           }),
         ],
       ),
+    );
+  }
+
+  /// 按住说话
+  Widget _recordVoice() {
+    return VoiceWidget(
+      startRecord: () {
+        LogUtil.v("开始录制");
+      },
+      stopRecord: (String path, double audioTimeLength) {
+        LogUtil.v("结束束录制");
+        LogUtil.v("音频文件位置" + path);
+        LogUtil.v("音频录制时长" + audioTimeLength.toString());
+        controller.sendAudioMessage(conversation, path);
+      },
+      height: 35.h,
+      margin: EdgeInsets.all(0),
     );
   }
 

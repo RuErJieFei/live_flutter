@@ -5,6 +5,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:leancloud_official_plugin/leancloud_plugin.dart';
 import 'package:wit_niit/app/component/image_show_server.dart';
 import 'package:wit_niit/app/data/theme_data.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
@@ -212,6 +213,30 @@ class ImgFileMsg extends StatelessWidget {
           );
         },
         child: Image.file(File(filepath)),
+      ),
+    );
+  }
+}
+
+/// 音频消息
+class AudioMsg extends GetView<MessageController> {
+  const AudioMsg({Key? key, required this.audioMessage}) : super(key: key);
+  final AudioMessage audioMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        controller.recordPlugin.playByPath('${audioMessage.url}', 'url');
+      },
+      child: Wrap(
+        children: [
+          Icon(Icons.volume_up_outlined),
+          Text(
+            '${audioMessage.duration?.ceil()}s',
+            style: TextStyle(fontSize: 18.sp),
+          ),
+        ],
       ),
     );
   }
