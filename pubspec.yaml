@@ -83,6 +83,7 @@ dependencies:
   flutter_plugin_record:
     git:
       url: https://github.com/szuwest/flutter_plugin_record.git
+      ref: 987ef8771aeb28e41513a486ad999e47ac9143ae
 
 
 
