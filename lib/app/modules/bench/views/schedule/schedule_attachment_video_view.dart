@@ -39,7 +39,7 @@ class HomeContent extends GetView<SchedulePageController> {
             ),
             onPressed: () {
               print( controller.videoContro.value.value.isPlaying);
-              if (controller.videoContro.value.value.isPlaying == false) {
+              if (controller.videoContro.value.value.isPlaying) {
                 controller.videoContro.value.pause();
               } else {
                 // If the video is paused, play it.

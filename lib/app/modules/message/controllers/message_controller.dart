@@ -175,7 +175,8 @@ class MessageController extends GetxController {
     ConversationQuery query = me.conversationQuery();
     query.orderByDescending('updatedAt'); // 按照会话的更新时间排序
     query.includeLastMessage = true; // 让查询结果附带一条最新消息
-    conversationList.value = await query.find();
+    List<Conversation> conversations = await query.find();
+    conversationList.value = conversations.where((e) => e.lastMessage != null).toList();
     return true;
   }
 

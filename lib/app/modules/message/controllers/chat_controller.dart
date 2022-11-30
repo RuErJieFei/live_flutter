@@ -22,7 +22,7 @@ class ChatController extends GetxController {
   // 输入框控制器
   TextEditingController msgTf = TextEditingController();
   // 滚动控制器
-  ScrollController scroll = ScrollController();
+  ScrollController scrollCto = ScrollController();
   // 消息列表
   var msgList = <Widget>[].obs;
   var msgCto = Get.find<MessageController>();
@@ -38,17 +38,18 @@ class ChatController extends GetxController {
   //     }
   //   });
   // }
+  /// 聊天记录：
+  late List<Message> messages;
 
   // Todo: 获取聊天记录
   void getChatRecord(Conversation conversation) async {
     // limit 取值范围 1~100，如调用 queryMessage 时不带 limit 参数，默认获取 20 条消息记录
     try {
-      List<Message> messages = await conversation.queryMessage(limit: 50);
+      messages = await conversation.queryMessage(limit: 15);
       String? myId = SpUtil.getString('userId');
       List<Widget> list = messages
           .map((e) {
             if (myId == e.fromClientID) {
-              /// 文字消息
               return msgCto.getMyMsgWidget(e);
             } else {
               return msgCto.getMsgWidget(e);
@@ -60,8 +61,8 @@ class ChatController extends GetxController {
       // scrollToBottom(); // 滚动到底部
       conversation.read(); // 清空未读消息数
     } catch (e) {
-      EasyLoading.showToast('获取聊天记录失败');
-      msgCto.onReady();
+      EasyLoading.showToast('状态异常，请重启应用');
+      // msgCto.onReady();
     }
   }
 
@@ -69,6 +70,11 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     msgCto.recordList.clear(); // 清空上一个会话的聊天记录
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 
   @override
@@ -80,11 +86,52 @@ class ChatController extends GetxController {
       // scrollToBottom();
       msgCto.currentConv.read();
     });
+    // 滚动监听
+    scrollCto.addListener(() {
+      if (isLoading) {
+        return;
+      }
+      if (scrollCto.offset > scrollCto.position.maxScrollExtent + 100) {
+        onLoadingMsg();
+      }
+    });
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  // 加载状态
+  bool isLoading = false;
+  // todo: 下拉加载历史消息
+  void onLoadingMsg() async {
+    isLoading = true;
+    // 返回的消息一定是时间增序排列，也就是最早的消息一定是第一个
+    Message oldMessage = messages.first;
+    // 以第一页的最早的消息作为开始，继续向前拉取消息
+    List<Message> newMessages = await msgCto.currentConv.queryMessage(
+      startTimestamp: oldMessage.sentTimestamp,
+      startMessageID: oldMessage.id,
+      startClosed: true,
+      limit: 7,
+    );
+    newMessages.removeLast();
+    if (newMessages.length == 0) {
+      scrollCto.dispose();
+      EasyLoading.showToast('已加载全部消息');
+      return;
+    }
+    messages.insertAll(0, newMessages);
+    // 渲染到聊天记录
+    String? myId = SpUtil.getString('userId');
+    List<Widget> list = newMessages
+        .map((e) {
+          if (myId == e.fromClientID) {
+            return msgCto.getMyMsgWidget(e);
+          } else {
+            return msgCto.getMsgWidget(e);
+          }
+        })
+        .cast<Widget>()
+        .toList();
+    msgCto.recordList.addAll(list.reversed);
+    await Future.delayed(Duration(seconds: 1), () => isLoading = false);
   }
 
   //TODO: 向会话发送文字消息

@@ -25,14 +25,10 @@ class ScheduleAddView extends GetView<SchedulePageController> {
 
   @override
   Widget build(BuildContext context) {
-    var now = DateTime.now();
-    controller.selectedStartDay.value = DateTime.now();
-    controller.selectedEndDay.value =
-        new DateTime(now.year, now.month, now.day, now.hour + 1, now.minute);
     Get.put(MicroDiskController());
     final size = MediaQuery.of(context).size;
     var thisDate = formatDate(controller.selectedStartDay.value,
-        [yyyy, "-", mm, "-", dd, " ", hh, ":", nn, ":", ss]);
+        [yyyy, "-", mm, "-", dd, " ", HH, ":",nn, ":", ss]);
     addScheduleInfo() async {
       print(thisDate);
       var data = {
@@ -92,13 +88,13 @@ class ScheduleAddView extends GetView<SchedulePageController> {
                 SykDivider(context, 8),
                 Expanded(flex: 1, child: _Participants(context)),
                 SykDivider(context, 8),
-                Expanded(flex: 2, child: _TimeComponent(context)),
+                Expanded(flex: 3, child: _TimeComponent(context)),
                 SykDivider(context, 8),
                 Expanded(flex: 1, child: _Address(context)),
                 SykDivider(context, 8),
-                Expanded(flex: 4, child: _Attachment(context)),
+                Expanded(flex: 5,child: _Attachment(context)),
                 SykDivider(context, 8),
-                Expanded(flex: 1, child: _Description(context)),
+                Expanded(flex: 2,child: _Description(context)),
                 // SykDivider(context, 8),
                 // Expanded(flex: 5, child: _MoreComponent(context)),
                 ElevatedButton(
@@ -114,9 +110,9 @@ class ScheduleAddView extends GetView<SchedulePageController> {
     );
   }
 
-  @override
-  // TODO: implement controller
-  SchedulePageController get controller => super.controller;
+  // @override
+  // // TODO: implement controller
+  // SchedulePageController get controller => super.controller;
 
   Widget _Topic(BuildContext context) {
     return SizedBox(
@@ -353,184 +349,186 @@ class ScheduleAddView extends GetView<SchedulePageController> {
       }
     }
 
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: 50.h,
-        child: Column(
-          children: [
-            TextButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (_) => CupertinoAlertDialog(
-                          content: Container(
-                            width: 0.8.sw,
-                            height: 0.5.sw,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (_) => CupertinoAlertDialog(
-                                                content: Container(
-                                                  width: 0.8.sw,
-                                                  height: 0.5.sw,
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      GestureDetector(
-                                                          onTap: () {
-                                                            getImage();
-                                                            Get.back();
-                                                            Get.back();
-                                                          },
-                                                          child: Text(
-                                                            "选择图片",
-                                                            style: TextStyle(
-                                                                fontSize: 20),
-                                                          )),
-                                                      SykDivider(context, 2),
-                                                      GestureDetector(
-                                                          onTap: () async {
-                                                            getVideoFromGallery();
-                                                            Get.back();
-                                                            Get.back();
-                                                          },
-                                                          child: Text(
-                                                            "选择视频",
-                                                            style: TextStyle(
-                                                                fontSize: 20),
-                                                          )),
-                                                      SykDivider(context, 2),
-                                                      GestureDetector(
-                                                          onTap: () {
-                                                            ImagesPicker
-                                                                .openCamera(
-                                                              pickType: PickType
-                                                                  .image,
-                                                              maxTime:
-                                                                  15, // record video max time
-                                                            );
-                                                            Get.back();
-                                                            Get.back();
-                                                          },
-                                                          child: Text(
-                                                            "拍照",
-                                                            style: TextStyle(
-                                                                fontSize: 20),
-                                                          )),
-                                                      SykDivider(context, 2),
-                                                      GestureDetector(
-                                                          onTap: () async {
-                                                            ImagesPicker
-                                                                .openCamera(
-                                                              pickType: PickType
-                                                                  .video,
-                                                              maxTime:
-                                                                  15, // record video max time
-                                                            );
-                                                            Get.back();
-                                                            Get.back();
-                                                          },
-                                                          child: Text(
-                                                            "录像",
-                                                            style: TextStyle(
-                                                                fontSize: 20),
-                                                          )),
-                                                      SykDivider(context, 2),
-                                                    ],
+    return 
+      SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 50.h,
+          child: Column(
+            children: [
+              TextButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                            content: Container(
+                              width: 0.8.sw,
+                              height: 0.5.sw,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (_) => CupertinoAlertDialog(
+                                                  content: Container(
+                                                    width: 0.8.sw,
+                                                    height: 0.5.sw,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        GestureDetector(
+                                                            onTap: () {
+                                                              getImage();
+                                                              Get.back();
+                                                              Get.back();
+                                                            },
+                                                            child: Text(
+                                                              "选择图片",
+                                                              style: TextStyle(
+                                                                  fontSize: 20),
+                                                            )),
+                                                        SykDivider(context, 2),
+                                                        GestureDetector(
+                                                            onTap: () async {
+                                                              getVideoFromGallery();
+                                                              Get.back();
+                                                              Get.back();
+                                                            },
+                                                            child: Text(
+                                                              "选择视频",
+                                                              style: TextStyle(
+                                                                  fontSize: 20),
+                                                            )),
+                                                        SykDivider(context, 2),
+                                                        GestureDetector(
+                                                            onTap: () {
+                                                              ImagesPicker
+                                                                  .openCamera(
+                                                                pickType: PickType
+                                                                    .image,
+                                                                maxTime:
+                                                                    15, // record video max time
+                                                              );
+                                                              Get.back();
+                                                              Get.back();
+                                                            },
+                                                            child: Text(
+                                                              "拍照",
+                                                              style: TextStyle(
+                                                                  fontSize: 20),
+                                                            )),
+                                                        SykDivider(context, 2),
+                                                        GestureDetector(
+                                                            onTap: () async {
+                                                              ImagesPicker
+                                                                  .openCamera(
+                                                                pickType: PickType
+                                                                    .video,
+                                                                maxTime:
+                                                                    15, // record video max time
+                                                              );
+                                                              Get.back();
+                                                              Get.back();
+                                                            },
+                                                            child: Text(
+                                                              "录像",
+                                                              style: TextStyle(
+                                                                  fontSize: 20),
+                                                            )),
+                                                        SykDivider(context, 2),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ));
-                                    },
-                                    child: Text(
-                                      "选择图片/视频",
-                                      style: TextStyle(fontSize: 20),
-                                    )),
-                                SykDivider(context, 2),
-                                GestureDetector(
-                                    onTap: () {},
-                                    child: Text(
-                                      "从收藏中选择",
-                                      style: TextStyle(fontSize: 20),
-                                    )),
-                                SykDivider(context, 2),
-                                GestureDetector(
-                                    onTap: () {},
-                                    child: Text(
-                                      "从文档中选择",
-                                      style: TextStyle(fontSize: 20),
-                                    )),
-                                SykDivider(context, 2),
-                                GestureDetector(
-                                    onTap: () {
-                                      Get.to(() => MicroDiskView(),
-                                          binding: MicroDiskBinding());
-                                    },
-                                    child: Text(
-                                      "从微盘中选择",
-                                      style: TextStyle(fontSize: 20),
-                                    )),
-                              ],
+                                                ));
+                                      },
+                                      child: Text(
+                                        "选择图片/视频",
+                                        style: TextStyle(fontSize: 20),
+                                      )),
+                                  SykDivider(context, 2),
+                                  GestureDetector(
+                                      onTap: () {},
+                                      child: Text(
+                                        "从收藏中选择",
+                                        style: TextStyle(fontSize: 20),
+                                      )),
+                                  SykDivider(context, 2),
+                                  GestureDetector(
+                                      onTap: () {},
+                                      child: Text(
+                                        "从文档中选择",
+                                        style: TextStyle(fontSize: 20),
+                                      )),
+                                  SykDivider(context, 2),
+                                  GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => MicroDiskView(),
+                                            binding: MicroDiskBinding());
+                                      },
+                                      child: Text(
+                                        "从微盘中选择",
+                                        style: TextStyle(fontSize: 20),
+                                      )),
+                                ],
+                              ),
                             ),
-                          ),
-                        ));
-              },
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "添加附件...",
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                  )),
-            ),
+                          ));
+                },
+                child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "添加附件...",
+                      style: TextStyle(color: Colors.black, fontSize: 18),
+                    )),
+              ),
 
-            //         SizedBox(
-            //           height: 200.h,
-            //           width: 1.sw,
-            //           child: ListView.builder(
-            //               itemCount: controller.attachmentList.length,
-            //               itemBuilder: (BuildContext context, index) {
-            //               var strPathList =  controller.attachmentList[index].thumbPath.toString().split("/");
-            //                 return ListTile(leading: Image.file(
-            //                   new File(controller.attachmentList[index].thumbPath),
-            //                   fit: BoxFit.cover,width: 40,height: 40,),title: Text("${strPathList[strPathList.length -1]}"),);
-            //               }),
-            //         )
-            //       ],
-            //     )
-            // );
+              //         SizedBox(
+              //           height: 200.h,
+              //           width: 1.sw,
+              //           child: ListView.builder(
+              //               itemCount: controller.attachmentList.length,
+              //               itemBuilder: (BuildContext context, index) {
+              //               var strPathList =  controller.attachmentList[index].thumbPath.toString().split("/");
+              //                 return ListTile(leading: Image.file(
+              //                   new File(controller.attachmentList[index].thumbPath),
+              //                   fit: BoxFit.cover,width: 40,height: 40,),title: Text("${strPathList[strPathList.length -1]}"),);
+              //               }),
+              //         )
+              //       ],
+              //     )
+              // );
 
-            SizedBox(
-              height: 200.h,
-              width: 1.sw,
-              child: ListView.builder(
-                  itemCount: controller.attachmentList.length,
-                  itemBuilder: (BuildContext context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        // Get.to(()=> VideoApp());
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomeContent()));
-                      },
-                      child: ListTile(
-                        leading: controller.attachmentList[index].item,
-                        title: Text("${controller.attachmentList[index].title}"),
-                        trailing: IconButton(onPressed: (){
-                          controller.attachmentList.removeAt(index);
-                        }, icon: Icon(Icons.clear,size: 16,)),
-                      ),
-                    );
-                  }),
-            )
-          ],
-        ));
+              SizedBox(
+                height: 200.h,
+                width: 1.sw,
+                child: ListView.builder(
+                    itemCount: controller.attachmentList.length,
+                    itemBuilder: (BuildContext context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          // Get.to(()=> VideoApp());
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomeContent()));
+                        },
+                        child: ListTile(
+                          leading: controller.attachmentList[index].item,
+                          title: Text("${controller.attachmentList[index].title}"),
+                          trailing: IconButton(onPressed: (){
+                            controller.attachmentList.removeAt(index);
+                          }, icon: Icon(Icons.clear,size: 16,)),
+                        ),
+                      );
+                    }),
+              )
+            ],
+          ),
+    );
   }
 
   Widget _Description(BuildContext context) {

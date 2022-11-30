@@ -46,51 +46,51 @@ class SchedulePageView extends GetView<SchedulePageController> {
           _popupMenu(context)
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 85.h,
-              child: Column(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Get.to(() => SchedulePageView());
-                      },
-                      icon: Icon(
-                        Icons.insert_invitation,
-                        color: Colors.blue,
-                      )),
-                  Text(
-                    "日程",
-                    style: TextStyle(color: Colors.blue),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 120.w,
-            ),
-            Container(
-              height: 85.h,
-              child: Column(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Get.to(() => ScheduleWillDoView());
-                    },
-                    icon: Icon(
-                      Icons.check_circle_outline,
-                    ),
-                  ),
-                  Text("待办")
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       Container(
+      //         height: 85.h,
+      //         child: Column(
+      //           children: [
+      //             IconButton(
+      //                 onPressed: () {
+      //                   Get.to(() => SchedulePageView());
+      //                 },
+      //                 icon: Icon(
+      //                   Icons.insert_invitation,
+      //                   color: Colors.blue,
+      //                 )),
+      //             Text(
+      //               "日程",
+      //               style: TextStyle(color: Colors.blue),
+      //             )
+      //           ],
+      //         ),
+      //       ),
+      //       SizedBox(
+      //         width: 120.w,
+      //       ),
+      //       Container(
+      //         height: 85.h,
+      //         child: Column(
+      //           children: [
+      //             IconButton(
+      //               onPressed: () {
+      //                 Get.to(() => ScheduleWillDoView());
+      //               },
+      //               icon: Icon(
+      //                 Icons.check_circle_outline,
+      //               ),
+      //             ),
+      //             Text("待办")
+      //           ],
+      //         ),
+      //       )
+      //     ],
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [

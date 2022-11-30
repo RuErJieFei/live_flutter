@@ -84,7 +84,7 @@ class _MessageList extends GetView<ChatController> {
         child: Obx(() {
           return ListView(
             reverse: true,
-            controller: controller.scroll,
+            controller: controller.scrollCto,
             children: msgCto.recordList,
           );
         }),

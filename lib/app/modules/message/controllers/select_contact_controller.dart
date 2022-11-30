@@ -23,9 +23,7 @@ class SelectContactController extends GetxController {
       Get.back();
       Get.back();
     } catch (e) {
-      // 原因大概是下线了
-      EasyLoading.showError('创建会话失败:');
-      msgCto.onReady(); // 重新登录LC
+      EasyLoading.showError('状态异常，请重启App');
     }
   }
 

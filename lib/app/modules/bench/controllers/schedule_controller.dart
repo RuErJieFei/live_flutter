@@ -121,8 +121,11 @@ class SchedulePageController extends GetxController {
 
     // videoContro = VideoPlayerController.file(new File(attachmentList[0].path));
     // videoContro.setLooping(true);
+    var now = DateTime.now();
+    selectedStartDay.value = DateTime.now();
+    selectedEndDay.value =
+    new DateTime(now.year, now.month, now.day, now.hour + 1, now.minute);
     initializeVideoPlayerFuture = videoContro.value.initialize();
-    update();
 
   }
 
@@ -134,7 +137,6 @@ class SchedulePageController extends GetxController {
 
   @override
   void onClose() {
-
     super.onClose();
     selectedDay.value = DateTime.now();
     // channel.sink.close();

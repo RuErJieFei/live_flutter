@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:authing_sdk/authing.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/foundation.dart';
@@ -78,9 +80,12 @@ void main() async {
     runApp(MyApp());
   }
   configLoading();
-  // LCObject object = LCObject('TestObject');
-  // object['words'] = 'Hello world!';
-  // await object.save();
+
+  /// 设置安卓头部导航栏透明
+  if (Platform.isAndroid) {
+    SystemUiOverlayStyle systemUiOverlayStyle =
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+  }
 }
 
 /// 吐司配置 https://github.com/nslogx/flutter_easyloading/blob/master/README-zh_CN.md
