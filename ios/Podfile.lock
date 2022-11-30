@@ -31,6 +31,8 @@ PODS:
     - Flutter
   - flutter_native_splash (0.0.1):
     - Flutter
+  - flutter_plugin_record (0.0.1):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -83,6 +85,7 @@ DEPENDENCIES:
   - flutter_baidu_mapapi_search (from `.symlinks/plugins/flutter_baidu_mapapi_search/ios`)
   - flutter_bmflocation (from `.symlinks/plugins/flutter_bmflocation/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+  - flutter_plugin_record (from `.symlinks/plugins/flutter_plugin_record/ios`)
   - images_picker (from `.symlinks/plugins/images_picker/ios`)
   - leancloud_official_plugin (from `.symlinks/plugins/leancloud_official_plugin/ios`)
   - notification_permissions (from `.symlinks/plugins/notification_permissions/ios`)
@@ -126,6 +129,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_bmflocation/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
+  flutter_plugin_record:
+    :path: ".symlinks/plugins/flutter_plugin_record/ios"
   images_picker:
     :path: ".symlinks/plugins/images_picker/ios"
   leancloud_official_plugin:
@@ -164,6 +169,7 @@ SPEC CHECKSUMS:
   flutter_baidu_mapapi_search: 92e0fb884929f3efe837616f301483e2d44ca59e
   flutter_bmflocation: 1bd73181196567fe1529f765aa4f8e2615a8a3cf
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
+  flutter_plugin_record: 562ded56f3a109d769e72c3ef52ef20d835493d4
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   images_picker: fa9364e3a7d3083c49f865fcfb2b9e7cdc574d3a
   LeanCloud: e6de4b8129ab68be7f70a9b77c4304f71c5a1a2c

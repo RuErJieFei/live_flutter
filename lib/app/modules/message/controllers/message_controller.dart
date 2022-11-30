@@ -1,6 +1,7 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_plugin_record/flutter_plugin_record.dart';
 import 'package:get/get.dart';
 import 'package:leancloud_official_plugin/leancloud_plugin.dart';
 import 'package:wit_niit/app/modules/login/model/user_model.dart';
@@ -25,7 +26,8 @@ class MessageController extends GetxController {
   /// 计数： 监听到的新消息数量
   final msgCount = 0.obs;
 
-  /// 我的信息
+  /// 录音插件
+  late FlutterPluginRecord recordPlugin;
 
   @override
   void onInit() {
@@ -36,7 +38,14 @@ class MessageController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    await me.open(); // 登录LeanCloud
+
+    /// 初始化录制 mp3
+    recordPlugin = new FlutterPluginRecord();
+    recordPlugin.init();
+    // recordPlugin.initRecordMp3();
+
+    /// 登录LeanCloud
+    await me.open();
     // 获取成功后再获取会话列表，要设置延迟 Loading
     EasyLoading.show(status: '正在获取会话');
     await updateConversationList().then((value) {
@@ -130,6 +139,7 @@ class MessageController extends GetxController {
   @override
   void onClose() {
     me.close(); // 下线
+    recordPlugin.dispose(); // 释放资源
     super.onClose();
   }
 
@@ -242,6 +252,11 @@ class MessageController extends GetxController {
         messageDate: dealDate(e.sentDate),
         widget: ImgNetMsg(imgUrl: e.url),
       );
+    } else if (e is AudioMessage) {
+      return MessageOwnTile(
+        messageDate: dealDate(e.sentDate),
+        widget: AudioMsg(audioMessage: e),
+      );
     } else {
       return MessageOwnTile(
         messageDate: dealDate(e.sentDate),
@@ -264,11 +279,18 @@ class MessageController extends GetxController {
         messageDate: dealDate(e.sentDate),
         widget: ImgNetMsg(imgUrl: e.url),
       );
+    } else if (e is AudioMessage) {
+      // LogUtil.v('收到音频消息，消息时长：${e.duration}');
+      return MessageTile(
+        senderId: e.fromClientID,
+        messageDate: dealDate(e.sentDate),
+        widget: AudioMsg(audioMessage: e),
+      );
     } else {
       return MessageTile(
         senderId: e.fromClientID,
         messageDate: dealDate(e.sentDate),
-        widget: TextMsg(message: '错误消息类型，无法显示!'),
+        widget: TextMsg(message: '错误消息类型，无法显示!', type: 1),
       );
     }
   }

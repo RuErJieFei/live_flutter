@@ -74,6 +74,7 @@ class ChatController extends GetxController {
 
   @override
   void onClose() {
+    scrollCto.dispose();
     super.onClose();
   }
 
@@ -81,12 +82,14 @@ class ChatController extends GetxController {
   void onReady() {
     super.onReady();
     getChatRecord(msgCto.currentConv);
-    // 每次监听到变化都回调
+
+    /// 每次监听到消息都回调
     ever(msgCto.msgCount, (callback) {
       // scrollToBottom();
       msgCto.currentConv.read();
     });
-    // 滚动监听
+
+    /// 滚动监听
     scrollCto.addListener(() {
       if (isLoading) {
         return;
@@ -95,11 +98,28 @@ class ChatController extends GetxController {
         onLoadingMsg();
       }
     });
+
+    // /// 开始录制停止录制监听
+    // msgCto.recordPlugin.response.listen((event) {
+    //   if (event.msg == "onStop") {
+    //     //结束录制时会返回录制文件的地址方便上传服务器
+    //     LogUtil.v("结束录制 onStop: ${event.path} ");
+    //     sendAudioMessage(msgCto.currentConv, '${event.path}');
+    //   } else if (event.msg == "onStart") {
+    //     LogUtil.v("onStart ---");
+    //   }
+    // });
+    //
+    /// 播放声音完成的监听监听
+    msgCto.recordPlugin.responsePlayStateController.listen((data) {
+      print("播放路径   " + data.playPath);
+      print("播放状态   " + data.playState);
+    });
   }
 
+  // todo: 下拉加载历史消息
   // 加载状态
   bool isLoading = false;
-  // todo: 下拉加载历史消息
   void onLoadingMsg() async {
     isLoading = true;
     // 返回的消息一定是时间增序排列，也就是最早的消息一定是第一个
@@ -177,6 +197,23 @@ class ChatController extends GetxController {
       } catch (e) {
         EasyLoading.showError('图片发送失败');
       }
+    }
+  }
+
+  // Todo: 发送音频消息
+  void sendAudioMessage(Conversation conv, String filePath) async {
+    AudioMessage audioMessage = AudioMessage.from(
+      binaryData: await File(filePath).readAsBytes(),
+      format: filePath.split('.').last,
+    );
+    try {
+      Message message = await conv.send(message: audioMessage);
+      if (message is AudioMessage) {
+        var msg = msgCto.getMyMsgWidget(message);
+        msgCto.recordList.insert(0, msg);
+      }
+    } catch (e) {
+      EasyLoading.showError('发送语音失败');
     }
   }
 
