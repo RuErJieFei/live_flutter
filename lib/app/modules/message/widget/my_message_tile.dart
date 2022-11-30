@@ -30,7 +30,7 @@ class MessageOwnTile extends StatelessWidget {
   Widget build(BuildContext context) {
     UserModel? myInfo = SpUtil.getObj("user", (v) => UserModel.fromJson(v as Map<String, dynamic>));
     return Padding(
-      padding: EdgeInsets.only(right: 4, left: 50.w),
+      padding: EdgeInsets.only(right: 4, left: 50.w, top: 5),
       child: Align(
         alignment: Alignment.centerRight,
         child: Column(

@@ -177,8 +177,6 @@ class MessageController extends GetxController {
     query.includeLastMessage = true; // 让查询结果附带一条最新消息
     List<Conversation> conversations = await query.find();
     conversationList.value = conversations.where((e) => e.lastMessage != null).toList();
-
-    // conversations.
     return true;
   }
 

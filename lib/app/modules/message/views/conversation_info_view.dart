@@ -10,6 +10,7 @@ import 'package:wit_niit/app/modules/message/bindings/message_binding.dart';
 import 'package:wit_niit/app/modules/message/controllers/chat_controller.dart';
 import 'package:wit_niit/app/modules/message/controllers/message_controller.dart';
 import 'package:wit_niit/app/modules/message/model/contact_model.dart';
+import 'package:wit_niit/app/modules/message/views/history_images.dart';
 import 'package:wit_niit/app/modules/message/views/select_contact_view.dart';
 
 class ConversationInfoView extends GetView<ChatController> {
@@ -74,16 +75,60 @@ class ConversationInfoView extends GetView<ChatController> {
   /// 查找聊天记录
   Widget _findHistory() {
     return Card(
-      child: ListTile(
-        onTap: () {
-          EasyLoading.showToast('开发中～');
-        },
-        title: Text('查找聊天记录'),
-        trailing: Wrap(
-          children: [
-            Icon(Icons.arrow_right),
-          ],
-        ),
+      child: Column(
+        children: [
+          Container(
+            height: 40.h,
+            child: ListTile(
+              title: Text('查找聊天记录'),
+            ),
+          ),
+          Divider(indent: 8, endIndent: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.folder_outlined, size: 30.w),
+                      onTap: () => EasyLoading.showToast('开发中～'),
+                    ),
+                    Text('文件'),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  InkWell(
+                    child: Icon(Icons.image_outlined, size: 30.w),
+                    onTap: () => Get.to(() => HistoryImages(conv: conversation)),
+                  ),
+                  Text('图片'),
+                ],
+              ),
+              Column(
+                children: [
+                  InkWell(
+                    child: Icon(Icons.date_range, size: 30.w),
+                    onTap: () => EasyLoading.showToast('开发中～'),
+                  ),
+                  Text('日期'),
+                ],
+              ),
+              Column(
+                children: [
+                  InkWell(
+                    child: Icon(Icons.link_outlined, size: 30.w),
+                    onTap: () => EasyLoading.showToast('开发中～'),
+                  ),
+                  Text('链接'),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
