@@ -85,6 +85,16 @@ dependencies:
       url: https://github.com/szuwest/flutter_plugin_record.git
       ref: 987ef8771aeb28e41513a486ad999e47ac9143ae
 
+  # fijkplayer 播放器 （直播模块）
+  fijkplayer: ^0.10.1
+  #  # fijkplayer 播放器定义UI （直播模块）
+  fijkplayer_skin:
+    git:
+      url: https://github.com/war1644/fijkplayer_skin.git
+  # 直播推流库 （直播模块）
+  haishin_kit: ^0.9.1
+  # 音频会话 （直播模块）
+  audio_session: any
 
 
 dev_dependencies:
