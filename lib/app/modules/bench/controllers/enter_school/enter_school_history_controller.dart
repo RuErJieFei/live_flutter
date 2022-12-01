@@ -40,15 +40,12 @@ class EnterSchoolHistoryController extends GetxController
     schoolList.value = await getSchoolByDate();
     schoolList.value =
         schoolList.map((element) => SchoolData.fromJson(element)).toList();
-    LogUtil.v('----------------------');
-    LogUtil.v(schoolList);
     update();
   }
 
   Future<List> getSchoolByDate() async {
     String? userId = user?.id;
     var res = await request.get("/entrance/select?userId=$userId");
-    LogUtil.v(res);
     return res;
   }
 
