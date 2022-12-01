@@ -1,10 +1,13 @@
 import 'package:flustars/flustars.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
+import 'package:wit_niit/app/modules/health_report/bindings/health_report_binding.dart';
+import 'package:wit_niit/app/modules/health_report/views/health_table_view.dart';
 import 'package:wit_niit/app/modules/health_report/views/location_view.dart';
 
 import '../../../component/school_push_buttton.dart';
@@ -98,6 +101,44 @@ class HealthReportView extends GetView<HealthReportController> {
                                   fontWeight: FontWeight.w600,
                                   fontSize: 24.sp,
                                 ),
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Text.rich(
+                                TextSpan(children: [
+                                  TextSpan(
+                                    text: '个人已提交信息，',
+                                    style: TextStyle(
+                                      color: SchoolConfig
+                                          .primarySwatchColor.shade400,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 24.sp,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '点我',
+                                    style: TextStyle(
+                                      color: SchoolConfig.primarySwatchColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 24.sp,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Get.to(() => HealthTableView(),
+                                            binding: HealthReportBinding());
+                                      },
+                                  ),
+                                  TextSpan(
+                                    text: '进入查询',
+                                    style: TextStyle(
+                                      color: SchoolConfig
+                                          .primarySwatchColor.shade400,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 24.sp,
+                                    ),
+                                  ),
+                                ]),
                               ),
                               SizedBox(
                                 height: 20.h,
@@ -1094,7 +1135,7 @@ class HealthReportView extends GetView<HealthReportController> {
                         if (controller.formKey.currentState?.validate() ==
                                 false ||
                             controller.locationName.value == '') {
-                          EasyLoading.showToast('请填写定位');
+                          EasyLoading.showToast('您还有必填项未填');
                         } else {
                           controller.pushStudentContent();
                         }
@@ -1104,7 +1145,7 @@ class HealthReportView extends GetView<HealthReportController> {
                                     ?.validate() ==
                                 false ||
                             controller.locationName.value == '') {
-                          EasyLoading.showToast('请填写定位');
+                          EasyLoading.showToast('您还有必填项未填');
                         } else {
                           controller.pushContent();
                         }

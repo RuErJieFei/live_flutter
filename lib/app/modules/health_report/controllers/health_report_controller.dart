@@ -82,7 +82,7 @@ class HealthReportController extends GetxController {
 
   void pushContent() {
     var dataForm = {
-      "userId": user?.id,
+      "userId": user?.sno,
       "isHealthy": "0",
       "reportTime": getTime(),
       "position": locationName.value,
@@ -122,7 +122,7 @@ class HealthReportController extends GetxController {
 
   void pushStudentContent() {
     var dataForm = {
-      "userId": user?.id,
+      "userId": user?.sno,
       "isHealthy": '1',
       "reportTime": getTime(),
       "position": locationName.value,
