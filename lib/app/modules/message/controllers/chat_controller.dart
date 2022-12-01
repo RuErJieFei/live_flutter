@@ -95,15 +95,21 @@ class ChatController extends GetxController {
       if (isLoading) {
         return;
       }
-      if (scrollCto.offset > scrollCto.position.maxScrollExtent + 100) {
-        onLoadingMsg();
+      if (Platform.isAndroid) {
+        if (scrollCto.offset == scrollCto.position.maxScrollExtent) {
+          onLoadingMsg();
+        }
+      } else if (Platform.isIOS) {
+        if (scrollCto.offset > scrollCto.position.maxScrollExtent + 100) {
+          onLoadingMsg();
+        }
       }
     });
 
     /// 播放声音完成的监听监听
     msgCto.recordPlugin.responsePlayStateController.listen((data) {
-      print("播放路径   " + data.playPath);
-      print("播放状态   " + data.playState);
+      LogUtil.v("播放路径   " + data.playPath);
+      LogUtil.v("播放状态   " + data.playState);
     });
   }
 

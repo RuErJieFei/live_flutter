@@ -52,11 +52,11 @@ class IndexController extends GetxController {
       BottomNavigationBarItem(
           backgroundColor: Colors.green,
           icon: Icon(
-            Icons.account_tree_outlined,
+            Icons.email_outlined,
             size: 20,
           ),
-          activeIcon: Icon(Icons.account_tree, size: 25),
-          label: 'HOME'),
+          activeIcon: Icon(Icons.email, size: 25),
+          label: '邮件'),
       BottomNavigationBarItem(
           backgroundColor: Colors.red,
           icon: Icon(

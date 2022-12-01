@@ -81,10 +81,15 @@ void main() async {
   }
   configLoading();
 
-  /// 设置安卓头部导航栏透明
+  /// 设置安卓沉浸式状态栏
   if (Platform.isAndroid) {
-    SystemUiOverlayStyle systemUiOverlayStyle =
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemUiOverlayStyle style = SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        //这是设置状态栏的图标和字体的颜色
+        //Brightness.light  一般都是显示为白色
+        //Brightness.dark 一般都是显示为黑色
+        statusBarIconBrightness: Brightness.light);
+    SystemChrome.setSystemUIOverlayStyle(style);
   }
 }
 
