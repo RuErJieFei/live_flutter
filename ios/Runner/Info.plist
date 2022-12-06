@@ -32,7 +32,6 @@
 	<string>获取麦克风权限</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>获取相册权限</string>
-
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

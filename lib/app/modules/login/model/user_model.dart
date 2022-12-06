@@ -61,4 +61,9 @@ class UserModel {
     data['teacherName'] = this.teacherName;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'UserModel{gender: $gender, email: $email, id: $id, phone: $phone, name: $name, photo: $photo, roleList: $roleList, sno: $sno, classes: $classes, college: $college, address: $address, teacherPhone: $teacherPhone, teacherName: $teacherName}';
+  }
 }

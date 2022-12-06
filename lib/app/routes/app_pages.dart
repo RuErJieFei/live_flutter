@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:wit_niit/app/modules/live_class/views/live_view.dart';
+import 'package:wit_niit/app/modules/live_class/views/live_watching.dart';
 
 import '../modules/ask_leave/bindings/ask_leave_binding.dart';
 import '../modules/ask_leave/views/ask_leave_view.dart';
@@ -155,7 +157,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.TIMETABLE,
-      page: () =>  TimetableView(),
+      page: () => TimetableView(),
       binding: TimetableBinding(),
     ),
     GetPage(

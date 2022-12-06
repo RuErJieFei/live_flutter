@@ -141,6 +141,7 @@ flutter:
     - images/public/zhrx.png
     - images/school/
     - images/contacts/
+    - lib/app/modules/live_class/images/
 
   fonts:
     - family: iconfont
