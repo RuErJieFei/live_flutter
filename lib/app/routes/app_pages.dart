@@ -55,7 +55,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.INDEX;
+  static const INITIAL = Routes.LIVE_CLASS;
 
   static final routes = [
     GetPage(

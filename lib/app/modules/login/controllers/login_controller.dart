@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:authing_sdk/client.dart';
 import 'package:authing_sdk/result.dart';
 import 'package:authing_sdk/user.dart';
+import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -111,10 +112,18 @@ class LoginController extends GetxController {
       /// Authing 账户登录，可以是手机号 / 邮箱 / 用户名
       EasyLoading.show(status: '正在登录');
       try {
-        result = await AuthClient.loginByAccount(accountTf.text, passwordTf.text);
+        result =
+            await AuthClient.loginByAccount(accountTf.text, passwordTf.text);
         User? user = result.user;
         SpUtil.putString('userId', '${user?.id}');
         SpUtil.putString('token', '${user?.token}'); // 存储token
+
+        Dio dio = Dio();
+        var res = await dio.post('http://101.200.120.36:8089/login/phone',
+            data: {"phone": accountTf.text, "password": passwordTf.text});
+
+        print("res:${res}");
+        SpUtil.putString('liveToken', '${res.data['token']}');
         EasyLoading.dismiss();
         // 获取用户信息
         getUserInfo(user?.id);
